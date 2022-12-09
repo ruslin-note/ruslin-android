@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Ruslin" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.Ruslin" parent="Theme.Material3.DayNight">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightNavigationBar">?attr/isLightTheme</item>
+    </style>
 </resources>
