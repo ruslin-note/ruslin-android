@@ -10,6 +10,9 @@ name = "uniffi_ruslin"
 [dependencies]
 uniffi = "0.21.0"
 uniffi_macros = "0.21.0"
+ruslin-data = { path = "./ruslin-data" }
+openssl-sys = "0.9.79"
+openssl = { version = "0.10.44", features = ["vendored"] }
 
 [build-dependencies]
 uniffi_build = { version = "0.21.0", features=["builtin-bindgen"] }

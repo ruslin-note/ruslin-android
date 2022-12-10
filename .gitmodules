@@ -1,0 +1,3 @@
+[submodule "ruslin-data-uniffi/ruslin-data"]
+	path = ruslin-data-uniffi/ruslin-data
+	url = git@gitlab.com:DianQK/ruslin-data.git
