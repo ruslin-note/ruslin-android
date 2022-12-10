@@ -9,10 +9,14 @@ import uniffi.ruslin.RuslinAndroidData
 
 class MainActivity : ComponentActivity() {
 
+    var ruslinAndroidData: RuslinAndroidData? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val ruslinData = RuslinAndroidData("/test/dir")
-        ruslinData.simpleLog("Hello")
+        ruslinAndroidData = RuslinAndroidData("/test/dir")
+        ruslinAndroidData?.let {
+            it.simpleLog("Hello")
+        }
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             RuslinApp()

@@ -15,6 +15,7 @@ openssl-sys = "0.9.79"
 openssl = { version = "0.10.44", features = ["vendored"] }
 log = "0.4.17"
 android_logger = "0.11.1"
+tokio = { version = "1.23.0", features = ["full"] }
 
 [build-dependencies]
 uniffi_build = { version = "0.21.0", features=["builtin-bindgen"] }
