@@ -5,4 +5,5 @@
     <string name="desc_sync">Sync</string>
     <string name="desc_more">More</string>
     <string name="desc_search">Search</string>
+    <string name="all_notes">All Notes</string>
 </resources>
