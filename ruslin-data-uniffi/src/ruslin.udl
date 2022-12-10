@@ -1,3 +1,7 @@
 namespace ruslin {
-  i32 add(i32 a, i32 b);
+};
+
+interface RuslinAndroidData {
+    constructor(string data_dir);
+    void simple_log(string message);
 };

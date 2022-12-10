@@ -21,3 +21,5 @@ cargo build --target aarch64-linux-android
 
 mkdir -p ../app/src/main/jniLibs/arm64-v8a
 cp target/aarch64-linux-android/debug/libuniffi_ruslin.so ../app/src/main/jniLibs/arm64-v8a
+
+uniffi-bindgen generate src/ruslin.udl --language kotlin --out-dir ../app/src/main/java
