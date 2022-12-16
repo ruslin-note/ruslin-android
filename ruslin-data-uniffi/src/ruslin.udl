@@ -1,7 +1,99 @@
 namespace ruslin {
 };
 
+dictionary FFIFolder {
+    string id;
+    string title;
+    i64 created_time;
+    i64 updated_time;
+    i64 user_created_time;
+    i64 user_updated_time;
+    string encryption_cipher_text;
+    boolean encryption_applied;
+    string? parent_id;
+    boolean is_shared;
+    string share_id;
+    string master_key_id;
+    string icon;
+};
+
+dictionary FFINote {
+    string id;
+    string? parent_id;
+    string title;
+    string body;
+    i64 created_time;
+    i64 updated_time;
+    boolean is_conflict;
+    f64 latitude;
+    f64 longitude;
+    f64 altitude;
+    string author;
+    string source_url;
+    boolean is_todo;
+    boolean todo_due;
+    boolean todo_completed;
+    string source;
+    string source_application;
+    string application_data;
+    i64 order;
+    i64 user_created_time;
+    i64 user_updated_time;
+    string encryption_cipher_text;
+    boolean encryption_applied;
+    boolean markup_language;
+    boolean is_shared;
+    string share_id;
+    string? conflict_original_id;
+    string master_key_id;
+};
+
+[Error]
+enum SyncError {
+    "IOError",
+    "FileNotExists",
+    "Unknown",
+    "SerializeError",
+    "APIError",
+    "JoinError",
+    "DatabaseError",
+    "DeserializeError",
+    "SerdeJsonError",
+    "SyncConfigNotExists",
+};
+
+[Error]
+enum DatabaseError {
+    "Open",
+    "InvalidPath",
+    "Update",
+    "Migration",
+    "Delete",
+    "Select",
+    "Insert",
+    "Options",
+    "Vacuum",
+    "R2d2Error",
+    "Unknown",
+};
+
+[Enum]
+interface SyncConfig {
+    JoplinServer(string host, string email, string password);
+};
+
 interface RuslinAndroidData {
+    [Throws=SyncError]
     constructor(string data_dir);
-    void simple_log(string message);
+    boolean sync_config_exists();
+    [Throws=SyncError]
+    void save_sync_config(SyncConfig config);
+    [Throws=SyncError]
+    void sync();
+    [Throws=DatabaseError]
+    void replace_folder(FFIFolder folder);
+    [Throws=DatabaseError]
+    sequence<FFIFolder> load_folders();
+    [Throws=DatabaseError]
+    void delete_folder(string id);
 };
