@@ -98,6 +98,7 @@ interface RuslinAndroidData {
     void save_sync_config(SyncConfig config);
     [Throws=SyncError]
     void sync();
+    FFIFolder new_folder(string? parent_id, string title);
     [Throws=DatabaseError]
     void replace_folder(FFIFolder folder);
     [Throws=DatabaseError]
@@ -106,6 +107,7 @@ interface RuslinAndroidData {
     void delete_folder(string id);
     [Throws=DatabaseError]
     sequence<FFIAbbrNote> load_abbr_notes(string? parent_id);
+    FFINote new_note(string? parent_id, string title, string body);
     [Throws=DatabaseError]
     FFINote load_note(string id);
     [Throws=DatabaseError]

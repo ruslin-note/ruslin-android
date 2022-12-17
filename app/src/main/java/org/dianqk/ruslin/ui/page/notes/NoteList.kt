@@ -9,21 +9,21 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.dianqk.ruslin.ui.ext.formatAsYmdHms
 import org.dianqk.ruslin.ui.theme.RuslinTheme
-
-
-data class NoteAbbr(
-    val id: String,
-    val title: String,
-    val date: String = "2022/01/01 10:00:00",
-)
+import uniffi.ruslin.FfiAbbrNote
+import java.text.SimpleDateFormat
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 @Composable
 fun NoteList(
-    notes: List<NoteAbbr>,
+    notes: List<FfiAbbrNote>,
     navigateToNoteDetail: (String) -> Unit,
     paddingValues: PaddingValues
 ) {
@@ -43,7 +43,7 @@ fun NoteList(
 }
 
 @Composable
-fun NoteAbbrCard(note: NoteAbbr, navigateToNoteDetail: (String) -> Unit) {
+fun NoteAbbrCard(note: FfiAbbrNote, navigateToNoteDetail: (String) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -57,7 +57,8 @@ fun NoteAbbrCard(note: NoteAbbr, navigateToNoteDetail: (String) -> Unit) {
             maxLines = 2,
             overflow = TextOverflow.Ellipsis
         )
-        Text(text = note.date, style = MaterialTheme.typography.bodySmall)
+
+        Text(text = Date(note.updatedTime).formatAsYmdHms(LocalContext.current), style = MaterialTheme.typography.bodySmall)
     }
 }
 
@@ -65,15 +66,7 @@ fun NoteAbbrCard(note: NoteAbbr, navigateToNoteDetail: (String) -> Unit) {
 @Composable
 fun NoteListPreview() {
     RuslinTheme {
-        val notes = listOf<NoteAbbr>(
-            NoteAbbr("1", "Compose for Wear OS 1.1 is now stable: check out new features!"),
-            NoteAbbr("2", "Introducing the Architecture Templates"),
-            NoteAbbr("3", "Android 13 for TV is now available"),
-            NoteAbbr("4", "Blurring the Lines"),
-            NoteAbbr("5", "Jetpack Compose — When should I use derivedStateOf?"),
-            NoteAbbr("6", "Google Play Coffee break with Creatrip"),
-            NoteAbbr("7", "RenderNode for Bigger, Better Blurs")
-        )
-        NoteList(notes = notes, navigateToNoteDetail = {}, paddingValues = PaddingValues(0.dp))
+//        val notes = emptyList()
+//        NoteList(notes = notes, navigateToNoteDetail = {}, paddingValues = PaddingValues(0.dp))
     }
 }

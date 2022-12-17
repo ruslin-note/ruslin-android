@@ -1,6 +1,7 @@
 use ruslin_data::{
     sync::{SyncConfig, SyncError},
     DatabaseError, RuslinData, UpdateSource,
+    Note, Folder,
 };
 use std::path::Path;
 use tokio::runtime::Runtime;
@@ -64,6 +65,10 @@ impl RuslinAndroidData {
         self.rt.block_on(self.data.sync())
     }
 
+    pub fn new_folder(&self, parent_id: Option<String>, title: String) -> FFIFolder {
+        Folder::new(title, parent_id).into()
+    }
+
     pub fn replace_folder(&self, folder: FFIFolder) -> Result<(), DatabaseError> {
         self.data
             .db
@@ -101,6 +106,10 @@ impl RuslinAndroidData {
             .map(|x| x.into())
             .collect::<Vec<FFIAbbrNote>>();
         Ok(notes)
+    }
+
+    pub fn new_note(&self, parent_id: Option<String>, title: String, body: String) -> FFINote {
+        Note::new(parent_id, title, body).into()
     }
 
     pub fn load_note(&self, id: String) -> Result<FFINote, DatabaseError> {

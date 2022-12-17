@@ -6,4 +6,10 @@
     <string name="desc_more">More</string>
     <string name="desc_search">Search</string>
     <string name="all_notes">All Notes</string>
+    <string name="title">Title</string>
+    <string name="body">Body</string>
+    <string name="folders">Folders</string>
+    <string name="new_folder">New Folder</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
 </resources>
