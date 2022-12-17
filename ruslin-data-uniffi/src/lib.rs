@@ -6,7 +6,7 @@ use std::path::Path;
 use tokio::runtime::Runtime;
 
 mod ffi;
-use ffi::{FFIFolder, FFINote};
+use ffi::{FFIAbbrNote, FFIFolder, FFINote};
 
 uniffi_macros::include_scaffolding!("ruslin");
 
@@ -81,5 +81,39 @@ impl RuslinAndroidData {
 
     pub fn delete_folder(&self, id: String) -> Result<(), DatabaseError> {
         self.data.db.delete_folder(&id, UpdateSource::LocalEdit)
+    }
+
+    //     [Throws=DatabaseError]
+    //     sequence<FFIAbbrNote> load_abbr_notes(string? parent_id);
+    //     [Throws=DatabaseError]
+    //     FFINote load_note(string id);
+    //     [Throws=DatabaseError]
+    //     void replace_note(FFINote note);
+    //     [Throws=DatabaseError]
+    //     void delete_note(string id);
+    pub fn load_abbr_notes(
+        &self,
+        parent_id: Option<String>,
+    ) -> Result<Vec<FFIAbbrNote>, DatabaseError> {
+        let notes = self.data.db.load_abbr_notes(parent_id.as_deref())?;
+        let notes = notes
+            .into_iter()
+            .map(|x| x.into())
+            .collect::<Vec<FFIAbbrNote>>();
+        Ok(notes)
+    }
+
+    pub fn load_note(&self, id: String) -> Result<FFINote, DatabaseError> {
+        Ok(self.data.db.load_note(&id)?.into())
+    }
+
+    pub fn replace_note(&self, note: FFINote) -> Result<(), DatabaseError> {
+        self.data
+            .db
+            .replace_note(&note.into(), UpdateSource::LocalEdit)
+    }
+
+    pub fn delete_note(&self, id: String) -> Result<(), DatabaseError> {
+        self.data.db.delete_note(&id, UpdateSource::LocalEdit)
     }
 }

@@ -48,6 +48,14 @@ dictionary FFINote {
     string master_key_id;
 };
 
+dictionary FFIAbbrNote {
+    string id;
+    string? parent_id;
+    string title;
+    i64 created_time;
+    i64 updated_time;
+};
+
 [Error]
 enum SyncError {
     "IOError",
@@ -96,4 +104,12 @@ interface RuslinAndroidData {
     sequence<FFIFolder> load_folders();
     [Throws=DatabaseError]
     void delete_folder(string id);
+    [Throws=DatabaseError]
+    sequence<FFIAbbrNote> load_abbr_notes(string? parent_id);
+    [Throws=DatabaseError]
+    FFINote load_note(string id);
+    [Throws=DatabaseError]
+    void replace_note(FFINote note);
+    [Throws=DatabaseError]
+    void delete_note(string id);
 };
