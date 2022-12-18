@@ -34,6 +34,7 @@ import org.dianqk.ruslin.R
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLifecycleComposeApi::class)
 @Composable
 fun NoteDetailPage(
+    onPopBack: () -> Unit = {},
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
     viewModel: NoteDetailViewModel = hiltViewModel()
 ) {
@@ -44,7 +45,7 @@ fun NoteDetailPage(
             TopAppBar(
                 title = {},
                 navigationIcon = {
-                    IconButton(onClick = { }) {
+                    IconButton(onClick = onPopBack) {
                         Icon(Icons.Default.ArrowBack, stringResource(id = R.string.desc_menu))
                     }
                 },

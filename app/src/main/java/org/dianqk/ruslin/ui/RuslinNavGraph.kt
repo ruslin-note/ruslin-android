@@ -39,7 +39,11 @@ fun RuslinNavGraph(
                 navArgument(NOTE_ID_ARG) { type = NavType.StringType; nullable = true }
             )
         ) {
-            NoteDetailPage()
+            NoteDetailPage(
+                onPopBack = {
+                    navController.popBackStack()
+                },
+            )
         }
     }
 }
