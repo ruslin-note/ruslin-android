@@ -1,17 +1,31 @@
 package org.dianqk.ruslin.ui.page.notes
 
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.FileOpen
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import org.dianqk.ruslin.R
+import org.dianqk.ruslin.ui.component.BottomDrawer
+import org.dianqk.ruslin.ui.component.FilledTonalButtonWithIcon
+import org.dianqk.ruslin.ui.component.OutlinedButtonWithIcon
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLifecycleComposeApi::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLifecycleComposeApi::class,
+    ExperimentalMaterialApi::class
+)
 @Composable
 fun NotesPage(
     navigateToNoteDetail: (parentId: String?, noteId: String?) -> Unit,
@@ -20,6 +34,7 @@ fun NotesPage(
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val showActionBottomDrawerState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
 
     val openCreateFolderDialog = remember { mutableStateOf(false) }
 
@@ -80,15 +95,61 @@ fun NotesPage(
                 }
             ) { innerPadding ->
                 NoteList(
+                    modifier = Modifier.padding(innerPadding),
                     notes = uiState.items,
                     navigateToNoteDetail = {
                         navigateToNoteDetail(uiState.selectedFolder?.id, it)
                     },
-                    paddingValues = innerPadding
+                    showActionBottomDrawer = { note ->
+                        scope.launch {
+                            viewModel.selectNote(note)
+                            showActionBottomDrawerState.show()
+                        }
+                    }
                 )
             }
         }
     )
+
+    uiState.selectedNote?.let { note ->
+        BottomDrawer(
+            drawerState = showActionBottomDrawerState,
+            sheetContent = {
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    SelectionContainer {
+                        Text(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 6.dp),
+                            text = note.title,
+                            style = MaterialTheme.typography.titleLarge
+                        )
+                    }
+                    Row(modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 24.dp), horizontalArrangement = Arrangement.End) {
+                        OutlinedButtonWithIcon(
+                            modifier = Modifier.padding(horizontal = 12.dp),
+                            onClick = {
+                                scope.launch { showActionBottomDrawerState.hide() }
+                                viewModel.deleteNote(note.id)
+                                viewModel.unselecteNote()
+                            },
+                            icon = Icons.Outlined.Delete,
+                            text = stringResource(id = R.string.delete)
+                        )
+                        FilledTonalButtonWithIcon(
+                            onClick = {
+                                scope.launch { showActionBottomDrawerState.hide() }
+                                navigateToNoteDetail(uiState.selectedFolder?.id, note.id)
+                                viewModel.unselecteNote()
+                            },
+                            icon = Icons.Outlined.FileOpen, text = stringResource(id = R.string.open))
+                    }
+                }
+            }
+        )
+    }
 
     LaunchedEffect(Unit) {
         viewModel.loadAbbrNotes()

@@ -19,6 +19,7 @@ data class NotesUiState(
     val folders: List<FfiFolder> = emptyList(),
     val selectedFolder: FfiFolder? = null,
     val isLoading: Boolean = false,
+    val selectedNote: FfiAbbrNote? = null,
 )
 
 const val TAG = "NotesViewModel"
@@ -45,6 +46,18 @@ class NotesViewModel @Inject constructor(
         loadAbbrNotes()
     }
 
+    fun selectNote(note: FfiAbbrNote) {
+        _uiState.update {
+            it.copy(selectedNote = note)
+        }
+    }
+
+    fun unselecteNote() {
+        _uiState.update {
+            it.copy(selectedNote = null)
+        }
+    }
+
     fun loadAbbrNotes() {
         viewModelScope.launch {
             notesRepository.loadAbbrNotes(uiState.value.selectedFolder?.id)
@@ -61,6 +74,22 @@ class NotesViewModel @Inject constructor(
                         it.copy(isLoading = false)
                     }
                     Log.e(TAG, "load abbr notes failed: $e")
+                }
+        }
+    }
+
+    fun deleteNote(noteId: String) {
+        viewModelScope.launch {
+            notesRepository.deleteNote(noteId)
+                .onSuccess {
+                    _uiState.update {
+                        it.copy(
+                            items = it.items.filter { note -> note.id != noteId }
+                        )
+                    }
+                }
+                .onFailure { e ->
+                    Log.e(TAG, "delete note failed: $e")
                 }
         }
     }

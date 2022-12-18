@@ -12,4 +12,6 @@
     <string name="new_folder">New Folder</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="open">Open</string>
 </resources>
