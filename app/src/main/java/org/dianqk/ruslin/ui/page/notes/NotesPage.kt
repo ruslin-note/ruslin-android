@@ -49,12 +49,25 @@ fun NotesPage(
         )
     )
 
+    val topAppBarTitle = if (uiState.showConflictNotes) {
+        stringResource(id = R.string.conflict_notes)
+    } else {
+        uiState.selectedFolder?.title
+            ?: stringResource(id = R.string.all_notes)
+    }
+
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
             NotesDrawerSheet(
                 folders = uiState.folders,
-                selectedFolder = uiState.selectedFolder,
+                selectedFolderId = uiState.selectedFolder?.id,
+                showConflictNoteFolder = uiState.conflictNoteExists,
+                conflictNoteFolderSelected = uiState.showConflictNotes,
+                onSelectedConflictFolder = {
+                    scope.launch { drawerState.close() }
+                    viewModel.showConflictNotes()
+                },
                 onSelectedFolderChanged = {
                     scope.launch { drawerState.close() }
                     viewModel.selectFolder(it)
@@ -72,9 +85,7 @@ fun NotesPage(
                     TopAppBar(
                         title = {
                             Text(
-                                text = uiState.selectedFolder?.title
-                                    ?: stringResource(id = R.string.all_notes),
-//                                style = MaterialTheme.typography.titleMedium,
+                                text = topAppBarTitle
                             )
                         },
                         navigationIcon = {
@@ -112,10 +123,12 @@ fun NotesPage(
                     )
                 },
                 floatingActionButton = {
-                    ExtendedFloatingActionButton(
-                        text = { Text(stringResource(id = R.string.new_note)) },
-                        icon = { Icon(Icons.Default.Edit, stringResource(id = R.string.new_note)) },
-                        onClick = { navigateToNoteDetail(uiState.selectedFolder?.id, null) })
+                    if (!uiState.showConflictNotes) {
+                        ExtendedFloatingActionButton(
+                            text = { Text(stringResource(id = R.string.new_note)) },
+                            icon = { Icon(Icons.Default.Edit, stringResource(id = R.string.new_note)) },
+                            onClick = { navigateToNoteDetail(uiState.selectedFolder?.id, null) })
+                    }
                 }
             ) { innerPadding ->
                 NoteList(

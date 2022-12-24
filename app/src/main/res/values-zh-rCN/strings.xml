@@ -19,4 +19,5 @@
     <string name="url">链接</string>
     <string name="email">邮箱</string>
     <string name="password">密码</string>
+    <string name="conflict_notes">冲突的笔记</string>
 </resources>

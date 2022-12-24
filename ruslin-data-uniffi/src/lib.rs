@@ -1,7 +1,6 @@
 use ruslin_data::{
     sync::{SyncConfig, SyncError},
-    DatabaseError, RuslinData, UpdateSource,
-    Note, Folder,
+    DatabaseError, Folder, Note, RuslinData, UpdateSource,
 };
 use std::path::Path;
 use tokio::runtime::Runtime;
@@ -124,5 +123,18 @@ impl RuslinAndroidData {
 
     pub fn delete_note(&self, id: String) -> Result<(), DatabaseError> {
         self.data.db.delete_note(&id, UpdateSource::LocalEdit)
+    }
+
+    pub fn conflict_note_exists(&self) -> Result<bool, DatabaseError> {
+        self.data.db.conflict_note_exists()
+    }
+
+    pub fn load_abbr_conflict_notes(&self) -> Result<Vec<FFIAbbrNote>, DatabaseError> {
+        let notes = self.data.db.load_abbr_conflict_notes()?;
+        let notes = notes
+            .into_iter()
+            .map(|x| x.into())
+            .collect::<Vec<FFIAbbrNote>>();
+        Ok(notes)
     }
 }

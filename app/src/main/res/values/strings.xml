@@ -19,4 +19,5 @@
     <string name="url">URL</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
+    <string name="conflict_notes">Conflict Notes</string>
 </resources>

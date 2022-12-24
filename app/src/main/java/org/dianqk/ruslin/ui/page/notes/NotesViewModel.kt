@@ -21,6 +21,8 @@ data class NotesUiState(
     val isLoading: Boolean = false,
     val selectedNote: FfiAbbrNote? = null,
     val isSyncing: Boolean = false,
+    val conflictNoteExists: Boolean = false,
+    val showConflictNotes: Boolean = false,
 )
 
 const val TAG = "NotesViewModel"
@@ -36,12 +38,24 @@ class NotesViewModel @Inject constructor(
     init {
         loadFolders()
         loadAbbrNotes()
+        checkConflictNoteExists()
     }
 
     fun selectFolder(folder: FfiFolder?) {
         _uiState.update {
             it.copy(
-                selectedFolder = folder
+                selectedFolder = folder,
+                showConflictNotes = false,
+            )
+        }
+        loadAbbrNotes()
+    }
+
+    fun showConflictNotes() {
+        _uiState.update {
+            it.copy(
+                selectedFolder = null,
+                showConflictNotes = true,
             )
         }
         loadAbbrNotes()
@@ -72,6 +86,7 @@ class NotesViewModel @Inject constructor(
                 .onSuccess {
                     loadAbbrNotes()
                     loadFolders()
+                    checkConflictNoteExists()
                 }
                 .onFailure { e ->
 
@@ -85,8 +100,18 @@ class NotesViewModel @Inject constructor(
     }
 
     fun loadAbbrNotes() {
+        val showConflictNotes = uiState.value.showConflictNotes
+        _uiState.update {
+            it.copy(
+                isLoading = true
+            )
+        }
         viewModelScope.launch {
-            notesRepository.loadAbbrNotes(uiState.value.selectedFolder?.id)
+            if (showConflictNotes) {
+                notesRepository.loadAbbrConflictNotes()
+            } else {
+                notesRepository.loadAbbrNotes(uiState.value.selectedFolder?.id)
+            }
                 .onSuccess { notes ->
                     _uiState.update {
                         it.copy(
@@ -143,6 +168,20 @@ class NotesViewModel @Inject constructor(
     private fun loadFolders() {
         viewModelScope.launch {
             loadFoldersFromRepo()
+        }
+    }
+
+    private fun checkConflictNoteExists() {
+        viewModelScope.launch {
+            notesRepository.conflictNoteExists()
+                .onSuccess { exists ->
+                    _uiState.update {
+                        it.copy(conflictNoteExists = exists)
+                    }
+                }
+                .onFailure { e ->
+                    Log.e(TAG, "check conflict note failed: $e")
+                }
         }
     }
 

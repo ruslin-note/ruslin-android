@@ -60,6 +60,7 @@ dictionary FFIAbbrNote {
 enum SyncError {
     "IOError",
     "FileNotExists",
+    "HandleConflictForDiffNote",
     "Unknown",
     "SerializeError",
     "APIError",
@@ -114,4 +115,8 @@ interface RuslinAndroidData {
     void replace_note(FFINote note);
     [Throws=DatabaseError]
     void delete_note(string id);
+    [Throws=DatabaseError]
+    boolean conflict_note_exists();
+    [Throws=DatabaseError]
+    sequence<FFIAbbrNote> load_abbr_conflict_notes();
 };

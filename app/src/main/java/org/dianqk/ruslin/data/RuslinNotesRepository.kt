@@ -24,7 +24,8 @@ class RuslinNotesRepository(
             kotlin.runCatching { data.sync() }
         }
 
-    override fun newFolder(parentId: String?, title: String): FfiFolder = data.newFolder(parentId, title)
+    override fun newFolder(parentId: String?, title: String): FfiFolder =
+        data.newFolder(parentId, title)
 
     override suspend fun replaceFolder(folder: FfiFolder): Result<Unit> =
         withContext(ioDispatcher) {
@@ -46,7 +47,8 @@ class RuslinNotesRepository(
             kotlin.runCatching { data.loadAbbrNotes(parentId) }
         }
 
-    override fun newNote(parentId: String?, title: String, body: String): FfiNote = data.newNote(parentId, title, body)
+    override fun newNote(parentId: String?, title: String, body: String): FfiNote =
+        data.newNote(parentId, title, body)
 
     override suspend fun loadNote(id: String): Result<FfiNote> =
         withContext(ioDispatcher) {
@@ -61,6 +63,15 @@ class RuslinNotesRepository(
     override suspend fun deleteNote(id: String): Result<Unit> =
         withContext(ioDispatcher) {
             kotlin.runCatching { data.deleteNote(id) }
+        }
+
+    override suspend fun conflictNoteExists(): Result<Boolean> = withContext(ioDispatcher) {
+        kotlin.runCatching { data.conflictNoteExists() }
+    }
+
+    override suspend fun loadAbbrConflictNotes(): Result<List<FfiAbbrNote>> =
+        withContext(ioDispatcher) {
+            kotlin.runCatching { data.loadAbbrConflictNotes() }
         }
 
 }

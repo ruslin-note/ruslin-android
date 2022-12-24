@@ -8,6 +8,7 @@ import androidx.compose.material.icons.filled.CreateNewFolder
 import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material.icons.outlined.CreateNewFolder
 import androidx.compose.material.icons.outlined.Folder
+import androidx.compose.material.icons.outlined.FolderCopy
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -24,7 +25,10 @@ import uniffi.ruslin.FfiFolder
 @Composable
 fun NotesDrawerSheet(
     folders: List<FfiFolder>,
-    selectedFolder: FfiFolder?,
+    selectedFolderId: String?,
+    showConflictNoteFolder: Boolean,
+    conflictNoteFolderSelected: Boolean,
+    onSelectedConflictFolder: () -> Unit,
     onSelectedFolderChanged: (FfiFolder?) -> Unit,
     openCreateFolderDialog: Boolean,
     onCreateFolder: (String) -> Unit,
@@ -54,7 +58,7 @@ fun NotesDrawerSheet(
         NavigationDrawerItem(
             icon = { Icon(Icons.Outlined.Article, contentDescription = null) },
             label = { Text(text = stringResource(id = R.string.all_notes)) },
-            selected = selectedFolder == null,
+            selected = !conflictNoteFolderSelected && selectedFolderId == null,
             onClick = {
                 onSelectedFolderChanged(null)
             },
@@ -69,7 +73,7 @@ fun NotesDrawerSheet(
             NavigationDrawerItem(
                 icon = { Icon(Icons.Outlined.Folder, contentDescription = null) },
                 label = { Text(folder.title) },
-                selected = folder.id == selectedFolder?.id,
+                selected = !conflictNoteFolderSelected && folder.id == selectedFolderId,
                 onClick = {
                     onSelectedFolderChanged(folder)
                 },
@@ -85,6 +89,18 @@ fun NotesDrawerSheet(
             },
             modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
         )
+        if (showConflictNoteFolder) {
+            NavigationDrawerItem(
+                icon = { Icon(Icons.Outlined.FolderCopy, contentDescription = null, tint = MaterialTheme.colorScheme.error) },
+                label = { Text(text = stringResource(id = R.string.conflict_notes), color = MaterialTheme.colorScheme.error) },
+                selected = conflictNoteFolderSelected,
+                onClick = onSelectedConflictFolder,
+                modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
+                colors = NavigationDrawerItemDefaults.colors(
+                    selectedContainerColor = MaterialTheme.colorScheme.errorContainer,
+                ),
+            )
+        }
     }
 }
 
