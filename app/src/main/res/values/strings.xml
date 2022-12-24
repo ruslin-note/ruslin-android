@@ -14,4 +14,9 @@
     <string name="cancel">Cancel</string>
     <string name="delete">Delete</string>
     <string name="open">Open</string>
+    <string name="content">Content</string>
+    <string name="sign_in">Sign in</string>
+    <string name="url">URL</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
 </resources>

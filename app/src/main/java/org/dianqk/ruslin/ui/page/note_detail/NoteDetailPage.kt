@@ -1,8 +1,13 @@
 package org.dianqk.ruslin.ui.page.note_detail
 
 import android.widget.Toast
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
@@ -14,13 +19,14 @@ import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -30,6 +36,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.dianqk.ruslin.R
+import org.dianqk.ruslin.ui.component.MarkdownVisualTransformation
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLifecycleComposeApi::class)
 @Composable
@@ -84,7 +91,9 @@ fun NoteDetailPage(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class,
+    ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class, ExperimentalLayoutApi::class
+)
 @Composable
 private fun NoteDetailContent(
     loading: Boolean,
@@ -94,6 +103,10 @@ private fun NoteDetailContent(
     onBodyChanged: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val bringIntoViewRequester = remember { BringIntoViewRequester() }
+    val scope = rememberCoroutineScope()
+
     if (loading) {
         val pullRefreshState = rememberPullRefreshState(refreshing = loading, onRefresh = { /* DO NOTHING */ })
         Box(modifier = modifier
@@ -105,26 +118,41 @@ private fun NoteDetailContent(
         Column(
             modifier = modifier
                 .fillMaxSize()
-                .padding(horizontal = 16.dp)
-                .verticalScroll(
-                    rememberScrollState()
-                ),
-        ) {
-            OutlinedTextField(
+                .bringIntoViewRequester(bringIntoViewRequester),
+            ) {
+            TextField(
                 value = title,
                 modifier = Modifier.fillMaxWidth(),
+                colors = TextFieldDefaults.textFieldColors(
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    containerColor = Color.Transparent,
+                ),
                 onValueChange = onTitleChanged,
                 placeholder = {
                     Text(text = stringResource(id = R.string.title), style = MaterialTheme.typography.titleMedium)
                 },
-                textStyle = MaterialTheme.typography.titleMedium,
-                maxLines = 1,
+                textStyle = MaterialTheme.typography.titleLarge,
+//                singleLine = true,
             )
-            Spacer(Modifier.height(16.dp))
-            OutlinedTextField(
+            Divider(modifier = Modifier.fillMaxWidth())
+            TextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .imePadding()
+//                    .verticalScroll(rememberScrollState())
+                    .fillMaxHeight(),
                 value = body,
                 onValueChange = onBodyChanged,
-                modifier = Modifier.fillMaxSize()
+                placeholder = {
+                    Text(text = stringResource(id = R.string.content))
+                },
+                colors = TextFieldDefaults.textFieldColors(
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    containerColor = Color.Transparent,
+                ),
+                visualTransformation = MarkdownVisualTransformation(),
             )
         }
     }

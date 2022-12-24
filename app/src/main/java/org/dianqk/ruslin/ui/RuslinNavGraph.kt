@@ -10,6 +10,7 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import org.dianqk.ruslin.ui.RuslinDestinationsArgs.NOTE_ID_ARG
 import org.dianqk.ruslin.ui.ext.animatedComposable
+import org.dianqk.ruslin.ui.page.login.LoginPage
 import org.dianqk.ruslin.ui.page.note_detail.NoteDetailPage
 import org.dianqk.ruslin.ui.page.notes.NotesPage
 
@@ -30,6 +31,9 @@ fun RuslinNavGraph(
             NotesPage(
                 navigateToNoteDetail = { parentId: String?, noteId: String? ->
                     navigationActions.navigateToNoteDetail(folderId = parentId, noteId = noteId)
+                },
+                navigateToLogin = {
+                    navigationActions.navigateToLogin()
                 }
             )
         }
@@ -43,6 +47,13 @@ fun RuslinNavGraph(
                 onPopBack = {
                     navController.popBackStack()
                 },
+            )
+        }
+        animatedComposable(RuslinDestinations.LOGIN_ROUTE) {
+            LoginPage(
+                onLoginSuccess = {
+                    navController.popBackStack()
+                }
             )
         }
     }

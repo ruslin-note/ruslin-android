@@ -34,7 +34,7 @@ impl RuslinAndroidData {
             .worker_threads(2)
             .enable_all()
             .build()
-            .unwrap();
+            .expect(&format!("unwrap error in {}:{}", file!(), line!()));
         Ok(Self {
             data: RuslinData::new(Path::new(&data_dir))?,
             rt,

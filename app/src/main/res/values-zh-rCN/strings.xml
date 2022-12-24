@@ -14,4 +14,9 @@
     <string name="cancel">取消</string>
     <string name="delete">删除</string>
     <string name="open">打开</string>
+    <string name="content">内容</string>
+    <string name="sign_in">登录</string>
+    <string name="url">链接</string>
+    <string name="email">邮箱</string>
+    <string name="password">密码</string>
 </resources>

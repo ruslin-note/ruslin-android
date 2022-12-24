@@ -20,6 +20,7 @@ data class NotesUiState(
     val selectedFolder: FfiFolder? = null,
     val isLoading: Boolean = false,
     val selectedNote: FfiAbbrNote? = null,
+    val isSyncing: Boolean = false,
 )
 
 const val TAG = "NotesViewModel"
@@ -55,6 +56,31 @@ class NotesViewModel @Inject constructor(
     fun unselecteNote() {
         _uiState.update {
             it.copy(selectedNote = null)
+        }
+    }
+
+    fun syncConfigExists(): Boolean = notesRepository.syncConfigExists()
+
+    fun sync() {
+        _uiState.update {
+            it.copy(
+                isSyncing = true
+            )
+        }
+        viewModelScope.launch {
+            notesRepository.sync()
+                .onSuccess {
+                    loadAbbrNotes()
+                    loadFolders()
+                }
+                .onFailure { e ->
+
+                }
+            _uiState.update {
+                it.copy(
+                    isSyncing = false
+                )
+            }
         }
     }
 

@@ -1,5 +1,6 @@
 package org.dianqk.ruslin.ui.page.notes
 
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.ExperimentalMaterialApi
@@ -12,6 +13,7 @@ import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -28,8 +30,9 @@ import org.dianqk.ruslin.ui.component.OutlinedButtonWithIcon
 )
 @Composable
 fun NotesPage(
+    viewModel: NotesViewModel = hiltViewModel(),
     navigateToNoteDetail: (parentId: String?, noteId: String?) -> Unit,
-    viewModel: NotesViewModel = hiltViewModel()
+    navigateToLogin: () -> Unit,
 ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -37,6 +40,14 @@ fun NotesPage(
     val showActionBottomDrawerState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
 
     val openCreateFolderDialog = remember { mutableStateOf(false) }
+
+    val syncAngle by rememberInfiniteTransition().animateFloat(
+        initialValue = 360f,
+        targetValue = 0f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1000, easing = LinearEasing)
+        )
+    )
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -63,7 +74,7 @@ fun NotesPage(
                             Text(
                                 text = uiState.selectedFolder?.title
                                     ?: stringResource(id = R.string.all_notes),
-                                style = MaterialTheme.typography.titleLarge,
+//                                style = MaterialTheme.typography.titleMedium,
                             )
                         },
                         navigationIcon = {
@@ -76,6 +87,19 @@ fun NotesPage(
                                 Icon(
                                     Icons.Default.Search,
                                     stringResource(id = R.string.desc_search)
+                                )
+                            }
+                            IconButton(onClick = {
+                                if (viewModel.syncConfigExists()) {
+                                    viewModel.sync()
+                                } else {
+                                    navigateToLogin()
+                                }
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Default.Sync,
+                                    contentDescription = stringResource(id = R.string.desc_sync),
+                                    modifier = Modifier.rotate(if (uiState.isSyncing) syncAngle else 360f),
                                 )
                             }
                             IconButton(onClick = { /*TODO*/ }) {

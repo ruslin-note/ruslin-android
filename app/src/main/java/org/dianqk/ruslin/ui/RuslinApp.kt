@@ -15,11 +15,9 @@ fun RuslinApp(
 ) {
     RuslinTheme {
         val navController = rememberAnimatedNavController();
-        var navigationActions = remember(navController) {
+        val navigationActions = remember(navController) {
             RuslinNavigationActions(navController)
         }
-        var coroutineScope = rememberCoroutineScope();
-
         RuslinNavGraph(
             navController = navController,
             navigationActions = navigationActions
