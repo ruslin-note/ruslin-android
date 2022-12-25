@@ -14,6 +14,7 @@ import org.dianqk.ruslin.ui.page.login.LoginPage
 import org.dianqk.ruslin.ui.page.note_detail.NoteDetailPage
 import org.dianqk.ruslin.ui.page.notes.NotesPage
 import org.dianqk.ruslin.ui.page.settings.SettingsPage
+import org.dianqk.ruslin.ui.page.settings.accounts.AccountDetailPage
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -57,11 +58,27 @@ fun RuslinNavGraph(
             LoginPage(
                 onLoginSuccess = {
                     navController.popBackStack()
+                },
+                onPopBack = {
+                    navController.popBackStack()
                 }
             )
         }
         animatedComposable(RuslinDestinations.SETTINGS_ROUTE) {
             SettingsPage(
+                navigateToAccountDetail = {
+                    navigationActions.navigateToAccountDetail()
+                },
+                onPopBack = {
+                    navController.popBackStack()
+                }
+            )
+        }
+        animatedComposable(RuslinDestinations.ACCOUNT_DETAIL_ROUTE) {
+            AccountDetailPage(
+                navigateToLogin = {
+                    navigationActions.navigateToLogin()
+                },
                 onPopBack = {
                     navController.popBackStack()
                 }

@@ -30,4 +30,5 @@
     <string name="about_setting_desc">版本、反馈、致谢</string>
     <string name="languages">语言</string>
     <string name="languages_setting_desc">英语、简体中文、更多</string>
+    <string name="joplin_server">Joplin 服务器</string>
 </resources>

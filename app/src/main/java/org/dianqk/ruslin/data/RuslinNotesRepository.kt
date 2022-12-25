@@ -19,6 +19,10 @@ class RuslinNotesRepository(
             kotlin.runCatching { data.saveSyncConfig(config) }
         }
 
+    override suspend fun getSyncConfig(): Result<SyncConfig?> = withContext(ioDispatcher) {
+        kotlin.runCatching { data.getSyncConfig() }
+    }
+
     override suspend fun sync(): Result<Unit> =
         withContext(ioDispatcher) {
             kotlin.runCatching { data.sync() }

@@ -60,6 +60,10 @@ impl RuslinAndroidData {
         self.rt.block_on(self.data.save_sync_config(config))
     }
 
+    pub fn get_sync_config(&self) -> Result<Option<SyncConfig>, SyncError> {
+        self.data.get_sync_config()
+    }
+
     pub fn sync(&self) -> Result<(), SyncError> {
         self.rt.block_on(self.data.sync())
     }

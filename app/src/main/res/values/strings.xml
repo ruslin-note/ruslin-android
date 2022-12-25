@@ -30,4 +30,5 @@
     <string name="about_setting_desc">Version, issue, credits</string>
     <string name="languages">Languages</string>
     <string name="languages_setting_desc">English, Chinese, more</string>
+    <string name="joplin_server">Joplin Server</string>
 </resources>

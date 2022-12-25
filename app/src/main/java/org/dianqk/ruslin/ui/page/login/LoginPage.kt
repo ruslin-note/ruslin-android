@@ -26,6 +26,7 @@ import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import org.dianqk.ruslin.R
+import org.dianqk.ruslin.ui.component.BackButton
 import org.dianqk.ruslin.ui.component.FilledButtonWithIcon
 
 @OptIn(
@@ -36,6 +37,7 @@ import org.dianqk.ruslin.ui.component.FilledButtonWithIcon
 fun LoginPage(
     viewModel: LoginViewModel = hiltViewModel(),
     onLoginSuccess: () -> Unit = {},
+    onPopBack: () -> Unit,
 ) {
     val snackbarState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -45,6 +47,12 @@ fun LoginPage(
 
     Scaffold(
         modifier = Modifier.imePadding(),
+        topBar = {
+            TopAppBar(
+                title = {},
+                navigationIcon = { BackButton(onClick = onPopBack) },
+            )
+        },
         snackbarHost = {
             SnackbarHost(hostState = snackbarState)
         },

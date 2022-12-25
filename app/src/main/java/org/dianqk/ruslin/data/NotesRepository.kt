@@ -8,6 +8,8 @@ interface NotesRepository {
 
     suspend fun saveSyncConfig(config: SyncConfig): Result<Unit>
 
+    suspend fun getSyncConfig(): Result<SyncConfig?>
+
     suspend fun sync(): Result<Unit>
 
     fun newFolder(parentId: String?, title: String): FfiFolder

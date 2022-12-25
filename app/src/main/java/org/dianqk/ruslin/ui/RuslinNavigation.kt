@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.navigation.NavHostController
 import org.dianqk.ruslin.ui.RuslinDestinationsArgs.FOLDER_ID_ARG
 import org.dianqk.ruslin.ui.RuslinDestinationsArgs.NOTE_ID_ARG
+import org.dianqk.ruslin.ui.RuslinPages.ACCOUNT_DETAIL_PAGE
 import org.dianqk.ruslin.ui.RuslinPages.LOGIN_PAGE
 import org.dianqk.ruslin.ui.RuslinPages.NOTES_PAGE
 import org.dianqk.ruslin.ui.RuslinPages.NOTE_DETAIL_PAGE
@@ -15,6 +16,7 @@ object RuslinPages {
     const val NOTE_DETAIL_PAGE = "note_detail"
     const val LOGIN_PAGE = "login"
     const val SETTINGS_PAGE = "settings"
+    const val ACCOUNT_DETAIL_PAGE = "account_detail"
 }
 
 object RuslinDestinationsArgs {
@@ -27,6 +29,7 @@ object RuslinDestinations {
     const val NOTE_DETAIL_ROUTE = "$NOTE_DETAIL_PAGE?$NOTE_ID_ARG={$NOTE_ID_ARG}&$FOLDER_ID_ARG={$FOLDER_ID_ARG}"
     const val LOGIN_ROUTE = LOGIN_PAGE
     const val SETTINGS_ROUTE = SETTINGS_PAGE
+    const val ACCOUNT_DETAIL_ROUTE = ACCOUNT_DETAIL_PAGE
 }
 
 class RuslinNavigationActions(private val navController: NavHostController) {
@@ -44,14 +47,26 @@ class RuslinNavigationActions(private val navController: NavHostController) {
             builder.appendQueryParameter(NOTE_ID_ARG, noteId)
         }
         val url = builder.build().toString()
-        navController.navigate(url)
+        navController.navigate(url) {
+            launchSingleTop = true
+        }
     }
 
     fun navigateToLogin() {
-        navController.navigate(RuslinDestinations.LOGIN_ROUTE)
+        navController.navigate(RuslinDestinations.LOGIN_ROUTE) {
+            launchSingleTop = true
+        }
     }
 
     fun navigateToSettings() {
-        navController.navigate(RuslinDestinations.SETTINGS_ROUTE)
+        navController.navigate(RuslinDestinations.SETTINGS_ROUTE) {
+            launchSingleTop = true
+        }
+    }
+
+    fun navigateToAccountDetail() {
+        navController.navigate(RuslinDestinations.ACCOUNT_DETAIL_ROUTE) {
+            launchSingleTop = true
+        }
     }
 }

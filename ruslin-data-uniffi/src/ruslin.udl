@@ -98,6 +98,8 @@ interface RuslinAndroidData {
     [Throws=SyncError]
     void save_sync_config(SyncConfig config);
     [Throws=SyncError]
+    SyncConfig? get_sync_config();
+    [Throws=SyncError]
     void sync();
     FFIFolder new_folder(string? parent_id, string title);
     [Throws=DatabaseError]
