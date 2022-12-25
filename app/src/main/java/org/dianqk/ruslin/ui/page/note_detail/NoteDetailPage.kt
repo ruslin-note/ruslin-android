@@ -36,6 +36,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.dianqk.ruslin.R
+import org.dianqk.ruslin.ui.component.BackButton
 import org.dianqk.ruslin.ui.component.MarkdownVisualTransformation
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLifecycleComposeApi::class)
@@ -52,9 +53,7 @@ fun NoteDetailPage(
             TopAppBar(
                 title = {},
                 navigationIcon = {
-                    IconButton(onClick = onPopBack) {
-                        Icon(Icons.Default.ArrowBack, stringResource(id = R.string.desc_menu))
-                    }
+                    BackButton(onClick = onPopBack)
                 },
                 actions = {
                     IconButton(onClick = { /*TODO*/ }) {

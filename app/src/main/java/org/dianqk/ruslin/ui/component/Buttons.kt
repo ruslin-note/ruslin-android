@@ -5,12 +5,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Button
-import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.*
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import org.dianqk.ruslin.R
 
 @Composable
 fun OutlinedButtonWithIcon(
@@ -81,5 +81,12 @@ fun FilledButtonWithIcon(
             modifier = Modifier.padding(start = 6.dp),
             text = text
         )
+    }
+}
+
+@Composable
+fun BackButton(modifier: Modifier = Modifier, onClick: () -> Unit) {
+    IconButton(modifier = modifier, onClick = onClick) {
+        Icon(Icons.Default.ArrowBack, stringResource(id = R.string.back))
     }
 }

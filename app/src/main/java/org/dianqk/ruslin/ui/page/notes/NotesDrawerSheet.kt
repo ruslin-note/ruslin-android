@@ -1,14 +1,12 @@
 package org.dianqk.ruslin.ui.page.notes
 
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CreateNewFolder
-import androidx.compose.material.icons.outlined.Article
-import androidx.compose.material.icons.outlined.CreateNewFolder
-import androidx.compose.material.icons.outlined.Folder
-import androidx.compose.material.icons.outlined.FolderCopy
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -33,6 +31,7 @@ fun NotesDrawerSheet(
     openCreateFolderDialog: Boolean,
     onCreateFolder: (String) -> Unit,
     onChangeOpenCreateFolderDialogVisible: (Boolean) -> Unit,
+    onShowSettingsPage: () -> Unit,
 ) {
     val createFolderTitle: MutableState<String> = remember { mutableStateOf("") }
 
@@ -101,6 +100,16 @@ fun NotesDrawerSheet(
                 ),
             )
         }
+        Spacer(Modifier.height(12.dp))
+        Divider(modifier = Modifier.fillMaxWidth())
+        Spacer(Modifier.height(12.dp))
+        NavigationDrawerItem(
+            icon = { Icon(Icons.Outlined.Settings, contentDescription = stringResource(id = R.string.settings)) },
+            label = { Text(text = stringResource(id = R.string.settings)) },
+            selected = false,
+            onClick = onShowSettingsPage,
+            modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+        )
     }
 }
 

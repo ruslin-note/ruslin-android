@@ -20,4 +20,14 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="conflict_notes">Conflict Notes</string>
+    <string name="settings">Settings</string>
+    <string name="back">Back</string>
+    <string name="account">Account</string>
+    <string name="account_setting_desc">Syncing</string>
+    <string name="color_and_style">Color &amp; Style</string>
+    <string name="color_and_style_setting_desc">Theme, color style</string>
+    <string name="about">About</string>
+    <string name="about_setting_desc">Version, issue, credits</string>
+    <string name="languages">Languages</string>
+    <string name="languages_setting_desc">English, Chinese, more</string>
 </resources>

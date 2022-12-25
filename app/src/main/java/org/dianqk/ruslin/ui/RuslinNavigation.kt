@@ -8,11 +8,13 @@ import org.dianqk.ruslin.ui.RuslinDestinationsArgs.NOTE_ID_ARG
 import org.dianqk.ruslin.ui.RuslinPages.LOGIN_PAGE
 import org.dianqk.ruslin.ui.RuslinPages.NOTES_PAGE
 import org.dianqk.ruslin.ui.RuslinPages.NOTE_DETAIL_PAGE
+import org.dianqk.ruslin.ui.RuslinPages.SETTINGS_PAGE
 
 object RuslinPages {
     const val NOTES_PAGE = "notes"
     const val NOTE_DETAIL_PAGE = "note_detail"
     const val LOGIN_PAGE = "login"
+    const val SETTINGS_PAGE = "settings"
 }
 
 object RuslinDestinationsArgs {
@@ -24,6 +26,7 @@ object RuslinDestinations {
     const val NOTES_ROUTE = NOTES_PAGE
     const val NOTE_DETAIL_ROUTE = "$NOTE_DETAIL_PAGE?$NOTE_ID_ARG={$NOTE_ID_ARG}&$FOLDER_ID_ARG={$FOLDER_ID_ARG}"
     const val LOGIN_ROUTE = LOGIN_PAGE
+    const val SETTINGS_ROUTE = SETTINGS_PAGE
 }
 
 class RuslinNavigationActions(private val navController: NavHostController) {
@@ -46,5 +49,9 @@ class RuslinNavigationActions(private val navController: NavHostController) {
 
     fun navigateToLogin() {
         navController.navigate(RuslinDestinations.LOGIN_ROUTE)
+    }
+
+    fun navigateToSettings() {
+        navController.navigate(RuslinDestinations.SETTINGS_ROUTE)
     }
 }

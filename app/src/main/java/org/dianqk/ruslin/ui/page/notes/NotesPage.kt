@@ -25,7 +25,8 @@ import org.dianqk.ruslin.ui.component.BottomDrawer
 import org.dianqk.ruslin.ui.component.FilledTonalButtonWithIcon
 import org.dianqk.ruslin.ui.component.OutlinedButtonWithIcon
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLifecycleComposeApi::class,
+@OptIn(
+    ExperimentalMaterial3Api::class, ExperimentalLifecycleComposeApi::class,
     ExperimentalMaterialApi::class
 )
 @Composable
@@ -33,6 +34,7 @@ fun NotesPage(
     viewModel: NotesViewModel = hiltViewModel(),
     navigateToNoteDetail: (parentId: String?, noteId: String?) -> Unit,
     navigateToLogin: () -> Unit,
+    navigateToSettings: () -> Unit,
 ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -77,6 +79,9 @@ fun NotesPage(
                 onChangeOpenCreateFolderDialogVisible = {
                     openCreateFolderDialog.value = it
                 },
+                onShowSettingsPage = {
+                    navigateToSettings()
+                }
             )
         },
         content = {
@@ -126,7 +131,12 @@ fun NotesPage(
                     if (!uiState.showConflictNotes) {
                         ExtendedFloatingActionButton(
                             text = { Text(stringResource(id = R.string.new_note)) },
-                            icon = { Icon(Icons.Default.Edit, stringResource(id = R.string.new_note)) },
+                            icon = {
+                                Icon(
+                                    Icons.Default.Edit,
+                                    stringResource(id = R.string.new_note)
+                                )
+                            },
                             onClick = { navigateToNoteDetail(uiState.selectedFolder?.id, null) })
                     }
                 }
@@ -162,9 +172,11 @@ fun NotesPage(
                             style = MaterialTheme.typography.titleLarge
                         )
                     }
-                    Row(modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 24.dp), horizontalArrangement = Arrangement.End) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 24.dp), horizontalArrangement = Arrangement.End
+                    ) {
                         OutlinedButtonWithIcon(
                             modifier = Modifier.padding(horizontal = 12.dp),
                             onClick = {
@@ -181,7 +193,9 @@ fun NotesPage(
                                 navigateToNoteDetail(uiState.selectedFolder?.id, note.id)
                                 viewModel.unselecteNote()
                             },
-                            icon = Icons.Outlined.FileOpen, text = stringResource(id = R.string.open))
+                            icon = Icons.Outlined.FileOpen,
+                            text = stringResource(id = R.string.open)
+                        )
                     }
                 }
             }
@@ -190,5 +204,9 @@ fun NotesPage(
 
     LaunchedEffect(Unit) {
         viewModel.loadAbbrNotes()
+    }
+
+    LaunchedEffect(Unit) {
+        drawerState.snapTo(DrawerValue.Closed)
     }
 }
