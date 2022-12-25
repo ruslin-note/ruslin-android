@@ -31,4 +31,18 @@
     <string name="languages">Languages</string>
     <string name="languages_setting_desc">English, Chinese, more</string>
     <string name="joplin_server">Joplin Server</string>
+    <string name="syncing">Syncing</string>
+    <string name="every_15_minutes">Every 15 minutes</string>
+    <string name="every_30_minutes">Every 30 minutes</string>
+    <string name="every_1_hour">Every hour</string>
+    <string name="every_2_hours">Every 2 hours</string>
+    <string name="every_3_hours">Every 3 hours</string>
+    <string name="every_6_hours">Every 6 hours</string>
+    <string name="every_12_hours">Every 12 hours</string>
+    <string name="every_1_day">Every day</string>
+    <string name="manually">Manually</string>
+    <string name="sync_interval">Sync</string>
+    <string name="sync_once_on_start">Sync once on start</string>
+    <string name="only_on_wifi">Only on Wi-Fi</string>
+    <string name="only_when_charging">Only when charging</string>
 </resources>

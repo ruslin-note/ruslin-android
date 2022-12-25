@@ -31,4 +31,18 @@
     <string name="languages">语言</string>
     <string name="languages_setting_desc">英语、简体中文、更多</string>
     <string name="joplin_server">Joplin 服务器</string>
+    <string name="syncing">同步</string>
+    <string name="every_15_minutes">每 15 分钟</string>
+    <string name="every_30_minutes">每 30 分钟</string>
+    <string name="every_1_hour">每 1 小时</string>
+    <string name="every_2_hours">每 2 小时</string>
+    <string name="every_3_hours">每 3 小时</string>
+    <string name="every_6_hours">每 6 小时</string>
+    <string name="every_12_hours">每 12 小时</string>
+    <string name="every_1_day">每 1 天</string>
+    <string name="manually">手动</string>
+    <string name="sync_interval">同步频率</string>
+    <string name="sync_once_on_start">启动时同步一次</string>
+    <string name="only_on_wifi">仅限连接 Wi-Fi 时</string>
+    <string name="only_when_charging">仅限连接充电器时</string>
 </resources>
