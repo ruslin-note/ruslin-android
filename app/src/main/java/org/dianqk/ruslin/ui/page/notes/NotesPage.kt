@@ -1,5 +1,6 @@
 package org.dianqk.ruslin.ui.page.notes
 
+import android.util.Log
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.selection.SelectionContainer
@@ -20,6 +21,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.work.WorkInfo
+import androidx.work.Worker
 import kotlinx.coroutines.launch
 import org.dianqk.ruslin.R
 import org.dianqk.ruslin.data.SyncWorker.Companion.getIsSyncing
@@ -53,13 +56,18 @@ fun NotesPage(
         )
     )
     var isSyncing by remember { mutableStateOf(false) }
-
+    var isFinished by remember { mutableStateOf(false) }
     val owner = LocalLifecycleOwner.current
     viewModel.syncWorkLiveData.observe(owner) {
-        it?.let {
-            isSyncing = it.any { it.progress.getIsSyncing() }
-            if (it.any { it.state.isFinished }) {
-                viewModel.loadAbbrNotes()
+        it?.let { workList ->
+            isSyncing = workList.any { it.progress.getIsSyncing() }
+            if (workList.any { it.state.isFinished }) {
+                if (!isFinished) {
+                    isFinished = true
+                    viewModel.loadAbbrNotes()
+                }
+            } else {
+                isFinished = false
             }
         }
     }

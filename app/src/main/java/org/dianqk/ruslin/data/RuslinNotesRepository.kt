@@ -32,6 +32,7 @@ class RuslinNotesRepository @Inject constructor(
 
     override suspend fun doSync(isOnStart: Boolean) {
         workManager.cancelAllWork()
+        workManager.pruneWork()
         if (isOnStart) {
             SyncWorker.enqueueOneTimeWork(workManager)
         } else {

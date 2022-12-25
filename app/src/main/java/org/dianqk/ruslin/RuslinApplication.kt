@@ -22,15 +22,15 @@ class RuslinApplication: Application(), Configuration.Provider {
     @Inject
     lateinit var notesRepository: NotesRepository
 
-//    @Inject
-//    @ApplicationScope
-//    lateinit var applicationScope: CoroutineScope
+    @Inject
+    @ApplicationScope
+    lateinit var applicationScope: CoroutineScope
 
     override fun onCreate() {
         super.onCreate()
-//        applicationScope.launch {
-//
-//        }
+        applicationScope.launch {
+            notesRepository.doSync(isOnStart = true)
+        }
     }
 
     override fun getWorkManagerConfiguration() =

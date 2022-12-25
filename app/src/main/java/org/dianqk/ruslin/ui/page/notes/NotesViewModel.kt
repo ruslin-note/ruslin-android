@@ -41,7 +41,6 @@ class NotesViewModel @Inject constructor(
 
     init {
         loadFolders()
-        loadAbbrNotes()
         checkConflictNoteExists()
     }
 

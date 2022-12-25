@@ -10,22 +10,20 @@ import kotlinx.coroutines.SupervisorJob
 import javax.inject.Qualifier
 import javax.inject.Singleton
 
-@Module
-@InstallIn(SingletonComponent::class)
-object CoroutineScopeModule {
-    @Provides
-    @Singleton
-    @ApplicationScope
-    fun provideCoroutineScope(@DefaultDispatcher defaultDispatcher: CoroutineDispatcher): CoroutineScope = CoroutineScope(
-        SupervisorJob() + defaultDispatcher
-    )
-}
+// https://medium.com/androiddevelopers/create-an-application-coroutinescope-using-hilt-dd444e721528
 
 @Retention(AnnotationRetention.RUNTIME)
 @Qualifier
 annotation class ApplicationScope
 
-@Retention(AnnotationRetention.RUNTIME)
-@Qualifier
-annotation class DefaultDispatcher
+@InstallIn(SingletonComponent::class)
+@Module
+object CoroutinesScopesModule {
 
+    @Singleton
+    @ApplicationScope
+    @Provides
+    fun providesCoroutineScope(
+        @DefaultDispatcher defaultDispatcher: CoroutineDispatcher
+    ): CoroutineScope = CoroutineScope(SupervisorJob() + defaultDispatcher)
+}
