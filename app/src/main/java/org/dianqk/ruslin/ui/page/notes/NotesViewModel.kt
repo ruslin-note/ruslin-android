@@ -84,6 +84,12 @@ class NotesViewModel @Inject constructor(
         }
     }
 
+    fun reloadAllAfterSync() {
+        loadAbbrNotes()
+        loadFolders()
+        checkConflictNoteExists()
+    }
+
     fun loadAbbrNotes() {
         val showConflictNotes = uiState.value.showConflictNotes
         _uiState.update {

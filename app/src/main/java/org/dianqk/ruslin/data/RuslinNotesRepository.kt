@@ -1,8 +1,11 @@
 package org.dianqk.ruslin.data
 
+import android.content.Context
 import androidx.work.WorkManager
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import uniffi.ruslin.*
 import javax.inject.Inject
@@ -11,6 +14,7 @@ class RuslinNotesRepository @Inject constructor(
     databaseDir: String,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val workManager: WorkManager,
+    private val appContext: Context,
 ) : NotesRepository {
     private val data: RuslinAndroidData = RuslinAndroidData(databaseDir)
 
@@ -31,13 +35,27 @@ class RuslinNotesRepository @Inject constructor(
         }
 
     override suspend fun doSync(isOnStart: Boolean) {
-        workManager.cancelAllWork()
-        workManager.pruneWork()
-        if (isOnStart) {
-            SyncWorker.enqueueOneTimeWork(workManager)
-        } else {
-            SyncWorker.enqueueOneTimeWork(workManager)
+        withContext(ioDispatcher) {
+            workManager.cancelAllWork()
+            val syncStrategy = appContext.dataStore.syncStrategy().first()
+            if (isOnStart) {
+                if (syncStrategy.syncOnStart) {
+                    SyncWorker.enqueueOneTimeWork(workManager)
+                }
+            } else {
+                SyncWorker.enqueueOneTimeWork(workManager)
+            }
+            if (syncStrategy.syncInterval > 0) {
+                SyncWorker.enqueuePeriodicWork(
+                    workManager = workManager,
+                    syncInterval = syncStrategy.syncInterval,
+                    syncOnlyWhenCharging = syncStrategy.syncOnlyWhenCharging,
+                    syncOnlyOnWiFi = syncStrategy.syncOnlyWiFi,
+                )
+            }
+
         }
+
     }
 
     override fun newFolder(parentId: String?, title: String): FfiFolder =

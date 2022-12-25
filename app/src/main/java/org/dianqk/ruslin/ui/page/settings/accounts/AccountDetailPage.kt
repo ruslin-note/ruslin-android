@@ -6,22 +6,18 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.dianqk.ruslin.R
-import org.dianqk.ruslin.ui.component.BackButton
-import org.dianqk.ruslin.ui.component.PreferenceSubtitle
-import org.dianqk.ruslin.ui.component.PreferenceSwitch
-import org.dianqk.ruslin.ui.component.SettingItem
+import org.dianqk.ruslin.data.SyncIntervalPreference
+import org.dianqk.ruslin.ui.component.*
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLifecycleComposeApi::class)
 @Composable
@@ -30,12 +26,13 @@ fun AccountDetailPage(
     navigateToLogin: () -> Unit,
     viewModel: AccountDetailViewModel = hiltViewModel()
 ) {
-
+    val context = LocalContext.current
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val fraction =
         CubicBezierEasing(1f, 0f, 0.8f, 0.4f).transform(scrollBehavior.state.overlappedFraction)
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val enabled = remember { mutableStateOf(false) }
+    val syncStrategy by viewModel.syncStrategy.collectAsStateWithLifecycle()
+    var syncIntervalDialogVisible by remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier
@@ -75,32 +72,50 @@ fun AccountDetailPage(
                 PreferenceSubtitle(text = stringResource(id = R.string.syncing))
                 SettingItem(
                     title = stringResource(id = R.string.sync_interval),
-                    description = stringResource(id = R.string.every_30_minutes),
+                    description = SyncIntervalPreference.toSyncInterval(syncStrategy.syncInterval).toDesc(context),
                     icon = Icons.Filled.EventRepeat,
-                    onClick = { /* TODO */ },
+                    onClick = { syncIntervalDialogVisible = true },
                 )
                 PreferenceSwitch(
                     title = stringResource(id = R.string.sync_once_on_start),
-                    isChecked = enabled.value,
+                    isChecked = syncStrategy.syncOnStart,
                     onClick = {
-                        enabled.value = !enabled.value
+                        viewModel.setSyncOnStart(!syncStrategy.syncOnStart)
                     },
                 )
                 PreferenceSwitch(
                     title = stringResource(id = R.string.only_on_wifi),
-                    isChecked = enabled.value,
+                    isChecked = syncStrategy.syncOnlyWiFi,
                     onClick = {
-                        enabled.value = !enabled.value
+                        viewModel.setSyncOnlyWiFi(!syncStrategy.syncOnlyWiFi)
                     },
                 )
                 PreferenceSwitch(
                     title = stringResource(id = R.string.only_when_charging),
-                    isChecked = enabled.value,
+                    isChecked = syncStrategy.syncOnlyWhenCharging,
                     onClick = {
-                        enabled.value = !enabled.value
+                        viewModel.setSyncOnlyWhenCharging(!syncStrategy.syncOnlyWhenCharging)
                     },
                 )
             }
         }
     }
+
+    if (syncIntervalDialogVisible) {
+        RadioDialog(
+            title = stringResource(R.string.sync_interval),
+            options = SyncIntervalPreference.values.map {
+                RadioDialogOption(
+                    text = it.toDesc(context),
+                    selected = it.value == syncStrategy.syncInterval,
+                ) {
+                    viewModel.setSyncInterval(it.value)
+                }
+            }
+        ) {
+            syncIntervalDialogVisible = false
+        }
+
+    }
+
 }

@@ -9,6 +9,7 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.util.UUID
+import java.util.concurrent.TimeUnit
 
 private val TAG = "SyncWorker"
 
@@ -34,6 +35,27 @@ class SyncWorker @AssistedInject constructor(
 
         fun enqueueOneTimeWork(workerManager: WorkManager) {
             workerManager.enqueue(OneTimeWorkRequestBuilder<SyncWorker>().addTag(WORK_NAME).build())
+        }
+
+        fun enqueuePeriodicWork(
+            workManager: WorkManager,
+            syncInterval: Long,
+            syncOnlyWhenCharging: Boolean,
+            syncOnlyOnWiFi: Boolean,
+        ) {
+            workManager.enqueueUniquePeriodicWork(
+                WORK_NAME,
+                ExistingPeriodicWorkPolicy.REPLACE,
+                PeriodicWorkRequestBuilder<SyncWorker>(syncInterval, TimeUnit.MINUTES)
+                    .setConstraints(Constraints.Builder()
+                        .setRequiresCharging(syncOnlyWhenCharging)
+                        .setRequiredNetworkType(if (syncOnlyOnWiFi) NetworkType.UNMETERED else NetworkType.CONNECTED)
+                        .build()
+                    )
+                    .addTag(WORK_NAME)
+                    .setInitialDelay(15, TimeUnit.MINUTES)
+                    .build()
+            )
         }
 
         fun setIsSyncing(boolean: Boolean) = workDataOf(IS_SYNCING to boolean)

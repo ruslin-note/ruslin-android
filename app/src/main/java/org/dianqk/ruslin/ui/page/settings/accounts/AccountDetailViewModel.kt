@@ -1,14 +1,17 @@
 package org.dianqk.ruslin.ui.page.settings.accounts
 
+import android.content.Context
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import org.dianqk.ruslin.data.NotesRepository
+import kotlinx.coroutines.withContext
+import org.dianqk.ruslin.data.*
 import uniffi.ruslin.SyncConfig
 import javax.inject.Inject
 
@@ -19,14 +22,56 @@ data class AccountDetailUiState(
 
 @HiltViewModel
 class AccountDetailViewModel @Inject constructor(
-    private val notesRepository: NotesRepository
+    private val notesRepository: NotesRepository,
+    @ApplicationContext private val context: Context,
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow(AccountDetailUiState())
     val uiState: StateFlow<AccountDetailUiState> = _uiState.asStateFlow()
+    val syncStrategy: StateFlow<SyncStrategy> = context.dataStore.syncStrategy().stateIn(viewModelScope, SharingStarted.WhileSubscribed(), SyncStrategy())
 
     init {
         loadSyncConfig()
+    }
+
+    fun setSyncInterval(syncInterval: Long) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                context.dataStore.edit {
+                    it[DataStoreKeys.SyncInterval.key] = syncInterval
+                }
+            }
+        }
+    }
+
+    fun setSyncOnStart(syncOnStart: Boolean) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                context.dataStore.edit {
+                    it[DataStoreKeys.SyncOnStart.key] = syncOnStart
+                }
+            }
+        }
+    }
+
+    fun setSyncOnlyWiFi(syncOnlyWiFi: Boolean) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                context.dataStore.edit {
+                    it[DataStoreKeys.SyncOnlyWiFi.key] = syncOnlyWiFi
+                }
+            }
+        }
+    }
+
+    fun setSyncOnlyWhenCharging(syncOnlyWhenCharging: Boolean) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                context.dataStore.edit {
+                    it[DataStoreKeys.SyncOnlyWhenCharging.key] = syncOnlyWhenCharging
+                }
+            }
+        }
     }
 
     private fun loadSyncConfig() {

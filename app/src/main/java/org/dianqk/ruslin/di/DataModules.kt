@@ -21,6 +21,6 @@ object RepositoryModel {
     fun provideNotesRepository(@ApplicationContext appContext: Context): NotesRepository {
         val databaseDir = appContext.getDatabasePath("database.sql").parent!!
         Log.d("RepositoryModel", "provideNotesRepository $databaseDir")
-        return RuslinNotesRepository(databaseDir = databaseDir, workManager = WorkManager.getInstance(appContext))
+        return RuslinNotesRepository(databaseDir = databaseDir, workManager = WorkManager.getInstance(appContext), appContext = appContext)
     }
 }

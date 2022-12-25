@@ -1,0 +1,76 @@
+package org.dianqk.ruslin.ui.component
+
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.BaselineShift
+import androidx.compose.ui.unit.dp
+
+
+@Composable
+fun RadioDialog(
+    modifier: Modifier = Modifier,
+    title: String = "",
+    options: List<RadioDialogOption> = emptyList(),
+    onDismissRequest: () -> Unit = {},
+) {
+    AlertDialog(
+        modifier = modifier,
+        onDismissRequest = onDismissRequest,
+        title = {
+            Text(text = title)
+        },
+        text = {
+            LazyColumn {
+                items(options) { option ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(CircleShape)
+                            .clickable {
+                                option.onClick()
+                                onDismissRequest()
+                            },
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        RadioButton(selected = option.selected, onClick = {
+                            option.onClick()
+                            onDismissRequest()
+                        })
+                        Text(
+                            modifier = Modifier.padding(start = 6.dp),
+                            text = option.text,
+                            style = MaterialTheme.typography.bodyLarge.copy(
+                                baselineShift = BaselineShift.None
+                            ).merge(other = option.style),
+                            color = MaterialTheme.colorScheme.onSurface,
+                        )
+                    }
+                }
+            }
+        },
+        confirmButton = {
+        },
+        dismissButton = {
+        }
+    )
+}
+
+@Immutable
+data class RadioDialogOption(
+    val text: String = "",
+    val style: TextStyle? = null,
+    val selected: Boolean = false,
+    val onClick: () -> Unit = {},
+)

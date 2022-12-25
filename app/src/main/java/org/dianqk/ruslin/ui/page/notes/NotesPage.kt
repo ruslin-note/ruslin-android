@@ -56,15 +56,15 @@ fun NotesPage(
         )
     )
     var isSyncing by remember { mutableStateOf(false) }
-    var isFinished by remember { mutableStateOf(false) }
+    var isFinished by remember { mutableStateOf(true) }
     val owner = LocalLifecycleOwner.current
     viewModel.syncWorkLiveData.observe(owner) {
         it?.let { workList ->
             isSyncing = workList.any { it.progress.getIsSyncing() }
-            if (workList.any { it.state.isFinished }) {
+            if (workList.all { it.state.isFinished }) {
                 if (!isFinished) {
                     isFinished = true
-                    viewModel.loadAbbrNotes()
+                    viewModel.reloadAllAfterSync()
                 }
             } else {
                 isFinished = false
