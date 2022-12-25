@@ -1,14 +1,16 @@
 package org.dianqk.ruslin.data
 
-import androidx.compose.ui.platform.LocalContext
+import androidx.work.WorkManager
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import uniffi.ruslin.*
+import javax.inject.Inject
 
-class RuslinNotesRepository(
+class RuslinNotesRepository @Inject constructor(
     databaseDir: String,
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val workManager: WorkManager,
 ) : NotesRepository {
     private val data: RuslinAndroidData = RuslinAndroidData(databaseDir)
 
@@ -27,6 +29,15 @@ class RuslinNotesRepository(
         withContext(ioDispatcher) {
             kotlin.runCatching { data.sync() }
         }
+
+    override suspend fun doSync(isOnStart: Boolean) {
+        workManager.cancelAllWork()
+        if (isOnStart) {
+            SyncWorker.enqueueOneTimeWork(workManager)
+        } else {
+            SyncWorker.enqueueOneTimeWork(workManager)
+        }
+    }
 
     override fun newFolder(parentId: String?, title: String): FfiFolder =
         data.newFolder(parentId, title)

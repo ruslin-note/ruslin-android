@@ -11,8 +11,6 @@ import uniffi.ruslin.RuslinAndroidData
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    var ruslinAndroidData: RuslinAndroidData? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)

@@ -14,6 +14,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -21,6 +22,7 @@ import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import org.dianqk.ruslin.R
+import org.dianqk.ruslin.data.SyncWorker.Companion.getIsSyncing
 import org.dianqk.ruslin.ui.component.BottomDrawer
 import org.dianqk.ruslin.ui.component.FilledTonalButtonWithIcon
 import org.dianqk.ruslin.ui.component.OutlinedButtonWithIcon
@@ -50,6 +52,17 @@ fun NotesPage(
             animation = tween(1000, easing = LinearEasing)
         )
     )
+    var isSyncing by remember { mutableStateOf(false) }
+
+    val owner = LocalLifecycleOwner.current
+    viewModel.syncWorkLiveData.observe(owner) {
+        it?.let {
+            isSyncing = it.any { it.progress.getIsSyncing() }
+            if (it.any { it.state.isFinished }) {
+                viewModel.loadAbbrNotes()
+            }
+        }
+    }
 
     val topAppBarTitle = if (uiState.showConflictNotes) {
         stringResource(id = R.string.conflict_notes)
@@ -115,7 +128,7 @@ fun NotesPage(
                                 Icon(
                                     imageVector = Icons.Default.Sync,
                                     contentDescription = stringResource(id = R.string.desc_sync),
-                                    modifier = Modifier.rotate(if (uiState.isSyncing) syncAngle else 360f),
+                                    modifier = Modifier.rotate(if (isSyncing) syncAngle else 360f),
                                 )
                             }
                             IconButton(onClick = { /*TODO*/ }) {

@@ -12,6 +12,8 @@ interface NotesRepository {
 
     suspend fun sync(): Result<Unit>
 
+    suspend fun doSync(isOnStart: Boolean);
+
     fun newFolder(parentId: String?, title: String): FfiFolder
 
     suspend fun replaceFolder(folder: FfiFolder): Result<Unit>

@@ -3,6 +3,7 @@ package org.dianqk.ruslin.ui.page.notes
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.WorkManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -10,6 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.dianqk.ruslin.data.NotesRepository
+import org.dianqk.ruslin.data.SyncWorker
 import uniffi.ruslin.FfiAbbrNote
 import uniffi.ruslin.FfiFolder
 import javax.inject.Inject
@@ -20,7 +22,6 @@ data class NotesUiState(
     val selectedFolder: FfiFolder? = null,
     val isLoading: Boolean = false,
     val selectedNote: FfiAbbrNote? = null,
-    val isSyncing: Boolean = false,
     val conflictNoteExists: Boolean = false,
     val showConflictNotes: Boolean = false,
 )
@@ -29,11 +30,14 @@ const val TAG = "NotesViewModel"
 
 @HiltViewModel
 class NotesViewModel @Inject constructor(
-    private val notesRepository: NotesRepository
+    private val notesRepository: NotesRepository,
+    workManager: WorkManager,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(NotesUiState())
     val uiState: StateFlow<NotesUiState> = _uiState.asStateFlow()
+
+    val syncWorkLiveData = workManager.getWorkInfosByTagLiveData(SyncWorker.WORK_NAME)
 
     init {
         loadFolders()
@@ -76,26 +80,8 @@ class NotesViewModel @Inject constructor(
     fun syncConfigExists(): Boolean = notesRepository.syncConfigExists()
 
     fun sync() {
-        _uiState.update {
-            it.copy(
-                isSyncing = true
-            )
-        }
         viewModelScope.launch {
-            notesRepository.sync()
-                .onSuccess {
-                    loadAbbrNotes()
-                    loadFolders()
-                    checkConflictNoteExists()
-                }
-                .onFailure { e ->
-
-                }
-            _uiState.update {
-                it.copy(
-                    isSyncing = false
-                )
-            }
+            notesRepository.doSync(isOnStart = false)
         }
     }
 

@@ -2,6 +2,7 @@ package org.dianqk.ruslin.di
 
 import android.content.Context
 import android.util.Log
+import androidx.work.WorkManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,6 +21,6 @@ object RepositoryModel {
     fun provideNotesRepository(@ApplicationContext appContext: Context): NotesRepository {
         val databaseDir = appContext.getDatabasePath("database.sql").parent!!
         Log.d("RepositoryModel", "provideNotesRepository $databaseDir")
-        return RuslinNotesRepository(databaseDir)
+        return RuslinNotesRepository(databaseDir = databaseDir, workManager = WorkManager.getInstance(appContext))
     }
 }
