@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Ruslin</string>
+    <string name="app_name" translatable="false">Ruslin</string>
     <string name="new_note">New Note</string>
     <string name="desc_menu">Menu</string>
     <string name="desc_sync">Sync</string>

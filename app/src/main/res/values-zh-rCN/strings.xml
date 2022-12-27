@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">Ruslin</string>
     <string name="new_note">创建笔记</string>
     <string name="desc_menu">菜单</string>
     <string name="desc_sync">同步</string>
