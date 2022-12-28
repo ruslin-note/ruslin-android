@@ -20,3 +20,6 @@ libsqlite3-sys = { version = "0.25.2", features = ["bundled"] }
 
 [build-dependencies]
 uniffi_build = { version = "0.22.0", features=["builtin-bindgen"] }
+
+[profile.release]
+lto = true
