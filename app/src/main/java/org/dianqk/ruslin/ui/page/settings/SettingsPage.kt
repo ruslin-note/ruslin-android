@@ -19,6 +19,7 @@ import org.dianqk.ruslin.ui.component.SettingItem
 @Composable
 fun SettingsPage(
     navigateToAccountDetail: () -> Unit,
+    navigateToTools: () -> Unit,
     onPopBack: () -> Unit,
 ) {
 
@@ -73,6 +74,14 @@ fun SettingsPage(
                     description = stringResource(id = R.string.languages_setting_desc),
                     icon = Icons.Filled.Language,
                     onClick = { /* TODO */ }
+                )
+            }
+            item {
+                SettingItem(
+                    title = stringResource(id = R.string.tools),
+                    description = stringResource(id = R.string.tools_setting_des),
+                    icon = Icons.Filled.Build,
+                    onClick = navigateToTools,
                 )
             }
             item {

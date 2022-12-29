@@ -10,6 +10,7 @@ import org.dianqk.ruslin.ui.RuslinPages.LOGIN_PAGE
 import org.dianqk.ruslin.ui.RuslinPages.NOTES_PAGE
 import org.dianqk.ruslin.ui.RuslinPages.NOTE_DETAIL_PAGE
 import org.dianqk.ruslin.ui.RuslinPages.SETTINGS_PAGE
+import org.dianqk.ruslin.ui.RuslinPages.TOOLS_PAGE
 
 object RuslinPages {
     const val NOTES_PAGE = "notes"
@@ -17,6 +18,8 @@ object RuslinPages {
     const val LOGIN_PAGE = "login"
     const val SETTINGS_PAGE = "settings"
     const val ACCOUNT_DETAIL_PAGE = "account_detail"
+    const val TOOLS_PAGE = "tools"
+    const val LOG_PAGE = "log"
 }
 
 object RuslinDestinationsArgs {
@@ -30,6 +33,8 @@ object RuslinDestinations {
     const val LOGIN_ROUTE = LOGIN_PAGE
     const val SETTINGS_ROUTE = SETTINGS_PAGE
     const val ACCOUNT_DETAIL_ROUTE = ACCOUNT_DETAIL_PAGE
+    const val TOOLS_ROUTE = TOOLS_PAGE
+    const val LOG_ROUTE = LOGIN_ROUTE
 }
 
 class RuslinNavigationActions(private val navController: NavHostController) {
@@ -69,4 +74,17 @@ class RuslinNavigationActions(private val navController: NavHostController) {
             launchSingleTop = true
         }
     }
+
+    fun navigateToTools() {
+        navController.navigate(RuslinDestinations.TOOLS_ROUTE) {
+            launchSingleTop = true
+        }
+    }
+
+    fun navigateToLog() {
+        navController.navigate(RuslinDestinations.LOG_ROUTE) {
+            launchSingleTop = true
+        }
+    }
+
 }

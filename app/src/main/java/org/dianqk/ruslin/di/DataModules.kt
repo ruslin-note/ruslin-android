@@ -35,7 +35,7 @@ object RepositoryModel {
         Log.d("RepositoryModel", "provideNotesRepository $databaseDir")
         return RuslinNotesRepository(
             databaseDir = databaseDir,
-            logTxtFile = logTxtFile.absolutePath,
+            logTxtFile = logTxtFile,
             workManager = WorkManager.getInstance(appContext),
             appContext = appContext,
             applicationScope = applicationScope

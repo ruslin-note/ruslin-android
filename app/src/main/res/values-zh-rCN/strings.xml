@@ -44,4 +44,8 @@
     <string name="sync_once_on_start">启动时同步一次</string>
     <string name="only_on_wifi">仅限连接 Wi-Fi 时</string>
     <string name="only_when_charging">仅限连接充电器时</string>
+    <string name="tools">工具</string>
+    <string name="tools_setting_des">日志、数据库、更多</string>
+    <string name="log">日志</string>
+    <string name="view_logs">查看日志</string>
 </resources>

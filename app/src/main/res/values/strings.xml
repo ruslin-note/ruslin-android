@@ -45,4 +45,8 @@
     <string name="sync_once_on_start">Sync once on start</string>
     <string name="only_on_wifi">Only on Wi-Fi</string>
     <string name="only_when_charging">Only when charging</string>
+    <string name="tools">Tools</string>
+    <string name="tools_setting_des">Log, Database, more</string>
+    <string name="log">Log</string>
+    <string name="view_logs">View Logs</string>
 </resources>

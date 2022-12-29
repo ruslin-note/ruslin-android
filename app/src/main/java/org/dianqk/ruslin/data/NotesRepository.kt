@@ -40,4 +40,6 @@ interface NotesRepository {
 
     suspend fun loadAbbrConflictNotes(): Result<List<FfiAbbrNote>>
 
+    suspend fun readLog(): String
+
 }
