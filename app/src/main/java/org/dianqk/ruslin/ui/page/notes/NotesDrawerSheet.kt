@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CreateNewFolder
 import androidx.compose.material.icons.outlined.*
@@ -34,6 +36,7 @@ fun NotesDrawerSheet(
     onShowSettingsPage: () -> Unit,
 ) {
     val createFolderTitle: MutableState<String> = remember { mutableStateOf("") }
+    val scroll = rememberScrollState(0)
 
     if (openCreateFolderDialog) {
         CreateFolderDialog(
@@ -52,7 +55,7 @@ fun NotesDrawerSheet(
             }
         )
     }
-    ModalDrawerSheet {
+    ModalDrawerSheet(modifier = Modifier.verticalScroll(scroll)) {
         Spacer(Modifier.height(12.dp))
         NavigationDrawerItem(
             icon = { Icon(Icons.Outlined.Article, contentDescription = null) },
@@ -90,8 +93,19 @@ fun NotesDrawerSheet(
         )
         if (showConflictNoteFolder) {
             NavigationDrawerItem(
-                icon = { Icon(Icons.Outlined.FolderCopy, contentDescription = null, tint = MaterialTheme.colorScheme.error) },
-                label = { Text(text = stringResource(id = R.string.conflict_notes), color = MaterialTheme.colorScheme.error) },
+                icon = {
+                    Icon(
+                        Icons.Outlined.FolderCopy,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.error
+                    )
+                },
+                label = {
+                    Text(
+                        text = stringResource(id = R.string.conflict_notes),
+                        color = MaterialTheme.colorScheme.error
+                    )
+                },
                 selected = conflictNoteFolderSelected,
                 onClick = onSelectedConflictFolder,
                 modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
@@ -104,7 +118,12 @@ fun NotesDrawerSheet(
         Divider(modifier = Modifier.fillMaxWidth())
         Spacer(Modifier.height(12.dp))
         NavigationDrawerItem(
-            icon = { Icon(Icons.Outlined.Settings, contentDescription = stringResource(id = R.string.settings)) },
+            icon = {
+                Icon(
+                    Icons.Outlined.Settings,
+                    contentDescription = stringResource(id = R.string.settings)
+                )
+            },
             label = { Text(text = stringResource(id = R.string.settings)) },
             selected = false,
             onClick = onShowSettingsPage,
