@@ -7,10 +7,12 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import org.dianqk.ruslin.di.ApplicationScope
 import uniffi.ruslin.*
+import java.io.File
 import javax.inject.Inject
 
 class RuslinNotesRepository @Inject constructor(
     databaseDir: String,
+    logTxtFile: String,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val workManager: WorkManager,
     private val appContext: Context,
@@ -22,7 +24,7 @@ class RuslinNotesRepository @Inject constructor(
     private val _syncFinished = MutableSharedFlow<Unit>(replay = 0)
     override val syncFinished: SharedFlow<Unit> = _syncFinished.asSharedFlow()
 
-    private val data: RuslinAndroidData = RuslinAndroidData(databaseDir)
+    private val data: RuslinAndroidData = RuslinAndroidData(databaseDir, logTxtFile)
 
     override fun syncConfigExists(): Boolean = data.syncConfigExists()
 

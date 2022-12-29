@@ -1,3 +1,11 @@
+use android_logger::AndroidLogger;
+use log::{Level, LevelFilter, Log};
+use log4rs::{
+    append::{file::FileAppender, Append},
+    config::{Appender, Root},
+    encode::pattern::PatternEncoder,
+    Config,
+};
 use ruslin_data::{
     sync::{SyncConfig, SyncError},
     DatabaseError, Folder, Note, RuslinData, UpdateSource,
@@ -10,25 +18,67 @@ use ffi::{FFIAbbrNote, FFIFolder, FFINote};
 
 uniffi_macros::include_scaffolding!("ruslin");
 
-fn init_log() {
-    use android_logger::Config;
-    use log::Level;
-    android_logger::init_once(
-        Config::default()
-            .with_min_level(Level::Trace)
+struct AndroidAppender(AndroidLogger);
+
+impl std::fmt::Debug for AndroidAppender {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_tuple("AndroidAppender")
+            .field(&"android_logger")
+            .finish()
+    }
+}
+
+impl Append for AndroidAppender {
+    fn append(&self, record: &log::Record) -> uniffi::deps::anyhow::Result<()> {
+        self.0.log(record);
+        Ok(())
+    }
+
+    fn flush(&self) {
+        self.0.flush()
+    }
+}
+
+fn init_log(log_text_file: &str) -> log4rs::Handle {
+    #[cfg(debug_assertions)]
+    let level_filter = LevelFilter::Debug;
+    #[cfg(not(debug_assertions))]
+    let level_filter = LevelFilter::Debug;
+
+    let android_appender = AndroidAppender(AndroidLogger::new(
+        android_logger::Config::default()
+            .with_min_level(Level::Debug)
             .with_tag("RuslinRust"),
-    );
-    log::debug!("ruslin-data loaded");
+    ));
+
+    let log_file = FileAppender::builder()
+        .encoder(Box::new(PatternEncoder::new(
+            "{d(%m-%d %H:%M:%S %Z)(utc)} [{l}]: {m}\n",
+        )))
+        .build(Path::new(log_text_file))
+        .unwrap();
+    let config = Config::builder()
+        .appender(Appender::builder().build("log_file", Box::new(log_file)))
+        .appender(Appender::builder().build("log_android", Box::new(android_appender)))
+        .build(
+            Root::builder()
+                .appender("log_file")
+                .appender("log_android")
+                .build(level_filter),
+        )
+        .unwrap();
+    log4rs::init_config(config).unwrap()
 }
 
 pub struct RuslinAndroidData {
     data: RuslinData,
     rt: Runtime,
+    _log_handle: log4rs::Handle,
 }
 
 impl RuslinAndroidData {
-    pub fn new(data_dir: String) -> Result<Self, SyncError> {
-        init_log();
+    pub fn new(data_dir: String, log_text_file: String) -> Result<Self, SyncError> {
+        let log_handle = init_log(&log_text_file);
         let rt = tokio::runtime::Builder::new_multi_thread()
             .worker_threads(2)
             .enable_all()
@@ -37,6 +87,7 @@ impl RuslinAndroidData {
         Ok(Self {
             data: RuslinData::new(Path::new(&data_dir))?,
             rt,
+            _log_handle: log_handle,
         })
     }
 

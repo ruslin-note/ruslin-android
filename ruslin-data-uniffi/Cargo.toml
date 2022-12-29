@@ -12,9 +12,10 @@ uniffi = "0.22.0"
 uniffi_macros = "0.22.0"
 ruslin-data = { path = "./ruslin-data" }
 log = "0.4.17"
-android_logger = "=0.11.1"
+android_logger = "0.11.3"
 tokio = { version = "1.23.0", features = ["full"] }
 libsqlite3-sys = { version = "0.25.2", features = ["bundled"] }
+log4rs = "1.2.0"
 
 [build-dependencies]
 uniffi_build = { version = "0.22.0", features=["builtin-bindgen"] }

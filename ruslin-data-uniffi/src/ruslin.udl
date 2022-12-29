@@ -64,6 +64,7 @@ enum SyncError {
     "Unknown",
     "SerializeError",
     "APIError",
+    "Misconfiguration",
     "JoinError",
     "DatabaseError",
     "DeserializeError",
@@ -93,7 +94,7 @@ interface SyncConfig {
 
 interface RuslinAndroidData {
     [Throws=SyncError]
-    constructor(string data_dir);
+    constructor(string data_dir, string log_text_file);
     boolean sync_config_exists();
     [Throws=SyncError]
     void save_sync_config(SyncConfig config);
