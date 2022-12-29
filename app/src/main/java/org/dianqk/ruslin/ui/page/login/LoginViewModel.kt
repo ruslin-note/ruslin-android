@@ -76,6 +76,9 @@ class LoginViewModel @Inject constructor(
     suspend fun login(): Result<Unit> {
         val syncConfig = SyncConfig.JoplinServer(host = uiState.value.url, email = uiState.value.email, password = uiState.value.password)
         return notesRepository.saveSyncConfig(syncConfig)
+            .onSuccess {
+                notesRepository.doSync(false)
+            }
     }
 
 }

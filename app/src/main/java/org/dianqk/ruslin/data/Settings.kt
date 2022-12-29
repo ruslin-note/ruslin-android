@@ -93,7 +93,7 @@ sealed class SyncIntervalPreference(
     companion object {
 
         fun toSyncInterval(syncInterval: Long): SyncIntervalPreference {
-            return SyncIntervalPreference.values.find { it.value == syncInterval } ?: SyncIntervalPreference.default
+            return values.find { it.value == syncInterval } ?: SyncIntervalPreference.default
         }
 
         val default = Every30Minutes

@@ -3,10 +3,9 @@ package org.dianqk.ruslin.data
 import android.content.Context
 import androidx.work.WorkManager
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+import org.dianqk.ruslin.di.ApplicationScope
 import uniffi.ruslin.*
 import javax.inject.Inject
 
@@ -15,7 +14,14 @@ class RuslinNotesRepository @Inject constructor(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val workManager: WorkManager,
     private val appContext: Context,
+    private val applicationScope: CoroutineScope,
 ) : NotesRepository {
+    private val _isSyncing = MutableSharedFlow<Boolean>(replay = 0)
+    override val isSyncing: SharedFlow<Boolean> = _isSyncing.asSharedFlow()
+
+    private val _syncFinished = MutableSharedFlow<Unit>(replay = 0)
+    override val syncFinished: SharedFlow<Unit> = _syncFinished.asSharedFlow()
+
     private val data: RuslinAndroidData = RuslinAndroidData(databaseDir)
 
     override fun syncConfigExists(): Boolean = data.syncConfigExists()
@@ -31,11 +37,15 @@ class RuslinNotesRepository @Inject constructor(
 
     override suspend fun sync(): Result<Unit> =
         withContext(ioDispatcher) {
-            kotlin.runCatching { data.sync() }
+            _isSyncing.emit(true)
+            val syncResult = kotlin.runCatching { data.sync() }
+            _isSyncing.emit(false)
+            _syncFinished.emit(Unit)
+            syncResult
         }
 
-    override suspend fun doSync(isOnStart: Boolean) {
-        withContext(ioDispatcher) {
+    override fun doSync(isOnStart: Boolean) {
+        applicationScope.launch {
             workManager.cancelAllWork()
             val syncStrategy = appContext.dataStore.syncStrategy().first()
             if (isOnStart) {
@@ -53,9 +63,7 @@ class RuslinNotesRepository @Inject constructor(
                     syncOnlyOnWiFi = syncStrategy.syncOnlyWiFi,
                 )
             }
-
         }
-
     }
 
     override fun newFolder(parentId: String?, title: String): FfiFolder =

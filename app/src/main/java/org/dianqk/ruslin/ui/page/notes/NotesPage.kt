@@ -1,6 +1,5 @@
 package org.dianqk.ruslin.ui.page.notes
 
-import android.util.Log
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.selection.SelectionContainer
@@ -15,17 +14,13 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.work.WorkInfo
-import androidx.work.Worker
 import kotlinx.coroutines.launch
 import org.dianqk.ruslin.R
-import org.dianqk.ruslin.data.SyncWorker.Companion.getIsSyncing
 import org.dianqk.ruslin.ui.component.BottomDrawer
 import org.dianqk.ruslin.ui.component.FilledTonalButtonWithIcon
 import org.dianqk.ruslin.ui.component.OutlinedButtonWithIcon
@@ -55,22 +50,6 @@ fun NotesPage(
             animation = tween(1000, easing = LinearEasing)
         )
     )
-    var isSyncing by remember { mutableStateOf(false) }
-    var isFinished by remember { mutableStateOf(true) }
-    val owner = LocalLifecycleOwner.current
-    viewModel.syncWorkLiveData.observe(owner) {
-        it?.let { workList ->
-            isSyncing = workList.any { it.progress.getIsSyncing() }
-            if (workList.all { it.state.isFinished }) {
-                if (!isFinished) {
-                    isFinished = true
-                    viewModel.reloadAllAfterSync()
-                }
-            } else {
-                isFinished = false
-            }
-        }
-    }
 
     val topAppBarTitle = if (uiState.showConflictNotes) {
         stringResource(id = R.string.conflict_notes)
@@ -126,7 +105,9 @@ fun NotesPage(
                                     stringResource(id = R.string.desc_search)
                                 )
                             }
-                            IconButton(onClick = {
+                            IconButton(
+                                enabled = !uiState.isSyncing,
+                                onClick = {
                                 if (viewModel.syncConfigExists()) {
                                     viewModel.sync()
                                 } else {
@@ -136,7 +117,7 @@ fun NotesPage(
                                 Icon(
                                     imageVector = Icons.Default.Sync,
                                     contentDescription = stringResource(id = R.string.desc_sync),
-                                    modifier = Modifier.rotate(if (isSyncing) syncAngle else 360f),
+                                    modifier = Modifier.rotate(if (uiState.isSyncing) syncAngle else 360f),
                                 )
                             }
                             IconButton(onClick = { /*TODO*/ }) {

@@ -28,9 +28,7 @@ class RuslinApplication: Application(), Configuration.Provider {
 
     override fun onCreate() {
         super.onCreate()
-        applicationScope.launch {
-            notesRepository.doSync(isOnStart = true)
-        }
+        notesRepository.doSync(isOnStart = true)
     }
 
     override fun getWorkManagerConfiguration() =

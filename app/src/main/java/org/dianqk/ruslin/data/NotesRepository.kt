@@ -1,5 +1,6 @@
 package org.dianqk.ruslin.data
 
+import kotlinx.coroutines.flow.SharedFlow
 import uniffi.ruslin.*
 
 interface NotesRepository {
@@ -12,7 +13,10 @@ interface NotesRepository {
 
     suspend fun sync(): Result<Unit>
 
-    suspend fun doSync(isOnStart: Boolean);
+    val isSyncing: SharedFlow<Boolean>
+    val syncFinished: SharedFlow<Unit> // TODO: add sync result
+
+    fun doSync(isOnStart: Boolean);
 
     fun newFolder(parentId: String?, title: String): FfiFolder
 
