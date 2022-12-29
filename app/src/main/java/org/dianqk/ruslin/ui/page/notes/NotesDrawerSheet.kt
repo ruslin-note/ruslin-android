@@ -1,9 +1,6 @@
 package org.dianqk.ruslin.ui.page.notes
 
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -71,6 +68,7 @@ fun NotesDrawerSheet(
             modifier = Modifier.padding(horizontal = 30.dp),
             text = stringResource(id = R.string.folders)
         )
+        Spacer(modifier = Modifier.height(12.dp))
         folders.forEach { folder ->
             NavigationDrawerItem(
                 icon = { Icon(Icons.Outlined.Folder, contentDescription = null) },
