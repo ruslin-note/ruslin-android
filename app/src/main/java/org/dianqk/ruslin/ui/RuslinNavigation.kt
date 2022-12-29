@@ -7,6 +7,7 @@ import org.dianqk.ruslin.ui.RuslinDestinationsArgs.FOLDER_ID_ARG
 import org.dianqk.ruslin.ui.RuslinDestinationsArgs.NOTE_ID_ARG
 import org.dianqk.ruslin.ui.RuslinPages.ACCOUNT_DETAIL_PAGE
 import org.dianqk.ruslin.ui.RuslinPages.LOGIN_PAGE
+import org.dianqk.ruslin.ui.RuslinPages.LOG_PAGE
 import org.dianqk.ruslin.ui.RuslinPages.NOTES_PAGE
 import org.dianqk.ruslin.ui.RuslinPages.NOTE_DETAIL_PAGE
 import org.dianqk.ruslin.ui.RuslinPages.SETTINGS_PAGE
@@ -34,7 +35,7 @@ object RuslinDestinations {
     const val SETTINGS_ROUTE = SETTINGS_PAGE
     const val ACCOUNT_DETAIL_ROUTE = ACCOUNT_DETAIL_PAGE
     const val TOOLS_ROUTE = TOOLS_PAGE
-    const val LOG_ROUTE = LOGIN_ROUTE
+    const val LOG_ROUTE = LOG_PAGE
 }
 
 class RuslinNavigationActions(private val navController: NavHostController) {

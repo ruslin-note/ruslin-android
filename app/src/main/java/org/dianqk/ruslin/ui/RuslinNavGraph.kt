@@ -94,7 +94,7 @@ fun RuslinNavGraph(
                 navController.popBackStack()
             }
         }
-        animatedComposable(RuslinDestinations.LOGIN_ROUTE) {
+        animatedComposable(RuslinDestinations.LOG_ROUTE) {
             LogPage {
                 navController.popBackStack()
             }
