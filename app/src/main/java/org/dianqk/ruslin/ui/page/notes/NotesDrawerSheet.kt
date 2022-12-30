@@ -52,7 +52,7 @@ fun NotesDrawerSheet(
             }
         )
     }
-    ModalDrawerSheet(modifier = Modifier.verticalScroll(scroll)) {
+    ModalDrawerSheet(modifier = Modifier.fillMaxHeight().verticalScroll(scroll)) {
         Spacer(Modifier.height(12.dp))
         NavigationDrawerItem(
             icon = { Icon(Icons.Outlined.Article, contentDescription = null) },
