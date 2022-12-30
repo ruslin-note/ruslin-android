@@ -5,10 +5,13 @@ plugins {
     id 'com.google.dagger.hilt.android'
 }
 
-
+def gitCommitHash = "git rev-parse --verify --short HEAD".execute().text.trim()
 def keystorePropertiesFile = rootProject.file("keystore.properties")
 def keystoreProperties = new Properties()
-keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+if (keystorePropertiesFile.exists()) {
+    println("Loading keystore properties from ${keystorePropertiesFile.absolutePath}")
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
 
 android {
     namespace 'org.dianqk.ruslin'
@@ -44,6 +47,11 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
+        }
+    }
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            output.outputFileName = "ruslin-${defaultConfig.versionName}-${gitCommitHash}.apk"
         }
     }
     compileOptions {
