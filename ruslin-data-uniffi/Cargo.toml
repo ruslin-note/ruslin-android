@@ -22,3 +22,7 @@ uniffi_build = { version = "0.22.0", features=["builtin-bindgen"] }
 
 [profile.release]
 lto = true
+
+[patch.crates-io]
+diesel = { git = 'https://github.com/DianQK/diesel.git', tag = "v2.0.2-p" }
+
