@@ -69,6 +69,11 @@ fun LoginPage(
                 text = stringResource(id = R.string.app_name),
                 style = MaterialTheme.typography.titleLarge
             )
+            Text(
+                modifier = Modifier.padding(bottom = 30.dp),
+                text = stringResource(id = R.string.login_tip),
+                style = MaterialTheme.typography.labelLarge,
+            )
             Column(
                 modifier = Modifier
                     .fillMaxWidth()

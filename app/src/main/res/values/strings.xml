@@ -50,4 +50,5 @@
     <string name="log">Log</string>
     <string name="view_logs">View Logs</string>
     <string name="coming_soon">Coming soon</string>
+    <string name="login_tip">Please input the login information for your Joplin server.</string>
 </resources>
