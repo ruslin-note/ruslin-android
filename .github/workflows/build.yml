@@ -101,8 +101,14 @@ jobs:
       uses: gradle/gradle-build-action@v2
       with:
         arguments: assembleRelease
-    - name: Upload signed APKs
+    - name: Build signed Android App Bundle
+      uses: gradle/gradle-build-action@v2
+      with:
+        arguments: bundleRelease
+    - name: Upload signed APKs & Android App Bundle
       uses: actions/upload-artifact@v3
       with:
         name: Signed APKs
-        path: app/build/outputs/apk/release/*.apk
+        path: |
+          app/build/outputs/apk/release/*.apk
+          app/build/outputs/bundle/release/*.aab
