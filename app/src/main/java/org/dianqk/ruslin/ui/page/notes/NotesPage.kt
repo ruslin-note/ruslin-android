@@ -14,6 +14,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -24,6 +25,8 @@ import org.dianqk.ruslin.R
 import org.dianqk.ruslin.ui.component.BottomDrawer
 import org.dianqk.ruslin.ui.component.FilledTonalButtonWithIcon
 import org.dianqk.ruslin.ui.component.OutlinedButtonWithIcon
+import org.dianqk.ruslin.ui.ext.showComingSoon
+import org.dianqk.ruslin.ui.ext.showToast
 
 @OptIn(
     ExperimentalMaterial3Api::class, ExperimentalLifecycleComposeApi::class,
@@ -40,6 +43,7 @@ fun NotesPage(
     val scope = rememberCoroutineScope()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val showActionBottomDrawerState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+    val context = LocalContext.current
 
     val openCreateFolderDialog = remember { mutableStateOf(false) }
 
@@ -99,7 +103,7 @@ fun NotesPage(
                             }
                         },
                         actions = {
-                            IconButton(onClick = { /*TODO*/ }) {
+                            IconButton(onClick = { context.showComingSoon() }) {
                                 Icon(
                                     Icons.Default.Search,
                                     stringResource(id = R.string.desc_search)
@@ -120,12 +124,12 @@ fun NotesPage(
                                     modifier = Modifier.rotate(if (uiState.isSyncing) syncAngle else 360f),
                                 )
                             }
-                            IconButton(onClick = { /*TODO*/ }) {
-                                Icon(
-                                    Icons.Default.MoreVert,
-                                    stringResource(id = R.string.desc_more)
-                                )
-                            }
+//                            IconButton(onClick = { /*TODO*/ }) {
+//                                Icon(
+//                                    Icons.Default.MoreVert,
+//                                    stringResource(id = R.string.desc_more)
+//                                )
+//                            }
                         }
                     )
                 },

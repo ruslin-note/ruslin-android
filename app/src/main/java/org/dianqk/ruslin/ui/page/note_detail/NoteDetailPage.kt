@@ -55,11 +55,11 @@ fun NoteDetailPage(
                 navigationIcon = {
                     BackButton(onClick = onPopBack)
                 },
-                actions = {
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(Icons.Default.MoreVert, stringResource(id = R.string.desc_more))
-                    }
-                }
+//                actions = {
+//                    IconButton(onClick = { /*TODO*/ }) {
+//                        Icon(Icons.Default.MoreVert, stringResource(id = R.string.desc_more))
+//                    }
+//                }
             )
         },
     ) { innerPadding ->

@@ -9,11 +9,13 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import org.dianqk.ruslin.R
 import org.dianqk.ruslin.ui.component.BackButton
 import org.dianqk.ruslin.ui.component.SettingItem
+import org.dianqk.ruslin.ui.ext.showComingSoon
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -26,6 +28,7 @@ fun SettingsPage(
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val fraction =
         CubicBezierEasing(1f, 0f, 0.8f, 0.4f).transform(scrollBehavior.state.overlappedFraction)
+    val context = LocalContext.current
 
     Scaffold(
         modifier = Modifier
@@ -65,7 +68,7 @@ fun SettingsPage(
                     title = stringResource(id = R.string.color_and_style),
                     description = stringResource(id = R.string.color_and_style_setting_desc),
                     icon = Icons.Filled.Palette,
-                    onClick = { /* TODO */ }
+                    onClick = { context.showComingSoon() }
                 )
             }
             item {
@@ -73,7 +76,7 @@ fun SettingsPage(
                     title = stringResource(id = R.string.languages),
                     description = stringResource(id = R.string.languages_setting_desc),
                     icon = Icons.Filled.Language,
-                    onClick = { /* TODO */ }
+                    onClick = { context.showComingSoon() }
                 )
             }
             item {
@@ -89,7 +92,7 @@ fun SettingsPage(
                     title = stringResource(id = R.string.about),
                     description = stringResource(id = R.string.about_setting_desc),
                     icon = Icons.Filled.TipsAndUpdates,
-                    onClick = { /* TODO */ }
+                    onClick = { context.showComingSoon() }
                 )
             }
         }
