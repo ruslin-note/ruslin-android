@@ -80,7 +80,6 @@ impl RuslinAndroidData {
     pub fn new(data_dir: String, log_text_file: String) -> Result<Self, SyncError> {
         let log_handle = init_log(&log_text_file);
         let rt = tokio::runtime::Builder::new_multi_thread()
-            .worker_threads(2)
             .enable_all()
             .build()
             .expect(&format!("unwrap error in {}:{}", file!(), line!()));
