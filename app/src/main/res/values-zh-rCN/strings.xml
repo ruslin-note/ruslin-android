@@ -50,4 +50,6 @@
     <string name="view_logs">查看日志</string>
     <string name="coming_soon">正在路上</string>
     <string name="login_tip">请输入你的 Joplin 服务器登录信息。</string>
+    <string name="database_status">数据库状态</string>
+    <string name="database_status_desc">查看数据库状态</string>
 </resources>

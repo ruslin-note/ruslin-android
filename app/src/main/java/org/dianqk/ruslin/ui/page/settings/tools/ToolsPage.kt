@@ -8,8 +8,11 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import org.dianqk.ruslin.R
 import org.dianqk.ruslin.ui.component.BackButton
@@ -19,6 +22,7 @@ import org.dianqk.ruslin.ui.component.SettingItem
 @Composable
 fun ToolsPage(
     navigateToLogDetail: () -> Unit,
+    navigateToDatabaseStatus: () -> Unit,
     onPopBack: () -> Unit,
 ) {
 
@@ -57,6 +61,14 @@ fun ToolsPage(
                     description = stringResource(id = R.string.view_logs),
                     icon = Icons.Filled.Description,
                     onClick = navigateToLogDetail
+                )
+            }
+            item {
+                SettingItem(
+                    title = stringResource(id = R.string.database_status),
+                    description = stringResource(id = R.string.database_status_desc),
+                    icon = ImageVector.vectorResource(id = R.drawable.ic_database),
+                    onClick = navigateToDatabaseStatus
                 )
             }
         }

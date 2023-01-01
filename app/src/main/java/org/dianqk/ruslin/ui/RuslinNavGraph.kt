@@ -17,6 +17,7 @@ import org.dianqk.ruslin.ui.page.settings.SettingsPage
 import org.dianqk.ruslin.ui.page.settings.accounts.AccountDetailPage
 import org.dianqk.ruslin.ui.page.settings.tools.log.LogPage
 import org.dianqk.ruslin.ui.page.settings.tools.ToolsPage
+import org.dianqk.ruslin.ui.page.settings.tools.database.DatabaseStatusPage
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -90,12 +91,20 @@ fun RuslinNavGraph(
             )
         }
         animatedComposable(RuslinDestinations.TOOLS_ROUTE) {
-            ToolsPage(navigateToLogDetail = { navigationActions.navigateToLog() }) {
+            ToolsPage(
+                navigateToLogDetail = { navigationActions.navigateToLog() },
+                navigateToDatabaseStatus = { navigationActions.navigateToDatabaseStatus() }
+            ) {
                 navController.popBackStack()
             }
         }
         animatedComposable(RuslinDestinations.LOG_ROUTE) {
             LogPage {
+                navController.popBackStack()
+            }
+        }
+        animatedComposable(RuslinDestinations.DATABASE_STATUS_ROUTE) {
+            DatabaseStatusPage {
                 navController.popBackStack()
             }
         }

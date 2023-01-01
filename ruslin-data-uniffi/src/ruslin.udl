@@ -56,6 +56,14 @@ dictionary FFIAbbrNote {
     i64 updated_time;
 };
 
+dictionary FFIStatus {
+    i64 note_count;
+    i64 folder_count;
+    i64 resource_count;
+    i64 tag_count;
+    i64 note_tag_count;
+};
+
 [Error]
 enum SyncError {
     "IOError",
@@ -122,4 +130,6 @@ interface RuslinAndroidData {
     boolean conflict_note_exists();
     [Throws=DatabaseError]
     sequence<FFIAbbrNote> load_abbr_conflict_notes();
+    [Throws=DatabaseError]
+    FFIStatus database_status();
 };

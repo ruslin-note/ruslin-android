@@ -42,4 +42,6 @@ interface NotesRepository {
 
     suspend fun readLog(): String
 
+    suspend fun readDatabaseStatus(): Result<FfiStatus>
+
 }

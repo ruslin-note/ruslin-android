@@ -51,4 +51,6 @@
     <string name="view_logs">View Logs</string>
     <string name="coming_soon">Coming soon</string>
     <string name="login_tip">Please input the login information for your Joplin server.</string>
+    <string name="database_status">Database Status</string>
+    <string name="database_status_desc">View database status</string>
 </resources>

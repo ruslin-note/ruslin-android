@@ -126,4 +126,8 @@ class RuslinNotesRepository @Inject constructor(
         }
     }
 
+    override suspend fun readDatabaseStatus(): Result<FfiStatus> = withContext(ioDispatcher) {
+        kotlin.runCatching { data.databaseStatus() }
+    }
+
 }

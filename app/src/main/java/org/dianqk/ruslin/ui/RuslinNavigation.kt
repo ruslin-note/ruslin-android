@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import org.dianqk.ruslin.ui.RuslinDestinationsArgs.FOLDER_ID_ARG
 import org.dianqk.ruslin.ui.RuslinDestinationsArgs.NOTE_ID_ARG
 import org.dianqk.ruslin.ui.RuslinPages.ACCOUNT_DETAIL_PAGE
+import org.dianqk.ruslin.ui.RuslinPages.DATABASE_STATUS_PAGE
 import org.dianqk.ruslin.ui.RuslinPages.LOGIN_PAGE
 import org.dianqk.ruslin.ui.RuslinPages.LOG_PAGE
 import org.dianqk.ruslin.ui.RuslinPages.NOTES_PAGE
@@ -21,6 +22,7 @@ object RuslinPages {
     const val ACCOUNT_DETAIL_PAGE = "account_detail"
     const val TOOLS_PAGE = "tools"
     const val LOG_PAGE = "log"
+    const val DATABASE_STATUS_PAGE = "database_status"
 }
 
 object RuslinDestinationsArgs {
@@ -36,6 +38,7 @@ object RuslinDestinations {
     const val ACCOUNT_DETAIL_ROUTE = ACCOUNT_DETAIL_PAGE
     const val TOOLS_ROUTE = TOOLS_PAGE
     const val LOG_ROUTE = LOG_PAGE
+    const val DATABASE_STATUS_ROUTE = DATABASE_STATUS_PAGE
 }
 
 class RuslinNavigationActions(private val navController: NavHostController) {
@@ -84,6 +87,12 @@ class RuslinNavigationActions(private val navController: NavHostController) {
 
     fun navigateToLog() {
         navController.navigate(RuslinDestinations.LOG_ROUTE) {
+            launchSingleTop = true
+        }
+    }
+
+    fun navigateToDatabaseStatus() {
+        navController.navigate(RuslinDestinations.DATABASE_STATUS_ROUTE) {
             launchSingleTop = true
         }
     }
