@@ -1,4 +1,6 @@
-use ruslin_data::{AbbrNote, DateTimeTimestamp, Note};
+use ruslin_data::{AbbrNote, DateTimeTimestamp, Note, NoteFts};
+
+pub type FFISearchNote = NoteFts;
 
 pub struct FFIAbbrNote {
     pub id: String,

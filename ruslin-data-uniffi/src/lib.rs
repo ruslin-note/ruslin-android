@@ -14,7 +14,7 @@ use std::path::Path;
 use tokio::runtime::Runtime;
 
 mod ffi;
-use ffi::{FFIAbbrNote, FFIFolder, FFINote, FFIStatus};
+use ffi::{FFIAbbrNote, FFIFolder, FFINote, FFISearchNote, FFIStatus};
 
 uniffi_macros::include_scaffolding!("ruslin");
 
@@ -195,5 +195,13 @@ impl RuslinAndroidData {
 
     pub fn database_status(&self) -> Result<FFIStatus, DatabaseError> {
         Ok(self.data.db.status()?)
+    }
+
+    pub fn search(
+        &self,
+        search_term: String,
+        enable_highlight: bool,
+    ) -> Result<Vec<FFISearchNote>, DatabaseError> {
+        Ok(self.data.db.search_notes(&search_term, enable_highlight)?)
     }
 }

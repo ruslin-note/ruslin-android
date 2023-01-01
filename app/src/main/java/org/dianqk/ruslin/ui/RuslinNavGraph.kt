@@ -13,6 +13,7 @@ import org.dianqk.ruslin.ui.ext.animatedComposable
 import org.dianqk.ruslin.ui.page.login.LoginPage
 import org.dianqk.ruslin.ui.page.note_detail.NoteDetailPage
 import org.dianqk.ruslin.ui.page.notes.NotesPage
+import org.dianqk.ruslin.ui.page.search.SearchPage
 import org.dianqk.ruslin.ui.page.settings.SettingsPage
 import org.dianqk.ruslin.ui.page.settings.accounts.AccountDetailPage
 import org.dianqk.ruslin.ui.page.settings.tools.log.LogPage
@@ -42,6 +43,9 @@ fun RuslinNavGraph(
                 },
                 navigateToSettings = {
                     navigationActions.navigateToSettings()
+                },
+                navigateToSearch = {
+                    navigationActions.navigateToSearch()
                 }
             )
         }
@@ -105,6 +109,13 @@ fun RuslinNavGraph(
         }
         animatedComposable(RuslinDestinations.DATABASE_STATUS_ROUTE) {
             DatabaseStatusPage {
+                navController.popBackStack()
+            }
+        }
+        animatedComposable(RuslinDestinations.SEARCH_ROUTE) {
+            SearchPage(navigateToNoteDetail = { noteId ->
+                navigationActions.navigateToNoteDetail(null, noteId)
+            }) {
                 navController.popBackStack()
             }
         }

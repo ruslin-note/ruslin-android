@@ -44,4 +44,6 @@ interface NotesRepository {
 
     suspend fun readDatabaseStatus(): Result<FfiStatus>
 
+    suspend fun search(searchTerm: String, enableHighlight: Boolean): Result<List<FfiSearchNote>>
+
 }

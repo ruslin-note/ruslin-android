@@ -38,6 +38,7 @@ fun NotesPage(
     navigateToNoteDetail: (parentId: String?, noteId: String?) -> Unit,
     navigateToLogin: () -> Unit,
     navigateToSettings: () -> Unit,
+    navigateToSearch: () -> Unit,
 ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -103,7 +104,7 @@ fun NotesPage(
                             }
                         },
                         actions = {
-                            IconButton(onClick = { context.showComingSoon() }) {
+                            IconButton(onClick = { navigateToSearch() }) {
                                 Icon(
                                     Icons.Default.Search,
                                     stringResource(id = R.string.desc_search)

@@ -64,6 +64,12 @@ dictionary FFIStatus {
     i64 note_tag_count;
 };
 
+dictionary FFISearchNote {
+    string id;
+    string title;
+    string body;
+};
+
 [Error]
 enum SyncError {
     "IOError",
@@ -132,4 +138,6 @@ interface RuslinAndroidData {
     sequence<FFIAbbrNote> load_abbr_conflict_notes();
     [Throws=DatabaseError]
     FFIStatus database_status();
+    [Throws=DatabaseError]
+    sequence<FFISearchNote> search(string search_term, boolean enable_highlight);
 };
