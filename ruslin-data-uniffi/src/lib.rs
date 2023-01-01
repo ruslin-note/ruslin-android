@@ -84,8 +84,14 @@ impl RuslinAndroidData {
             .enable_all()
             .build()
             .expect(&format!("unwrap error in {}:{}", file!(), line!()));
+        let data = RuslinData::new(Path::new(&data_dir))?;
+        let db = data.db.clone();
+        rt.spawn(async move {
+            // prepare jieba
+            db.search_notes("", false).ok();
+        });
         Ok(Self {
-            data: RuslinData::new(Path::new(&data_dir))?,
+            data,
             rt,
             _log_handle: log_handle,
         })
