@@ -42,12 +42,16 @@ impl Append for AndroidAppender {
 fn init_log(log_text_file: &str) -> log4rs::Handle {
     #[cfg(debug_assertions)]
     let level_filter = LevelFilter::Debug;
+    #[cfg(debug_assertions)]
+    let level = Level::Debug;
     #[cfg(not(debug_assertions))]
-    let level_filter = LevelFilter::Debug;
+    let level_filter = LevelFilter::Info;
+    #[cfg(not(debug_assertions))]
+    let level = Level::Info;
 
     let android_appender = AndroidAppender(AndroidLogger::new(
         android_logger::Config::default()
-            .with_min_level(Level::Debug)
+            .with_min_level(level)
             .with_tag("RuslinRust"),
     ));
 
