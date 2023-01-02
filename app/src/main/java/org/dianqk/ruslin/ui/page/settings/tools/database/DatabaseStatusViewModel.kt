@@ -19,7 +19,7 @@ data class DatabaseUiState(
 @HiltViewModel
 class DatabaseStatusViewModel @Inject constructor(
     private val notesRepository: NotesRepository
-): ViewModel() {
+) : ViewModel() {
     private val _uiState = MutableStateFlow(DatabaseUiState())
     val uiState: StateFlow<DatabaseUiState> = _uiState.asStateFlow()
 

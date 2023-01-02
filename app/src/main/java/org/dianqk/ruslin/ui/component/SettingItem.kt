@@ -24,7 +24,7 @@ fun SettingItem(title: String, description: String, icon: ImageVector, onClick: 
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp, 20.dp),
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
                 imageVector = icon,
@@ -49,7 +49,7 @@ fun SettingItem(title: String, description: String, icon: ImageVector, onClick: 
                     text = description,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.bodyMedium
                 )
             }
         }
@@ -65,14 +65,14 @@ fun PreferenceSwitch(
     enabled: Boolean = true,
     isChecked: Boolean = true,
     checkedIcon: ImageVector = Icons.Outlined.Check,
-    onClick: (() -> Unit) = {},
+    onClick: (() -> Unit) = {}
 ) {
     val thumbContent: (@Composable () -> Unit)? = if (isChecked) {
         {
             Icon(
                 imageVector = checkedIcon,
                 contentDescription = null,
-                modifier = Modifier.size(SwitchDefaults.IconSize),
+                modifier = Modifier.size(SwitchDefaults.IconSize)
             )
         }
     } else {
@@ -89,7 +89,7 @@ fun PreferenceSwitch(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp, 20.dp),
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             icon?.let {
                 Icon(
@@ -102,7 +102,9 @@ fun PreferenceSwitch(
                 )
             }
             Column(
-                modifier = Modifier.weight(1f).padding(start = if (icon == null) 6.dp else 0.dp)
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = if (icon == null) 6.dp else 0.dp)
             ) {
                 Text(
                     text = title,
@@ -111,20 +113,22 @@ fun PreferenceSwitch(
                     color = MaterialTheme.colorScheme.onSurface.applyOpacity(enabled),
                     overflow = TextOverflow.Ellipsis
                 )
-                if (!description.isNullOrEmpty())
+                if (!description.isNullOrEmpty()) {
                     Text(
                         modifier = Modifier.padding(top = 2.dp),
                         text = description,
                         color = MaterialTheme.colorScheme.onSurfaceVariant.applyOpacity(enabled),
                         maxLines = 2,
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = MaterialTheme.typography.bodyMedium
                     )
+                }
             }
             Switch(
                 checked = isChecked,
                 onCheckedChange = null,
                 modifier = Modifier.padding(start = 20.dp, end = 6.dp),
-                enabled = enabled, thumbContent = thumbContent
+                enabled = enabled,
+                thumbContent = thumbContent
             )
         }
     }

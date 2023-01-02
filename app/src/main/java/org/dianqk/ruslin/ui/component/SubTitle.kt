@@ -13,22 +13,23 @@ import androidx.compose.ui.unit.dp
 fun SubTitle(
     modifier: Modifier = Modifier,
     text: String,
-    color: Color = MaterialTheme.colorScheme.primary,
+    color: Color = MaterialTheme.colorScheme.primary
 ) {
     Text(
         text = text,
-        modifier = modifier.fillMaxWidth().padding(),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(),
         color = color,
         style = MaterialTheme.typography.labelLarge
     )
 }
 
-
 @Composable
 fun PreferenceSubtitle(
     modifier: Modifier = Modifier,
     text: String,
-    color: Color = MaterialTheme.colorScheme.primary,
+    color: Color = MaterialTheme.colorScheme.primary
 ) {
     Text(
         text = text,

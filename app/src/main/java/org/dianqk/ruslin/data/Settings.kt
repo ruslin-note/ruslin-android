@@ -38,8 +38,6 @@ sealed class DataStoreKeys<T> {
         override val key: Preferences.Key<Boolean>
             get() = booleanPreferencesKey("sync.syncOnlyWhenCharging")
     }
-
-
 }
 
 fun DataStore<Preferences>.syncStrategy(): Flow<SyncStrategy> = this.data.map {
@@ -49,7 +47,7 @@ fun DataStore<Preferences>.syncStrategy(): Flow<SyncStrategy> = this.data.map {
         syncOnStart = it[DataStoreKeys.SyncOnStart.key] ?: default.syncOnStart,
         syncOnlyWiFi = it[DataStoreKeys.SyncOnlyWiFi.key] ?: default.syncOnlyWiFi,
         syncOnlyWhenCharging = it[DataStoreKeys.SyncOnlyWhenCharging.key]
-            ?: default.syncOnlyWhenCharging,
+            ?: default.syncOnlyWhenCharging
     )
 }
 
@@ -57,11 +55,11 @@ data class SyncStrategy(
     val syncInterval: Long = SyncIntervalPreference.default.value,
     val syncOnStart: Boolean = true,
     val syncOnlyWiFi: Boolean = false,
-    val syncOnlyWhenCharging: Boolean = false,
+    val syncOnlyWhenCharging: Boolean = false
 )
 
 sealed class SyncIntervalPreference(
-    val value: Long,
+    val value: Long
 ) {
 
     object Manually : SyncIntervalPreference(0L)
@@ -106,7 +104,7 @@ sealed class SyncIntervalPreference(
             Every3Hours,
             Every6Hours,
             Every12Hours,
-            Every1Day,
+            Every1Day
         )
     }
 }

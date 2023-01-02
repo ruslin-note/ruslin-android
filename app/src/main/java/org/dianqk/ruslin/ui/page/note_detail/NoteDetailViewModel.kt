@@ -18,7 +18,7 @@ import javax.inject.Inject
 data class NoteDetailUiState(
     val title: String = "",
     val body: String = "",
-    val isLoading: Boolean = false,
+    val isLoading: Boolean = false
 )
 
 const val TAG = "NoteDetailViewModel"
@@ -27,7 +27,7 @@ const val TAG = "NoteDetailViewModel"
 class NoteDetailViewModel @Inject constructor(
     private val notesRepository: NotesRepository,
     savedStateHandle: SavedStateHandle
-): ViewModel() {
+) : ViewModel() {
 
     private val folderId: String? = savedStateHandle[RuslinDestinationsArgs.FOLDER_ID_ARG]
     private val noteId: String? = savedStateHandle[RuslinDestinationsArgs.NOTE_ID_ARG]
@@ -107,5 +107,4 @@ class NoteDetailViewModel @Inject constructor(
                 }
         }
     }
-
 }

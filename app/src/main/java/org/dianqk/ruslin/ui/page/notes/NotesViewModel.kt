@@ -3,12 +3,13 @@ package org.dianqk.ruslin.ui.page.notes
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.work.WorkManager
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.dianqk.ruslin.data.NotesRepository
-import org.dianqk.ruslin.data.SyncWorker
 import uniffi.ruslin.FfiAbbrNote
 import uniffi.ruslin.FfiFolder
 import javax.inject.Inject
@@ -21,14 +22,14 @@ data class NotesUiState(
     val selectedNote: FfiAbbrNote? = null,
     val conflictNoteExists: Boolean = false,
     val showConflictNotes: Boolean = false,
-    val isSyncing: Boolean = false,
+    val isSyncing: Boolean = false
 )
 
 const val TAG = "NotesViewModel"
 
 @HiltViewModel
 class NotesViewModel @Inject constructor(
-    private val notesRepository: NotesRepository,
+    private val notesRepository: NotesRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(NotesUiState())
@@ -55,7 +56,7 @@ class NotesViewModel @Inject constructor(
         _uiState.update {
             it.copy(
                 selectedFolder = folder,
-                showConflictNotes = false,
+                showConflictNotes = false
             )
         }
         loadAbbrNotes()
@@ -65,7 +66,7 @@ class NotesViewModel @Inject constructor(
         _uiState.update {
             it.copy(
                 selectedFolder = null,
-                showConflictNotes = true,
+                showConflictNotes = true
             )
         }
         loadAbbrNotes()
@@ -182,5 +183,4 @@ class NotesViewModel @Inject constructor(
                 }
         }
     }
-
 }

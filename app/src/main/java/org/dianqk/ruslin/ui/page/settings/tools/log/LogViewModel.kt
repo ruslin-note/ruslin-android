@@ -17,8 +17,8 @@ data class LogUiState(
 
 @HiltViewModel
 class LogViewModel @Inject constructor(
-    private val notesRepository: NotesRepository,
-): ViewModel() {
+    private val notesRepository: NotesRepository
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(LogUiState())
     val uiState: StateFlow<LogUiState> = _uiState.asStateFlow()
@@ -33,5 +33,4 @@ class LogViewModel @Inject constructor(
             }
         }
     }
-
 }

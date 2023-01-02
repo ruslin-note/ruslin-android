@@ -2,10 +2,11 @@ package org.dianqk.ruslin.data
 
 import android.content.Context
 import androidx.work.WorkManager
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-import org.dianqk.ruslin.di.ApplicationScope
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.first
 import uniffi.ruslin.*
 import java.io.File
 import javax.inject.Inject
@@ -16,7 +17,7 @@ class RuslinNotesRepository @Inject constructor(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val workManager: WorkManager,
     private val appContext: Context,
-    private val applicationScope: CoroutineScope,
+    private val applicationScope: CoroutineScope
 ) : NotesRepository {
     private val _isSyncing = MutableSharedFlow<Boolean>(replay = 0)
     override val isSyncing: SharedFlow<Boolean> = _isSyncing.asSharedFlow()
@@ -62,7 +63,7 @@ class RuslinNotesRepository @Inject constructor(
                     workManager = workManager,
                     syncInterval = syncStrategy.syncInterval,
                     syncOnlyWhenCharging = syncStrategy.syncOnlyWhenCharging,
-                    syncOnlyOnWiFi = syncStrategy.syncOnlyWiFi,
+                    syncOnlyOnWiFi = syncStrategy.syncOnlyWiFi
                 )
             }
         }
@@ -130,8 +131,15 @@ class RuslinNotesRepository @Inject constructor(
         kotlin.runCatching { data.databaseStatus() }
     }
 
-    override suspend fun search(searchTerm: String, enableHighlight: Boolean): Result<List<FfiSearchNote>> = withContext(ioDispatcher) {
-        kotlin.runCatching { data.search(searchTerm = searchTerm, enableHighlight = enableHighlight) }
+    override suspend fun search(
+        searchTerm: String,
+        enableHighlight: Boolean
+    ): Result<List<FfiSearchNote>> = withContext(ioDispatcher) {
+        kotlin.runCatching {
+            data.search(
+                searchTerm = searchTerm,
+                enableHighlight = enableHighlight
+            )
+        }
     }
-
 }

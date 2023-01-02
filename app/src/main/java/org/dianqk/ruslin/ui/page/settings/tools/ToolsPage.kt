@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -23,9 +22,8 @@ import org.dianqk.ruslin.ui.component.SettingItem
 fun ToolsPage(
     navigateToLogDetail: () -> Unit,
     navigateToDatabaseStatus: () -> Unit,
-    onPopBack: () -> Unit,
+    onPopBack: () -> Unit
 ) {
-
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val fraction =
         CubicBezierEasing(1f, 0f, 0.8f, 0.4f).transform(scrollBehavior.state.overlappedFraction)

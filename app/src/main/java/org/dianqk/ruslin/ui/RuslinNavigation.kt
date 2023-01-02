@@ -1,7 +1,6 @@
 package org.dianqk.ruslin.ui
 
 import android.net.Uri
-import android.util.Log
 import androidx.navigation.NavHostController
 import org.dianqk.ruslin.ui.RuslinDestinationsArgs.FOLDER_ID_ARG
 import org.dianqk.ruslin.ui.RuslinDestinationsArgs.NOTE_ID_ARG
@@ -34,7 +33,8 @@ object RuslinDestinationsArgs {
 
 object RuslinDestinations {
     const val NOTES_ROUTE = NOTES_PAGE
-    const val NOTE_DETAIL_ROUTE = "$NOTE_DETAIL_PAGE?$NOTE_ID_ARG={$NOTE_ID_ARG}&$FOLDER_ID_ARG={$FOLDER_ID_ARG}"
+    const val NOTE_DETAIL_ROUTE =
+        "$NOTE_DETAIL_PAGE?$NOTE_ID_ARG={$NOTE_ID_ARG}&$FOLDER_ID_ARG={$FOLDER_ID_ARG}"
     const val LOGIN_ROUTE = LOGIN_PAGE
     const val SETTINGS_ROUTE = SETTINGS_PAGE
     const val ACCOUNT_DETAIL_ROUTE = ACCOUNT_DETAIL_PAGE
@@ -105,5 +105,4 @@ class RuslinNavigationActions(private val navController: NavHostController) {
             launchSingleTop = true
         }
     }
-
 }

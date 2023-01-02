@@ -2,7 +2,6 @@ package org.dianqk.ruslin.ui.page.settings.accounts
 
 import android.content.Context
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,18 +16,19 @@ import javax.inject.Inject
 
 data class AccountDetailUiState(
     val email: String? = null,
-    val url: String? = null,
+    val url: String? = null
 )
 
 @HiltViewModel
 class AccountDetailViewModel @Inject constructor(
     private val notesRepository: NotesRepository,
-    @ApplicationContext private val context: Context,
-): ViewModel() {
+    @ApplicationContext private val context: Context
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AccountDetailUiState())
     val uiState: StateFlow<AccountDetailUiState> = _uiState.asStateFlow()
-    val syncStrategy: StateFlow<SyncStrategy> = context.dataStore.syncStrategy().stateIn(viewModelScope, SharingStarted.WhileSubscribed(), SyncStrategy())
+    val syncStrategy: StateFlow<SyncStrategy> = context.dataStore.syncStrategy()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), SyncStrategy())
 
     init {
         loadSyncConfig()
@@ -83,16 +83,14 @@ class AccountDetailViewModel @Inject constructor(
                             _uiState.update {
                                 it.copy(
                                     email = syncConfig.email,
-                                    url = syncConfig.host,
+                                    url = syncConfig.host
                                 )
                             }
                         }
                     }
                 }
                 .onFailure { e ->
-
                 }
         }
     }
-
 }

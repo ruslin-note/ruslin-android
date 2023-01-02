@@ -16,13 +16,13 @@ data class LoginInfoUiState(
     val url: String = "",
     val email: String = "",
     val password: String = "",
-    val errorMessage: String? = null,
+    val errorMessage: String? = null
 )
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val notesRepository: NotesRepository,
-): ViewModel() {
+    private val notesRepository: NotesRepository
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(LoginInfoUiState())
     val uiState: StateFlow<LoginInfoUiState> = _uiState.asStateFlow()
@@ -37,14 +37,13 @@ class LoginViewModel @Inject constructor(
                                 it.copy(
                                     email = syncConfig.email,
                                     url = syncConfig.host,
-                                    password = syncConfig.password,
+                                    password = syncConfig.password
                                 )
                             }
                         }
                     }
                 }
                 .onFailure { e ->
-
                 }
         }
     }
@@ -74,11 +73,14 @@ class LoginViewModel @Inject constructor(
     }
 
     suspend fun login(): Result<Unit> {
-        val syncConfig = SyncConfig.JoplinServer(host = uiState.value.url, email = uiState.value.email, password = uiState.value.password)
+        val syncConfig = SyncConfig.JoplinServer(
+            host = uiState.value.url,
+            email = uiState.value.email,
+            password = uiState.value.password
+        )
         return notesRepository.saveSyncConfig(syncConfig)
             .onSuccess {
                 notesRepository.doSync(false)
             }
     }
-
 }

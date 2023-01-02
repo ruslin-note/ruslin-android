@@ -1,10 +1,10 @@
 package org.dianqk.ruslin.ui.page.settings.tools.log
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,7 +21,7 @@ import org.dianqk.ruslin.ui.component.BackButton
 @Composable
 fun LogPage(
     viewModel: LogViewModel = hiltViewModel(),
-    onPopBack: () -> Unit,
+    onPopBack: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val scroll = rememberScrollState()
@@ -36,13 +36,15 @@ fun LogPage(
                         color = MaterialTheme.colorScheme.onSurface
                     )
                 },
-                navigationIcon = { BackButton(onClick = onPopBack) },
+                navigationIcon = { BackButton(onClick = onPopBack) }
             )
         }
     ) {
         SelectionContainer(modifier = Modifier.padding(it)) {
             Text(
-                modifier = Modifier.verticalScroll(scroll).padding(horizontal = 5.dp),
+                modifier = Modifier
+                    .verticalScroll(scroll)
+                    .padding(horizontal = 5.dp),
                 text = uiState.log
             )
         }

@@ -1,13 +1,13 @@
 package org.dianqk.ruslin.ui.component
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import org.dianqk.ruslin.R
@@ -22,8 +22,7 @@ fun OutlinedButtonWithIcon(
     OutlinedButton(
         modifier = modifier,
         onClick = onClick
-    )
-    {
+    ) {
         Icon(
             modifier = Modifier.size(18.dp),
             imageVector = icon,
@@ -46,8 +45,7 @@ fun FilledTonalButtonWithIcon(
     FilledTonalButton(
         modifier = modifier,
         onClick = onClick
-    )
-    {
+    ) {
         Icon(
             modifier = Modifier.size(18.dp),
             imageVector = icon,
@@ -70,8 +68,7 @@ fun FilledButtonWithIcon(
     Button(
         modifier = modifier,
         onClick = onClick
-    )
-    {
+    ) {
         Icon(
             modifier = Modifier.size(18.dp),
             imageVector = icon,

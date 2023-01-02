@@ -1,10 +1,12 @@
 package org.dianqk.ruslin.ui.page.settings.accounts
 
 import androidx.compose.animation.core.CubicBezierEasing
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.EventRepeat
+import androidx.compose.material.icons.filled.ManageAccounts
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -65,37 +67,38 @@ fun AccountDetailPage(
                     title = uiState.email ?: stringResource(id = R.string.account),
                     description = uiState.url ?: stringResource(id = R.string.account_setting_desc),
                     icon = Icons.Filled.ManageAccounts,
-                    onClick = navigateToLogin,
+                    onClick = navigateToLogin
                 )
             }
             item {
                 PreferenceSubtitle(text = stringResource(id = R.string.syncing))
                 SettingItem(
                     title = stringResource(id = R.string.sync_interval),
-                    description = SyncIntervalPreference.toSyncInterval(syncStrategy.syncInterval).toDesc(context),
+                    description = SyncIntervalPreference.toSyncInterval(syncStrategy.syncInterval)
+                        .toDesc(context),
                     icon = Icons.Filled.EventRepeat,
-                    onClick = { syncIntervalDialogVisible = true },
+                    onClick = { syncIntervalDialogVisible = true }
                 )
                 PreferenceSwitch(
                     title = stringResource(id = R.string.sync_once_on_start),
                     isChecked = syncStrategy.syncOnStart,
                     onClick = {
                         viewModel.setSyncOnStart(!syncStrategy.syncOnStart)
-                    },
+                    }
                 )
                 PreferenceSwitch(
                     title = stringResource(id = R.string.only_on_wifi),
                     isChecked = syncStrategy.syncOnlyWiFi,
                     onClick = {
                         viewModel.setSyncOnlyWiFi(!syncStrategy.syncOnlyWiFi)
-                    },
+                    }
                 )
                 PreferenceSwitch(
                     title = stringResource(id = R.string.only_when_charging),
                     isChecked = syncStrategy.syncOnlyWhenCharging,
                     onClick = {
                         viewModel.setSyncOnlyWhenCharging(!syncStrategy.syncOnlyWhenCharging)
-                    },
+                    }
                 )
             }
         }
@@ -107,7 +110,7 @@ fun AccountDetailPage(
             options = SyncIntervalPreference.values.map {
                 RadioDialogOption(
                     text = it.toDesc(context),
-                    selected = it.value == syncStrategy.syncInterval,
+                    selected = it.value == syncStrategy.syncInterval
                 ) {
                     viewModel.setSyncInterval(it.value)
                 }
@@ -115,7 +118,5 @@ fun AccountDetailPage(
         ) {
             syncIntervalDialogVisible = false
         }
-
     }
-
 }

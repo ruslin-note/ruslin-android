@@ -5,7 +5,10 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Login
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -30,14 +33,15 @@ import org.dianqk.ruslin.ui.component.BackButton
 import org.dianqk.ruslin.ui.component.FilledButtonWithIcon
 
 @OptIn(
-    ExperimentalMaterial3Api::class, ExperimentalLifecycleComposeApi::class,
+    ExperimentalMaterial3Api::class,
+    ExperimentalLifecycleComposeApi::class,
     ExperimentalComposeUiApi::class
 )
 @Composable
 fun LoginPage(
     viewModel: LoginViewModel = hiltViewModel(),
     onLoginSuccess: () -> Unit = {},
-    onPopBack: () -> Unit,
+    onPopBack: () -> Unit
 ) {
     val snackbarState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -50,12 +54,12 @@ fun LoginPage(
         topBar = {
             TopAppBar(
                 title = {},
-                navigationIcon = { BackButton(onClick = onPopBack) },
+                navigationIcon = { BackButton(onClick = onPopBack) }
             )
         },
         snackbarHost = {
             SnackbarHost(hostState = snackbarState)
-        },
+        }
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -72,7 +76,7 @@ fun LoginPage(
             Text(
                 modifier = Modifier.padding(bottom = 30.dp),
                 text = stringResource(id = R.string.login_tip),
-                style = MaterialTheme.typography.labelLarge,
+                style = MaterialTheme.typography.labelLarge
             )
             Column(
                 modifier = Modifier
@@ -90,12 +94,12 @@ fun LoginPage(
                     keyboardOptions = KeyboardOptions(
                         capitalization = KeyboardCapitalization.None,
                         autoCorrect = false,
-                        keyboardType = KeyboardType.Uri,
+                        keyboardType = KeyboardType.Uri
                     )
                 )
                 Autofill(
                     autofillTypes = listOf(AutofillType.EmailAddress),
-                    onFill = viewModel::setEmail,
+                    onFill = viewModel::setEmail
                 ) { autofillNode ->
                     OutlinedTextField(
                         modifier = Modifier
@@ -118,13 +122,13 @@ fun LoginPage(
                         keyboardOptions = KeyboardOptions(
                             capitalization = KeyboardCapitalization.None,
                             autoCorrect = false,
-                            keyboardType = KeyboardType.Email,
+                            keyboardType = KeyboardType.Email
                         )
                     )
                 }
                 Autofill(
                     autofillTypes = listOf(AutofillType.Password),
-                    onFill = viewModel::setPassword,
+                    onFill = viewModel::setPassword
                 ) { autofillNode ->
                     OutlinedTextField(
                         modifier = Modifier
@@ -148,7 +152,7 @@ fun LoginPage(
                         keyboardOptions = KeyboardOptions(
                             capitalization = KeyboardCapitalization.None,
                             autoCorrect = false,
-                            keyboardType = KeyboardType.Password,
+                            keyboardType = KeyboardType.Password
                         )
                     )
                 }

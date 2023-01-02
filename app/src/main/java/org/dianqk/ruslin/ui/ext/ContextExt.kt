@@ -4,7 +4,6 @@ import android.content.Context
 import android.widget.Toast
 import org.dianqk.ruslin.R
 
-
 private var toast: Toast? = null
 
 fun Context.showToast(message: String?, duration: Int = Toast.LENGTH_SHORT) {

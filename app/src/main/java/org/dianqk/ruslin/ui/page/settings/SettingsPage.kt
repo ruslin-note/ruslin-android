@@ -22,9 +22,8 @@ import org.dianqk.ruslin.ui.ext.showComingSoon
 fun SettingsPage(
     navigateToAccountDetail: () -> Unit,
     navigateToTools: () -> Unit,
-    onPopBack: () -> Unit,
+    onPopBack: () -> Unit
 ) {
-
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val fraction =
         CubicBezierEasing(1f, 0f, 0.8f, 0.4f).transform(scrollBehavior.state.overlappedFraction)
@@ -84,7 +83,7 @@ fun SettingsPage(
                     title = stringResource(id = R.string.tools),
                     description = stringResource(id = R.string.tools_setting_des),
                     icon = Icons.Filled.Build,
-                    onClick = navigateToTools,
+                    onClick = navigateToTools
                 )
             }
             item {

@@ -1,6 +1,6 @@
 package org.dianqk.ruslin.ui.page.search
 
-import androidx.compose.foundation.*
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -18,10 +18,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.platform.LocalTextInputService
-import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
@@ -33,14 +30,16 @@ import org.dianqk.ruslin.R
 import org.dianqk.ruslin.ui.component.BackButton
 import uniffi.ruslin.FfiSearchNote
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLifecycleComposeApi::class,
+@OptIn(
+    ExperimentalMaterial3Api::class,
+    ExperimentalLifecycleComposeApi::class,
     ExperimentalComposeUiApi::class
 )
 @Composable
 fun SearchPage(
     viewModel: SearchViewModel = hiltViewModel(),
     navigateToNoteDetail: (noteId: String) -> Unit,
-    onPopBack: () -> Unit,
+    onPopBack: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val focusRequest = remember { FocusRequester() }
@@ -56,7 +55,7 @@ fun SearchPage(
                         color = MaterialTheme.colorScheme.onSurface
                     )
                 },
-                navigationIcon = { BackButton(onClick = onPopBack) },
+                navigationIcon = { BackButton(onClick = onPopBack) }
             )
         }
     ) { innerPadding ->
@@ -80,7 +79,7 @@ fun SearchPage(
             if (uiState.notFound) {
                 Text(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    text = stringResource(id = R.string.not_found, uiState.searchTerm),
+                    text = stringResource(id = R.string.not_found, uiState.searchTerm)
                 )
             }
             if (uiState.isSearching) {
@@ -88,13 +87,13 @@ fun SearchPage(
                     Icon(imageVector = Icons.Default.TravelExplore, contentDescription = null)
                     Text(
                         modifier = Modifier.padding(horizontal = 10.dp),
-                        text = stringResource(id = R.string.searching, uiState.searchingTerm),
+                        text = stringResource(id = R.string.searching, uiState.searchingTerm)
                     )
                 }
             }
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
-                state = lazyListState,
+                state = lazyListState
             ) {
                 items(
                     items = uiState.searchNotes,

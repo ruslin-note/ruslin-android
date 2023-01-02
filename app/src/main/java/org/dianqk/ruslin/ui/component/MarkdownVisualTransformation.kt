@@ -1,41 +1,34 @@
 package org.dianqk.ruslin.ui.component
 
-import android.text.style.StrikethroughSpan
 import android.util.Log
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Typography
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.OffsetMapping
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.sp
-import com.google.android.material.color.MaterialColors
 import org.intellij.markdown.IElementType
 import org.intellij.markdown.MarkdownElementTypes
 import org.intellij.markdown.ast.ASTNode
 import org.intellij.markdown.ast.acceptChildren
 import org.intellij.markdown.ast.visitors.RecursiveVisitor
-import org.intellij.markdown.flavours.commonmark.CommonMarkFlavourDescriptor
 import org.intellij.markdown.flavours.gfm.GFMElementTypes
 import org.intellij.markdown.flavours.gfm.GFMFlavourDescriptor
 import org.intellij.markdown.parser.MarkdownParser
-import org.intellij.markdown.parser.markerblocks.providers.AtxHeaderProvider
 
 val HASHTAG_REGEX_PATTERN = Regex(pattern = "(#[A-Za-z0-9-_]+)(?:#[A-Za-z0-9-_]+)*")
 val BOLD_REGEX_PATTERN = Regex(pattern = "(\\*{2})(\\s*\\b)([^\\*]*)(\\b\\s*)(\\*{2})")
 val ITALICS_REGEX_PATTERN = Regex(pattern = "(\\~{2})(\\s*\\b)([^\\*]*)(\\b\\s*)(\\~{2})")
 val HEADING_REGEX_PATTERN = Regex(pattern = "\\#{1,4}\\s([^\\#]*)\\s\\#{1,4}(?=\\n)")
 
-class MarkdownVisualTransformation: VisualTransformation {
+class MarkdownVisualTransformation : VisualTransformation {
 
     override fun filter(text: AnnotatedString): TransformedText {
         Log.d("MarkdownTF", "filter $text")
@@ -44,16 +37,21 @@ class MarkdownVisualTransformation: VisualTransformation {
         val parsedTree = MarkdownParser(flavour).buildMarkdownTreeFromString(text.text)
         val visitor = AnnotatedStringGeneratingVisitor(builder, PROVIDERS)
         visitor.visitNode(parsedTree)
-        return TransformedText(text = builder.toAnnotatedString(), offsetMapping = OffsetMapping.Identity)
+        return TransformedText(
+            text = builder.toAnnotatedString(),
+            offsetMapping = OffsetMapping.Identity
+        )
     }
 
-    inner class AnnotatedStringGeneratingVisitor(private val builder: AnnotatedString.Builder, private val providers: Map<IElementType, GeneratingProvider>) : RecursiveVisitor() {
+    inner class AnnotatedStringGeneratingVisitor(
+        private val builder: AnnotatedString.Builder,
+        private val providers: Map<IElementType, GeneratingProvider>
+    ) : RecursiveVisitor() {
         override fun visitNode(node: ASTNode) {
             Log.d("MarkdownTF", "$node -> ${node.type}")
             providers[node.type]?.processNode(this, builder, node) ?: node.acceptChildren(this)
         }
     }
-
 }
 
 val PROVIDERS: Map<IElementType, GeneratingProvider> = hashMapOf(
@@ -65,40 +63,56 @@ val PROVIDERS: Map<IElementType, GeneratingProvider> = hashMapOf(
     MarkdownElementTypes.ATX_3 to ATXHeaderGeneratingProvider(level = 3),
     MarkdownElementTypes.ATX_4 to ATXHeaderGeneratingProvider(level = 4),
     MarkdownElementTypes.ATX_5 to ATXHeaderGeneratingProvider(level = 5),
-    MarkdownElementTypes.ATX_6 to ATXHeaderGeneratingProvider(level = 6),
-    )
+    MarkdownElementTypes.ATX_6 to ATXHeaderGeneratingProvider(level = 6)
+)
 
 interface GeneratingProvider {
-    fun processNode(visitor: MarkdownVisualTransformation.AnnotatedStringGeneratingVisitor, builder: AnnotatedString.Builder, node: ASTNode)
+    fun processNode(
+        visitor: MarkdownVisualTransformation.AnnotatedStringGeneratingVisitor,
+        builder: AnnotatedString.Builder,
+        node: ASTNode
+    )
 }
 
-class StrongGeneratingProvider: GeneratingProvider {
+class StrongGeneratingProvider : GeneratingProvider {
     override fun processNode(
         visitor: MarkdownVisualTransformation.AnnotatedStringGeneratingVisitor,
         builder: AnnotatedString.Builder,
         node: ASTNode
     ) {
-        builder.addStyle(style = MarkdownDefaultTypography.bold.toSpanStyle(), node.startOffset, node.endOffset)
+        builder.addStyle(
+            style = MarkdownDefaultTypography.bold.toSpanStyle(),
+            node.startOffset,
+            node.endOffset
+        )
     }
 }
 
-class EmphGeneratingProvider: GeneratingProvider {
+class EmphGeneratingProvider : GeneratingProvider {
     override fun processNode(
         visitor: MarkdownVisualTransformation.AnnotatedStringGeneratingVisitor,
         builder: AnnotatedString.Builder,
         node: ASTNode
     ) {
-        builder.addStyle(style = MarkdownDefaultTypography.emph.toSpanStyle(), node.startOffset, node.endOffset)
+        builder.addStyle(
+            style = MarkdownDefaultTypography.emph.toSpanStyle(),
+            node.startOffset,
+            node.endOffset
+        )
     }
 }
 
-class StrikethroughGeneratingProvider: GeneratingProvider {
+class StrikethroughGeneratingProvider : GeneratingProvider {
     override fun processNode(
         visitor: MarkdownVisualTransformation.AnnotatedStringGeneratingVisitor,
         builder: AnnotatedString.Builder,
         node: ASTNode
     ) {
-        builder.addStyle(style = MarkdownDefaultTypography.strikethrough.toSpanStyle(), node.startOffset, node.endOffset)
+        builder.addStyle(
+            style = MarkdownDefaultTypography.strikethrough.toSpanStyle(),
+            node.startOffset,
+            node.endOffset
+        )
     }
 }
 
@@ -108,7 +122,7 @@ class MarkdownTypography(
     val titleSmall: TextStyle,
     val bold: TextStyle,
     val emph: TextStyle,
-    val strikethrough: TextStyle,
+    val strikethrough: TextStyle
 )
 
 var DefaultTypography = Typography()
@@ -119,43 +133,55 @@ val MarkdownDefaultTypography = MarkdownTypography(
         fontWeight = DefaultTypography.titleLarge.fontWeight,
         fontSize = DefaultTypography.titleLarge.fontSize,
         lineHeight = DefaultTypography.titleLarge.lineHeight,
-        letterSpacing = DefaultTypography.titleLarge.letterSpacing,
+        letterSpacing = DefaultTypography.titleLarge.letterSpacing
     ),
     titleMedium = TextStyle(
         fontFamily = DefaultTypography.titleMedium.fontFamily,
         fontWeight = DefaultTypography.titleMedium.fontWeight,
         fontSize = DefaultTypography.titleMedium.fontSize,
         lineHeight = DefaultTypography.titleMedium.lineHeight,
-        letterSpacing = DefaultTypography.titleMedium.letterSpacing,
+        letterSpacing = DefaultTypography.titleMedium.letterSpacing
     ),
     titleSmall = TextStyle(
         fontFamily = DefaultTypography.titleSmall.fontFamily,
         fontWeight = DefaultTypography.titleSmall.fontWeight,
         fontSize = DefaultTypography.titleSmall.fontSize,
         lineHeight = DefaultTypography.titleSmall.lineHeight,
-        letterSpacing = DefaultTypography.titleSmall.letterSpacing,
+        letterSpacing = DefaultTypography.titleSmall.letterSpacing
     ),
     bold = TextStyle(
-        fontWeight = FontWeight.Bold,
+        fontWeight = FontWeight.Bold
     ),
     emph = TextStyle(
-        fontStyle = FontStyle.Italic,
+        fontStyle = FontStyle.Italic
     ),
     strikethrough = TextStyle(
-        textDecoration = TextDecoration.LineThrough,
-    ),
+        textDecoration = TextDecoration.LineThrough
+    )
 )
 
-class ATXHeaderGeneratingProvider(private val level: Int): GeneratingProvider {
+class ATXHeaderGeneratingProvider(private val level: Int) : GeneratingProvider {
     override fun processNode(
         visitor: MarkdownVisualTransformation.AnnotatedStringGeneratingVisitor,
         builder: AnnotatedString.Builder,
         node: ASTNode
     ) {
         when (level) {
-            1 -> builder.addStyle(style = MarkdownDefaultTypography.titleLarge.toSpanStyle(), node.startOffset, node.endOffset)
-            2 -> builder.addStyle(style = MarkdownDefaultTypography.titleMedium.toSpanStyle(), node.startOffset, node.endOffset)
-            else -> builder.addStyle(style = MarkdownDefaultTypography.titleSmall.toSpanStyle(), node.startOffset, node.endOffset)
+            1 -> builder.addStyle(
+                style = MarkdownDefaultTypography.titleLarge.toSpanStyle(),
+                node.startOffset,
+                node.endOffset
+            )
+            2 -> builder.addStyle(
+                style = MarkdownDefaultTypography.titleMedium.toSpanStyle(),
+                node.startOffset,
+                node.endOffset
+            )
+            else -> builder.addStyle(
+                style = MarkdownDefaultTypography.titleSmall.toSpanStyle(),
+                node.startOffset,
+                node.endOffset
+            )
         }
         node.acceptChildren(visitor)
     }
@@ -171,17 +197,28 @@ fun transformHeading(text: AnnotatedString): AnnotatedString {
             val headingLevel = getHeadingLevel(match.value)
             val sizeList = listOf(32.sp, 28.sp, 24.sp, 18.sp)
             builder.addStyle(
-                style = SpanStyle(color = Color.Gray, baselineShift = BaselineShift.Superscript, fontSize = sizeList[headingLevel - 1] / 4),
+                style = SpanStyle(
+                    color = Color.Gray,
+                    baselineShift = BaselineShift.Superscript,
+                    fontSize = sizeList[headingLevel - 1] / 4
+                ),
                 matchRange.first,
                 matchRange.first + headingLevel
             )
             builder.addStyle(
-                style = SpanStyle(fontWeight = FontWeight.Bold, fontSize = sizeList[headingLevel - 1]),
+                style = SpanStyle(
+                    fontWeight = FontWeight.Bold,
+                    fontSize = sizeList[headingLevel - 1]
+                ),
                 matchRange.first + headingLevel,
                 matchRange.last - headingLevel + 1
             )
             builder.addStyle(
-                style = SpanStyle(color = Color.Gray, baselineShift = BaselineShift.Superscript, fontSize = sizeList[headingLevel - 1] / 4),
+                style = SpanStyle(
+                    color = Color.Gray,
+                    baselineShift = BaselineShift.Superscript,
+                    fontSize = sizeList[headingLevel - 1] / 4
+                ),
                 matchRange.last - headingLevel + 1,
                 matchRange.last + 1
             )
@@ -192,7 +229,7 @@ fun transformHeading(text: AnnotatedString): AnnotatedString {
     }
 }
 
-//fun transformItalics(text: AnnotatedString): Transformation {
+// fun transformItalics(text: AnnotatedString): Transformation {
 //    val matches = ITALICS_REGEX_PATTERN.findAll(text.text)
 //    return if (matches.count() > 0) {
 //        val builder = AnnotatedString.Builder(text)
@@ -214,9 +251,9 @@ fun transformHeading(text: AnnotatedString): AnnotatedString {
 //    } else {
 //        Transformation(annotatedString = text, offsetMapping = OffsetMapping.Identity)
 //    }
-//}
+// }
 //
-//fun transformBold(text: AnnotatedString): Transformation {
+// fun transformBold(text: AnnotatedString): Transformation {
 //    val matches = BOLD_REGEX_PATTERN.findAll(text.text)
 //    return if (matches.count() > 0) {
 //        val builder = AnnotatedString.Builder(text)
@@ -238,9 +275,9 @@ fun transformHeading(text: AnnotatedString): AnnotatedString {
 //    } else {
 //        Transformation(annotatedString = text, offsetMapping = OffsetMapping.Identity)
 //    }
-//}
+// }
 //
-//fun transformHashtags(text: AnnotatedString): Transformation {
+// fun transformHashtags(text: AnnotatedString): Transformation {
 //    val builder = AnnotatedString.Builder(text)
 //    val matches = HASHTAG_REGEX_PATTERN.findAll(text.text)
 //    for (match in matches) {
@@ -248,7 +285,7 @@ fun transformHeading(text: AnnotatedString): AnnotatedString {
 //        builder.addStyle(style = SpanStyle(color = Color.Yellow), start = matchRange.first, end = matchRange.last + 1)
 //    }
 //    return Transformation(annotatedString = builder.toAnnotatedString(), offsetMapping = OffsetMapping.Identity)
-//}
+// }
 
 private fun getHeadingLevel(text: String): Int {
     var i = 0

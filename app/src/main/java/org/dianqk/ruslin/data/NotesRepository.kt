@@ -16,7 +16,7 @@ interface NotesRepository {
     val isSyncing: SharedFlow<Boolean>
     val syncFinished: SharedFlow<Unit> // TODO: add sync result
 
-    fun doSync(isOnStart: Boolean);
+    fun doSync(isOnStart: Boolean)
 
     fun newFolder(parentId: String?, title: String): FfiFolder
 
@@ -45,5 +45,4 @@ interface NotesRepository {
     suspend fun readDatabaseStatus(): Result<FfiStatus>
 
     suspend fun search(searchTerm: String, enableHighlight: Boolean): Result<List<FfiSearchNote>>
-
 }

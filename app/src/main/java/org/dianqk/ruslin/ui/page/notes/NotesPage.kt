@@ -6,7 +6,10 @@ import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Sync
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.FileOpen
 import androidx.compose.material.rememberModalBottomSheetState
@@ -25,11 +28,10 @@ import org.dianqk.ruslin.R
 import org.dianqk.ruslin.ui.component.BottomDrawer
 import org.dianqk.ruslin.ui.component.FilledTonalButtonWithIcon
 import org.dianqk.ruslin.ui.component.OutlinedButtonWithIcon
-import org.dianqk.ruslin.ui.ext.showComingSoon
-import org.dianqk.ruslin.ui.ext.showToast
 
 @OptIn(
-    ExperimentalMaterial3Api::class, ExperimentalLifecycleComposeApi::class,
+    ExperimentalMaterial3Api::class,
+    ExperimentalLifecycleComposeApi::class,
     ExperimentalMaterialApi::class
 )
 @Composable
@@ -38,7 +40,7 @@ fun NotesPage(
     navigateToNoteDetail: (parentId: String?, noteId: String?) -> Unit,
     navigateToLogin: () -> Unit,
     navigateToSettings: () -> Unit,
-    navigateToSearch: () -> Unit,
+    navigateToSearch: () -> Unit
 ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -113,16 +115,19 @@ fun NotesPage(
                             IconButton(
                                 enabled = !uiState.isSyncing,
                                 onClick = {
-                                if (viewModel.syncConfigExists()) {
-                                    viewModel.sync()
-                                } else {
-                                    navigateToLogin()
+                                    if (viewModel.syncConfigExists()) {
+                                        viewModel.sync()
+                                    } else {
+                                        navigateToLogin()
+                                    }
                                 }
-                            }) {
+                            ) {
                                 Icon(
                                     imageVector = Icons.Default.Sync,
                                     contentDescription = stringResource(id = R.string.desc_sync),
-                                    modifier = Modifier.rotate(if (uiState.isSyncing) syncAngle else 360f),
+                                    modifier = Modifier.rotate(
+                                        if (uiState.isSyncing) syncAngle else 360f
+                                    )
                                 )
                             }
 //                            IconButton(onClick = { /*TODO*/ }) {
@@ -144,7 +149,8 @@ fun NotesPage(
                                     stringResource(id = R.string.new_note)
                                 )
                             },
-                            onClick = { navigateToNoteDetail(uiState.selectedFolder?.id, null) })
+                            onClick = { navigateToNoteDetail(uiState.selectedFolder?.id, null) }
+                        )
                     }
                 }
             ) { innerPadding ->
@@ -182,7 +188,8 @@ fun NotesPage(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 24.dp), horizontalArrangement = Arrangement.End
+                            .padding(top = 24.dp),
+                        horizontalArrangement = Arrangement.End
                     ) {
                         OutlinedButtonWithIcon(
                             modifier = Modifier.padding(horizontal = 12.dp),

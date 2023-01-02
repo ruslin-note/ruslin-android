@@ -30,7 +30,7 @@ fun NotesDrawerSheet(
     openCreateFolderDialog: Boolean,
     onCreateFolder: (String) -> Unit,
     onChangeOpenCreateFolderDialogVisible: (Boolean) -> Unit,
-    onShowSettingsPage: () -> Unit,
+    onShowSettingsPage: () -> Unit
 ) {
     val createFolderTitle: MutableState<String> = remember { mutableStateOf("") }
     val scroll = rememberScrollState(0)
@@ -52,7 +52,11 @@ fun NotesDrawerSheet(
             }
         )
     }
-    ModalDrawerSheet(modifier = Modifier.fillMaxHeight().verticalScroll(scroll)) {
+    ModalDrawerSheet(
+        modifier = Modifier
+            .fillMaxHeight()
+            .verticalScroll(scroll)
+    ) {
         Spacer(Modifier.height(12.dp))
         NavigationDrawerItem(
             icon = { Icon(Icons.Outlined.Article, contentDescription = null) },
@@ -108,8 +112,8 @@ fun NotesDrawerSheet(
                 onClick = onSelectedConflictFolder,
                 modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
                 colors = NavigationDrawerItemDefaults.colors(
-                    selectedContainerColor = MaterialTheme.colorScheme.errorContainer,
-                ),
+                    selectedContainerColor = MaterialTheme.colorScheme.errorContainer
+                )
             )
         }
         Spacer(Modifier.height(12.dp))

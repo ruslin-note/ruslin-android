@@ -1,20 +1,10 @@
 package org.dianqk.ruslin.ui.page.note_detail
 
-import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.foundation.relocation.bringIntoViewRequester
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -24,11 +14,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -54,14 +42,14 @@ fun NoteDetailPage(
                 title = {},
                 navigationIcon = {
                     BackButton(onClick = onPopBack)
-                },
+                }
 //                actions = {
 //                    IconButton(onClick = { /*TODO*/ }) {
 //                        Icon(Icons.Default.MoreVert, stringResource(id = R.string.desc_more))
 //                    }
 //                }
             )
-        },
+        }
     ) { innerPadding ->
         NoteDetailContent(
             loading = uiState.isLoading,
@@ -90,8 +78,12 @@ fun NoteDetailPage(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class,
-    ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class, ExperimentalLayoutApi::class
+@OptIn(
+    ExperimentalMaterialApi::class,
+    ExperimentalMaterial3Api::class,
+    ExperimentalComposeUiApi::class,
+    ExperimentalFoundationApi::class,
+    ExperimentalLayoutApi::class
 )
 @Composable
 private fun NoteDetailContent(
@@ -107,31 +99,41 @@ private fun NoteDetailContent(
     val scope = rememberCoroutineScope()
 
     if (loading) {
-        val pullRefreshState = rememberPullRefreshState(refreshing = loading, onRefresh = { /* DO NOTHING */ })
-        Box(modifier = modifier
-            .fillMaxSize()
-            .pullRefresh(pullRefreshState)) {
-            PullRefreshIndicator(refreshing = loading, state = pullRefreshState, modifier = Modifier.align(Alignment.TopCenter))
+        val pullRefreshState =
+            rememberPullRefreshState(refreshing = loading, onRefresh = { /* DO NOTHING */ })
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+                .pullRefresh(pullRefreshState)
+        ) {
+            PullRefreshIndicator(
+                refreshing = loading,
+                state = pullRefreshState,
+                modifier = Modifier.align(Alignment.TopCenter)
+            )
         }
     } else {
         Column(
             modifier = modifier
                 .fillMaxSize()
-                .bringIntoViewRequester(bringIntoViewRequester),
-            ) {
+                .bringIntoViewRequester(bringIntoViewRequester)
+        ) {
             TextField(
                 value = title,
                 modifier = Modifier.fillMaxWidth(),
                 colors = TextFieldDefaults.textFieldColors(
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
-                    containerColor = Color.Transparent,
+                    containerColor = Color.Transparent
                 ),
                 onValueChange = onTitleChanged,
                 placeholder = {
-                    Text(text = stringResource(id = R.string.title), style = MaterialTheme.typography.titleMedium)
+                    Text(
+                        text = stringResource(id = R.string.title),
+                        style = MaterialTheme.typography.titleMedium
+                    )
                 },
-                textStyle = MaterialTheme.typography.titleLarge,
+                textStyle = MaterialTheme.typography.titleLarge
 //                singleLine = true,
             )
             Divider(modifier = Modifier.fillMaxWidth())
@@ -149,9 +151,9 @@ private fun NoteDetailContent(
                 colors = TextFieldDefaults.textFieldColors(
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
-                    containerColor = Color.Transparent,
+                    containerColor = Color.Transparent
                 ),
-                visualTransformation = MarkdownVisualTransformation(),
+                visualTransformation = MarkdownVisualTransformation()
             )
         }
     }

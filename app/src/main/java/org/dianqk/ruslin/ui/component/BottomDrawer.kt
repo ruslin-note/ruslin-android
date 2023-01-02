@@ -1,16 +1,7 @@
 package org.dianqk.ruslin.ui.component
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
@@ -37,7 +28,7 @@ fun BottomDrawer(
         ModalBottomSheetValue.Hidden
     ),
     sheetContent: @Composable ColumnScope.() -> Unit = {},
-    content: @Composable () -> Unit = {},
+    content: @Composable () -> Unit = {}
 ) {
     androidx.compose.material.ModalBottomSheetLayout(
         modifier = modifier,
@@ -54,7 +45,7 @@ fun BottomDrawer(
             Column {
                 Surface(
                     color = MaterialTheme.colorScheme.surface,
-                    tonalElevation = 6.dp,
+                    tonalElevation = 6.dp
                 ) {
                     Box(modifier = Modifier.padding(horizontal = 28.dp)) {
                         Row(
@@ -62,7 +53,7 @@ fun BottomDrawer(
                                 .padding(top = 8.dp)
                                 .fillMaxWidth(),
                             horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             Row(
                                 modifier = modifier
@@ -90,7 +81,7 @@ fun BottomDrawer(
                 )
             }
         },
-        content = content,
+        content = content
     )
 }
 
@@ -98,7 +89,7 @@ fun BottomDrawer(
 fun DrawerSheetSubtitle(
     modifier: Modifier = Modifier,
     text: String,
-    color: Color = MaterialTheme.colorScheme.primary,
+    color: Color = MaterialTheme.colorScheme.primary
 ) {
     Text(
         text = text,

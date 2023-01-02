@@ -8,7 +8,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.util.UUID
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 private val TAG = "SyncWorker"
@@ -17,7 +17,7 @@ private val TAG = "SyncWorker"
 class SyncWorker @AssistedInject constructor(
     @Assisted appContext: Context,
     @Assisted workerParams: WorkerParameters,
-    private val notesRepository: NotesRepository,
+    private val notesRepository: NotesRepository
 ) : CoroutineWorker(appContext, workerParams) {
 
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
@@ -41,16 +41,19 @@ class SyncWorker @AssistedInject constructor(
             workManager: WorkManager,
             syncInterval: Long,
             syncOnlyWhenCharging: Boolean,
-            syncOnlyOnWiFi: Boolean,
+            syncOnlyOnWiFi: Boolean
         ) {
             workManager.enqueueUniquePeriodicWork(
                 WORK_NAME,
                 ExistingPeriodicWorkPolicy.REPLACE,
                 PeriodicWorkRequestBuilder<SyncWorker>(syncInterval, TimeUnit.MINUTES)
-                    .setConstraints(Constraints.Builder()
-                        .setRequiresCharging(syncOnlyWhenCharging)
-                        .setRequiredNetworkType(if (syncOnlyOnWiFi) NetworkType.UNMETERED else NetworkType.CONNECTED)
-                        .build()
+                    .setConstraints(
+                        Constraints.Builder()
+                            .setRequiresCharging(syncOnlyWhenCharging)
+                            .setRequiredNetworkType(
+                                if (syncOnlyOnWiFi) NetworkType.UNMETERED else NetworkType.CONNECTED
+                            )
+                            .build()
                     )
                     .addTag(WORK_NAME)
                     .setInitialDelay(15, TimeUnit.MINUTES)
@@ -61,5 +64,4 @@ class SyncWorker @AssistedInject constructor(
         fun setIsSyncing(boolean: Boolean) = workDataOf(IS_SYNCING to boolean)
         fun Data.getIsSyncing(): Boolean = getBoolean(IS_SYNCING, false)
     }
-
 }

@@ -7,7 +7,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.*
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
@@ -17,13 +20,12 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.unit.dp
 
-
 @Composable
 fun RadioDialog(
     modifier: Modifier = Modifier,
     title: String = "",
     options: List<RadioDialogOption> = emptyList(),
-    onDismissRequest: () -> Unit = {},
+    onDismissRequest: () -> Unit = {}
 ) {
     AlertDialog(
         modifier = modifier,
@@ -42,7 +44,7 @@ fun RadioDialog(
                                 option.onClick()
                                 onDismissRequest()
                             },
-                        verticalAlignment = Alignment.CenterVertically,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         RadioButton(selected = option.selected, onClick = {
                             option.onClick()
@@ -54,7 +56,7 @@ fun RadioDialog(
                             style = MaterialTheme.typography.bodyLarge.copy(
                                 baselineShift = BaselineShift.None
                             ).merge(other = option.style),
-                            color = MaterialTheme.colorScheme.onSurface,
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 }
@@ -72,5 +74,5 @@ data class RadioDialogOption(
     val text: String = "",
     val style: TextStyle? = null,
     val selected: Boolean = false,
-    val onClick: () -> Unit = {},
+    val onClick: () -> Unit = {}
 )
