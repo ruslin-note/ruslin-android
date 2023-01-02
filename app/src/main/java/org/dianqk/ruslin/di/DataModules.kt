@@ -1,7 +1,6 @@
 package org.dianqk.ruslin.di
 
 import android.content.Context
-import android.os.Build
 import android.util.Log
 import androidx.work.WorkManager
 import dagger.Module
@@ -27,6 +26,9 @@ object RepositoryModel {
     ): NotesRepository {
         val databaseDir = appContext.getDatabasePath("database.sql").parent!!
         val logTxtFile = appContext.filesDir.resolve("log.txt")
+        if (logTxtFile.exists() && logTxtFile.length() >= 1024 * 100) {
+            logTxtFile.delete()
+        }
         if (BuildConfig.DEBUG) {
             if (logTxtFile.exists()) {
                 logTxtFile.delete()
