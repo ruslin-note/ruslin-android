@@ -11,10 +11,10 @@ interface NotesRepository {
 
     suspend fun getSyncConfig(): Result<SyncConfig?>
 
-    suspend fun sync(): Result<Unit>
+    suspend fun sync(): Result<FfiSyncInfo>
 
     val isSyncing: SharedFlow<Boolean>
-    val syncFinished: SharedFlow<Unit> // TODO: add sync result
+    val syncFinished: SharedFlow<Result<FfiSyncInfo>>
 
     val notesChangedManually: SharedFlow<Unit>
 

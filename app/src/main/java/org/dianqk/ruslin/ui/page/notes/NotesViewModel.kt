@@ -40,8 +40,16 @@ class NotesViewModel @Inject constructor(
         loadAbbrNotes()
         checkConflictNoteExists()
         viewModelScope.launch {
-            notesRepository.syncFinished.collect {
-                reloadAllAfterSync()
+            notesRepository.syncFinished.collect { syncResult ->
+                syncResult.onSuccess { syncInfo ->
+                    if (syncInfo.conflictNoteCount > 0
+                        || syncInfo.otherConflictCount > 0
+                        || syncInfo.pullCount > 0
+                        || syncInfo.deleteCount > 0
+                    ) {
+                        reloadAllAfterSync()
+                    }
+                }
             }
         }
         viewModelScope.launch {

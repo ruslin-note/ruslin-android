@@ -22,8 +22,8 @@ class RuslinNotesRepository @Inject constructor(
     private val _isSyncing = MutableSharedFlow<Boolean>(replay = 0)
     override val isSyncing: SharedFlow<Boolean> = _isSyncing.asSharedFlow()
 
-    private val _syncFinished = MutableSharedFlow<Unit>(replay = 0)
-    override val syncFinished: SharedFlow<Unit> = _syncFinished.asSharedFlow()
+    private val _syncFinished = MutableSharedFlow<Result<FfiSyncInfo>>(replay = 0)
+    override val syncFinished: SharedFlow<Result<FfiSyncInfo>> = _syncFinished.asSharedFlow()
 
     private val _notesChangedManually = MutableSharedFlow<Unit>(replay = 0)
     override val notesChangedManually: SharedFlow<Unit> = _notesChangedManually.asSharedFlow()
@@ -41,12 +41,12 @@ class RuslinNotesRepository @Inject constructor(
         kotlin.runCatching { data.getSyncConfig() }
     }
 
-    override suspend fun sync(): Result<Unit> =
+    override suspend fun sync(): Result<FfiSyncInfo> =
         withContext(ioDispatcher) {
             _isSyncing.emit(true)
             val syncResult = kotlin.runCatching { data.sync() }
             _isSyncing.emit(false)
-            _syncFinished.emit(Unit)
+            _syncFinished.emit(syncResult)
             syncResult
         }
 

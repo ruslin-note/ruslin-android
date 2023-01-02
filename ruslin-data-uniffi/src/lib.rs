@@ -14,7 +14,7 @@ use std::path::Path;
 use tokio::runtime::Runtime;
 
 mod ffi;
-use ffi::{FFIAbbrNote, FFIFolder, FFINote, FFISearchNote, FFIStatus};
+use ffi::{FFIAbbrNote, FFIFolder, FFINote, FFISearchNote, FFIStatus, FFISyncInfo};
 
 uniffi_macros::include_scaffolding!("ruslin");
 
@@ -124,7 +124,7 @@ impl RuslinAndroidData {
         self.data.get_sync_config()
     }
 
-    pub fn sync(&self) -> Result<(), SyncError> {
+    pub fn sync(&self) -> Result<FFISyncInfo, SyncError> {
         self.rt.block_on(self.data.sync())
     }
 

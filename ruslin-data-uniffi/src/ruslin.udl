@@ -70,6 +70,16 @@ dictionary FFISearchNote {
     string body;
 };
 
+dictionary FFISyncInfo {
+    i32 delete_remote_count;
+    i32 conflict_note_count;
+    i32 other_conflict_count;
+    i32 upload_count;
+    i32 delete_count;
+    i32 pull_count;
+    f64 elapsed_time;
+};
+
 [Error]
 enum SyncError {
     "IOError",
@@ -115,7 +125,7 @@ interface RuslinAndroidData {
     [Throws=SyncError]
     SyncConfig? get_sync_config();
     [Throws=SyncError]
-    void sync();
+    FFISyncInfo sync();
     FFIFolder new_folder(string? parent_id, string title);
     [Throws=DatabaseError]
     void replace_folder(FFIFolder folder);
