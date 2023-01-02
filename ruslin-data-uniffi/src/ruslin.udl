@@ -94,6 +94,7 @@ enum SyncError {
     "DeserializeError",
     "SerdeJsonError",
     "SyncConfigNotExists",
+    "NotSupportedSyncTargetInfo",
 };
 
 [Error]
