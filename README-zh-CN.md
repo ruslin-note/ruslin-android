@@ -1,9 +1,6 @@
 <div align="center">
     <h1>Ruslin</h1>
-    <p>A simple notes application that supports syncing notes using a self-deployed Joplin server.</p>
-    <p>English by DeepL&nbsp;&nbsp;|&nbsp;&nbsp;
-    <a target="_blank" href="./README-zh-CN.md">简体中文<a>
-    </p>
+    <p>一个简单的笔记应用，支持使用自部署的 Joplin 服务器同步笔记。</p>
     <br/>
     <img src="./fastlane/metadata/android/zh-CN/images/notes.png" width="19.2%" alt="notes" />
     <img src="./fastlane/metadata/android/zh-CN/images/folders.png" width="19.2%" alt="folders" />
@@ -14,28 +11,28 @@
     <br/>
 </div>
 
-🚧 Currently in Pre-alpha, not ready for use in production environments. Please be careful to back up. 🚧
+🚧 目前处于 Pre-alpha 阶段，不建议在生产环境使用，请注意做好备份。 🚧
 
-Supported features:
+已支持的功能：
 
-- ✅ Create, modify and delete notes
-- ✅ Create folders
-- ✅ A simple Markdown editor
-- ✅ Full-text search using jieba-rs (Chinese and English supported)
-- ✅ Sync notes using a self-hosted Joplin server
-- ✅ Manual and automatic synchronization
-- 🚧 Possible compatibility with Joplin's sync format (End-to-end encryption is not supported)
+- ✅ 创建、修改和删除笔记
+- ✅ 创建文件夹
+- ✅ 简单的 Markdown 编辑器
+- ✅ 使用 jieba-rs 完成的全文搜索（支持中文和英文）
+- ✅ 使用自部署的 Joplin 服务器同步笔记
+- ✅ 手动和自动同步
+- 🚧 可能兼容 Joplin 的同步格式（不支持端到端加密）
 
-## Download
+## 下载
 
 https://github.com/DianQK/ruslin-android/releases
 
-## Credits
+## 感谢
 
 - [Joplin](https://github.com/laurent22/joplin): [AGPL-3.0](https://github.com/laurent22/joplin/blob/dev/LICENSE)
 - [ReadYou](https://github.com/Ashinch/ReadYou): [GPL-3.0](https://github.com/Ashinch/ReadYou/blob/main/LICENSE)
 - [Seal](https://github.com/JunkFood02/Seal): [GPL-3.0](https://github.com/JunkFood02/Seal/blob/main/LICENSE)
 
-## License
+## 许可证
 
 [GNU GPL v3.0](https://github.com/DianQK/ruslin-android/blob/main/LICENSE)
