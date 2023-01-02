@@ -1,6 +1,6 @@
 <div align="center">
     <h1>Ruslin</h1>
-    <p>A simple notes application that supports syncing notes using a self-deployed Joplin server.</p>
+    <p>A simple notes application that supports syncing notes using a self-hosted Joplin server.</p>
     <p>English by DeepL&nbsp;&nbsp;|&nbsp;&nbsp;
     <a target="_blank" href="./README-zh-CN.md">简体中文<a>
     </p>
