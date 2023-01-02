@@ -25,6 +25,9 @@ class RuslinNotesRepository @Inject constructor(
     private val _syncFinished = MutableSharedFlow<Unit>(replay = 0)
     override val syncFinished: SharedFlow<Unit> = _syncFinished.asSharedFlow()
 
+    private val _notesChangedManually = MutableSharedFlow<Unit>(replay = 0)
+    override val notesChangedManually: SharedFlow<Unit> = _notesChangedManually.asSharedFlow()
+
     private val data: RuslinAndroidData = RuslinAndroidData(databaseDir, logTxtFile.absolutePath)
 
     override fun syncConfigExists(): Boolean = data.syncConfigExists()
@@ -103,11 +106,13 @@ class RuslinNotesRepository @Inject constructor(
     override suspend fun replaceNote(note: FfiNote): Result<Unit> =
         withContext(ioDispatcher) {
             kotlin.runCatching { data.replaceNote(note) }
+                .onSuccess { _notesChangedManually.emit(Unit) }
         }
 
     override suspend fun deleteNote(id: String): Result<Unit> =
         withContext(ioDispatcher) {
             kotlin.runCatching { data.deleteNote(id) }
+                .onSuccess { _notesChangedManually.emit(Unit) }
         }
 
     override suspend fun conflictNoteExists(): Result<Boolean> = withContext(ioDispatcher) {

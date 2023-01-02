@@ -16,6 +16,8 @@ interface NotesRepository {
     val isSyncing: SharedFlow<Boolean>
     val syncFinished: SharedFlow<Unit> // TODO: add sync result
 
+    val notesChangedManually: SharedFlow<Unit>
+
     fun doSync(isOnStart: Boolean)
 
     fun newFolder(parentId: String?, title: String): FfiFolder

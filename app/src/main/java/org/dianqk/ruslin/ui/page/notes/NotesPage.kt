@@ -217,10 +217,6 @@ fun NotesPage(
     }
 
     LaunchedEffect(Unit) {
-        viewModel.loadAbbrNotes()
-    }
-
-    LaunchedEffect(Unit) {
         drawerState.snapTo(DrawerValue.Closed)
     }
 }

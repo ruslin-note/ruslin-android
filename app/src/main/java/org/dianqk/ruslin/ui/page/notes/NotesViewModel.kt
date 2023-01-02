@@ -37,6 +37,7 @@ class NotesViewModel @Inject constructor(
 
     init {
         loadFolders()
+        loadAbbrNotes()
         checkConflictNoteExists()
         viewModelScope.launch {
             notesRepository.syncFinished.collect {
@@ -48,6 +49,11 @@ class NotesViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(isSyncing = isSyncing)
                 }
+            }
+        }
+        viewModelScope.launch {
+            notesRepository.notesChangedManually.collect {
+                loadAbbrNotes()
             }
         }
     }
