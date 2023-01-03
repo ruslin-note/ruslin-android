@@ -64,6 +64,7 @@ android {
             signingConfig signingConfigs.release
         }
     }
+
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
             def abi = output.getFilter(OutputFile.ABI)
@@ -73,10 +74,12 @@ android {
             output.outputFileName = "Ruslin-${defaultConfig.versionName}-${abi}-${gitCommitHash}-${variant.buildType.name}.apk"
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = '1.8'
         freeCompilerArgs += [
@@ -84,15 +87,24 @@ android {
                 "-Xjvm-default=all"
         ]
     }
+
     buildFeatures {
         compose true
     }
+
     composeOptions {
         kotlinCompilerExtensionVersion '1.1.1'
     }
+
     packagingOptions {
         resources {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
+
+    bundle {
+        storeArchive {
+            enable = false
         }
     }
 }
