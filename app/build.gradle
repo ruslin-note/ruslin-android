@@ -18,6 +18,7 @@ import com.android.build.OutputFile
 android {
     namespace 'org.dianqk.ruslin'
     compileSdk 33
+    ndkVersion "25.1.8937393"
 
     defaultConfig {
         applicationId "org.dianqk.ruslin"
@@ -62,6 +63,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
+
+            ndk {
+                debugSymbolLevel 'FULL'
+            }
         }
     }
 
