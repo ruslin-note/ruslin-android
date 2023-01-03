@@ -112,3 +112,5 @@ jobs:
         path: |
           app/build/outputs/apk/release/*.apk
           app/build/outputs/bundle/release/*.aab
+          app/build/outputs/native-debug-symbols/release/*.zip
+          app/build/outputs/mapping/release/*.txt
