@@ -116,8 +116,11 @@ impl RuslinAndroidData {
     }
 
     pub fn save_sync_config(&self, config: SyncConfig) -> Result<(), SyncError> {
-        // self.rt.spawn_blocking(func)
-        self.rt.block_on(self.data.save_sync_config(config))
+        let result = self.rt.block_on(self.data.save_sync_config(config));
+        if let Err(e) = &result {
+            log::error!("save sync config error: {e}");
+        }
+        result
     }
 
     pub fn get_sync_config(&self) -> Result<Option<SyncConfig>, SyncError> {
@@ -125,7 +128,11 @@ impl RuslinAndroidData {
     }
 
     pub fn sync(&self) -> Result<FFISyncInfo, SyncError> {
-        self.rt.block_on(self.data.sync())
+        let result = self.rt.block_on(self.data.sync());
+        if let Err(e) = &result {
+            log::error!("sync error: {e}");
+        }
+        result
     }
 
     pub fn new_folder(&self, parent_id: Option<String>, title: String) -> FFIFolder {
@@ -151,14 +158,6 @@ impl RuslinAndroidData {
         self.data.db.delete_folder(&id, UpdateSource::LocalEdit)
     }
 
-    //     [Throws=DatabaseError]
-    //     sequence<FFIAbbrNote> load_abbr_notes(string? parent_id);
-    //     [Throws=DatabaseError]
-    //     FFINote load_note(string id);
-    //     [Throws=DatabaseError]
-    //     void replace_note(FFINote note);
-    //     [Throws=DatabaseError]
-    //     void delete_note(string id);
     pub fn load_abbr_notes(
         &self,
         parent_id: Option<String>,
