@@ -11,7 +11,7 @@ name = "uniffi_ruslin"
 uniffi = "0.22.0"
 uniffi_macros = "0.22.0"
 ruslin-data = { path = "./ruslin-data" }
-log = "0.4.17"
+log = { version = "0.4", features = ["max_level_debug", "release_max_level_info"] }
 android_logger = "0.11.3"
 tokio = { version = "1.23.0", features = ["full"] }
 libsqlite3-sys = { version = "0.25.2", features = ["bundled"] }
@@ -19,11 +19,10 @@ log4rs = "1.2.0"
 time = "0.3.17"
 
 [build-dependencies]
-uniffi_build = { version = "0.22.0", features=["builtin-bindgen"] }
+uniffi_build = { version = "0.22.0", features = ["builtin-bindgen"] }
 
 [profile.release]
 lto = true
 
 [patch.crates-io]
 diesel = { git = 'https://github.com/DianQK/diesel.git', tag = "v2.0.2-p" }
-
