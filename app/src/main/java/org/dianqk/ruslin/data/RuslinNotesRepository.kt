@@ -137,13 +137,11 @@ class RuslinNotesRepository @Inject constructor(
     }
 
     override suspend fun search(
-        searchTerm: String,
-        enableHighlight: Boolean
+        searchTerm: String
     ): Result<List<FfiSearchNote>> = withContext(ioDispatcher) {
         kotlin.runCatching {
             data.search(
                 searchTerm = searchTerm,
-                enableHighlight = enableHighlight
             )
         }
     }

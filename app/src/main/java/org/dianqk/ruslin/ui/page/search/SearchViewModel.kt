@@ -43,7 +43,7 @@ class SearchViewModel @Inject constructor(
             it.copy(isSearching = true, notFound = false, searchingTerm = searchTerm)
         }
         viewModelScope.launch {
-            notesRepository.search(searchTerm = searchTerm, enableHighlight = false)
+            notesRepository.search(searchTerm = searchTerm)
                 .onSuccess { notes ->
                     _uiState.update {
                         it.copy(
