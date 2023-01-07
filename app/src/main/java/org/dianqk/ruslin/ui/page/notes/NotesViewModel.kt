@@ -4,19 +4,26 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.dianqk.ruslin.data.NotesRepository
 import uniffi.ruslin.FfiAbbrNote
 import uniffi.ruslin.FfiFolder
 import javax.inject.Inject
 
+data class Folder(
+    val ffiFolder: FfiFolder,
+    val subFolders: MutableList<Folder> = mutableListOf(),
+)
+
 data class NotesUiState(
     val items: List<FfiAbbrNote> = emptyList(),
-    val folders: List<FfiFolder> = emptyList(),
+    val folders: List<Folder> = emptyList(),
     val selectedFolder: FfiFolder? = null,
     val isLoading: Boolean = false,
     val selectedNote: FfiAbbrNote? = null,
@@ -169,13 +176,30 @@ class NotesViewModel @Inject constructor(
     private suspend fun loadFoldersFromRepo() {
         notesRepository.loadFolders()
             .onSuccess { folders ->
-                _uiState.update {
-                    it.copy(folders = folders)
+                withContext(Dispatchers.Default) {
+                    updateFoldersFromFfi(folders)
                 }
             }
             .onFailure { e ->
                 Log.e(TAG, "load folders failed: $e")
             }
+    }
+
+    private fun updateFoldersFromFfi(ffiFolders: List<FfiFolder>) {
+        val allFolders = ffiFolders.map { Folder(it) }
+        val folderMap = emptyMap<String, Folder>().toMutableMap()
+        allFolders.forEach { folder ->
+            folderMap[folder.ffiFolder.id] = folder
+        }
+        allFolders.forEach { folder ->
+            folder.ffiFolder.parentId?.let {
+                folderMap[it]?.subFolders?.add(folder)
+            }
+        }
+        val rootFolders = allFolders.filter { it.ffiFolder.parentId == null }
+        _uiState.update {
+            it.copy(folders = rootFolders)
+        }
     }
 
     private fun loadFolders() {

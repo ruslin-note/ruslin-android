@@ -1,27 +1,39 @@
 package org.dianqk.ruslin.ui.page.notes
 
+import androidx.compose.animation.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CreateNewFolder
 import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.icons.rounded.ExpandLess
+import androidx.compose.material.icons.rounded.ExpandMore
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import org.dianqk.ruslin.R
 import org.dianqk.ruslin.ui.component.SubTitle
+import org.dianqk.ruslin.ui.theme.Shape32
 import uniffi.ruslin.FfiFolder
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NotesDrawerSheet(
-    folders: List<FfiFolder>,
+    folders: List<Folder>,
     selectedFolderId: String?,
     showConflictNoteFolder: Boolean,
     conflictNoteFolderSelected: Boolean,
@@ -74,12 +86,12 @@ fun NotesDrawerSheet(
         )
         Spacer(modifier = Modifier.height(12.dp))
         folders.forEach { folder ->
-            NavigationDrawerItem(
-                icon = { Icon(Icons.Outlined.Folder, contentDescription = null) },
-                label = { Text(folder.title) },
-                selected = !conflictNoteFolderSelected && folder.id == selectedFolderId,
-                onClick = {
-                    onSelectedFolderChanged(folder)
+            ExpandableNavigationDrawerFolderItem(
+                folder = folder,
+                level = 0,
+                selectedFolderId = if (conflictNoteFolderSelected) null else selectedFolderId,
+                onClick = { clickedFolder ->
+                    onSelectedFolderChanged(clickedFolder.ffiFolder)
                 },
                 modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
             )
@@ -177,4 +189,96 @@ fun CreateFolderDialog(
             }
         }
     )
+}
+
+@Composable
+@ExperimentalMaterial3Api
+fun ExpandableNavigationDrawerFolderItem(
+    folder: Folder,
+    level: Int,
+    selectedFolderId: String?,
+    onClick: (Folder) -> Unit,
+    modifier: Modifier = Modifier,
+    shape: Shape = Shape32,
+    colors: NavigationDrawerItemColors = NavigationDrawerItemDefaults.colors(),
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
+) {
+    val expandable = folder.subFolders.isNotEmpty()
+    var isExpanded by remember { mutableStateOf(false) }
+    val selected = folder.ffiFolder.id == selectedFolderId
+    Surface(
+        selected = selected,
+        onClick = {
+            onClick(folder)
+        },
+        modifier = modifier
+            .height(56.dp)
+            .padding(start = (level * 20).dp)
+            .fillMaxWidth(),
+        shape = shape,
+        color = colors.containerColor(selected).value,
+        interactionSource = interactionSource,
+    ) {
+        Row(
+            Modifier.padding(start = 16.dp, end = if (expandable) 0.dp else 24.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            val iconColor = colors.iconColor(selected).value
+            CompositionLocalProvider(
+                LocalContentColor provides iconColor,
+                content = { Icon(Icons.Outlined.Folder, contentDescription = null) })
+            Spacer(Modifier.width(12.dp))
+            Box(Modifier.weight(1f)) {
+                val labelColor = colors.textColor(selected).value
+                CompositionLocalProvider(
+                    LocalContentColor provides labelColor,
+                    content = {
+                        Text(
+                            text = folder.ffiFolder.title,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    })
+            }
+            if (expandable) {
+                Spacer(Modifier.width(12.dp))
+                Row(
+                    modifier = Modifier
+                        .padding(end = 24.dp)
+                        .size(24.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.surfaceTint.copy(alpha = 0.1f))
+                        .clickable {
+                            isExpanded = !isExpanded
+                        },
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(
+                        imageVector = if (isExpanded) Icons.Rounded.ExpandLess else Icons.Rounded.ExpandMore,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                    )
+                }
+            }
+        }
+    }
+    
+    AnimatedVisibility(
+        visible = isExpanded,
+        enter = fadeIn() + expandVertically(),
+        exit = fadeOut() + shrinkVertically()
+    ) {
+        Column {
+            folder.subFolders.forEach { subFolder ->
+                ExpandableNavigationDrawerFolderItem(
+                    folder = subFolder,
+                    level = level + 1,
+                    selectedFolderId = selectedFolderId,
+                    onClick = onClick,
+                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+                )
+            }
+        }
+    }
 }
