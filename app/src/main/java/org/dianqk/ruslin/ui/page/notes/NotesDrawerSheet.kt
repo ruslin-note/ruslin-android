@@ -25,6 +25,8 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.dianqk.ruslin.R
 import org.dianqk.ruslin.ui.component.SubTitle
 import org.dianqk.ruslin.ui.theme.Shape32
@@ -191,6 +193,7 @@ fun CreateFolderDialog(
     )
 }
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 @ExperimentalMaterial3Api
 fun ExpandableNavigationDrawerFolderItem(
@@ -204,8 +207,9 @@ fun ExpandableNavigationDrawerFolderItem(
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
     val expandable = folder.subFolders.isNotEmpty()
-    var isExpanded by remember { mutableStateOf(false) }
     val selected = folder.ffiFolder.id == selectedFolderId
+    val isExpanded by folder.isExpanded.collectAsStateWithLifecycle()
+
     Surface(
         selected = selected,
         onClick = {
@@ -249,7 +253,7 @@ fun ExpandableNavigationDrawerFolderItem(
                         .clip(CircleShape)
                         .background(MaterialTheme.colorScheme.surfaceTint.copy(alpha = 0.1f))
                         .clickable {
-                            isExpanded = !isExpanded
+                            folder.setExpanded(!isExpanded)
                         },
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically,
@@ -263,14 +267,14 @@ fun ExpandableNavigationDrawerFolderItem(
             }
         }
     }
-    
+
     AnimatedVisibility(
         visible = isExpanded,
         enter = fadeIn() + expandVertically(),
         exit = fadeOut() + shrinkVertically()
     ) {
         Column {
-            folder.subFolders.forEach { subFolder ->
+            for (subFolder in folder.subFolders) {
                 ExpandableNavigationDrawerFolderItem(
                     folder = subFolder,
                     level = level + 1,

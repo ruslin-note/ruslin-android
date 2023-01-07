@@ -19,7 +19,13 @@ import javax.inject.Inject
 data class Folder(
     val ffiFolder: FfiFolder,
     val subFolders: MutableList<Folder> = mutableListOf(),
-)
+    private var _isExpanded: MutableStateFlow<Boolean> = MutableStateFlow(false), // Whether the internal update of data is reasonable ?
+    val isExpanded: StateFlow<Boolean> = _isExpanded.asStateFlow()
+) {
+    fun setExpanded(isExpanded: Boolean) {
+        _isExpanded.update { isExpanded }
+    }
+}
 
 data class NotesUiState(
     val items: List<FfiAbbrNote> = emptyList(),
@@ -187,7 +193,7 @@ class NotesViewModel @Inject constructor(
 
     private fun updateFoldersFromFfi(ffiFolders: List<FfiFolder>) {
         val allFolders = ffiFolders.map { Folder(it) }
-        val folderMap = emptyMap<String, Folder>().toMutableMap()
+        val folderMap = mutableMapOf<String, Folder>()
         allFolders.forEach { folder ->
             folderMap[folder.ffiFolder.id] = folder
         }

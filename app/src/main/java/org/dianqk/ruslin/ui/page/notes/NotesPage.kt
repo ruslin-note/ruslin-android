@@ -17,7 +17,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -46,7 +45,6 @@ fun NotesPage(
     val scope = rememberCoroutineScope()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val showActionBottomDrawerState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
-    val context = LocalContext.current
 
     val openCreateFolderDialog = remember { mutableStateOf(false) }
 
