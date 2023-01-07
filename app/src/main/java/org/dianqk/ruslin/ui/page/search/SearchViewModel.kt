@@ -1,5 +1,7 @@
 package org.dianqk.ruslin.ui.page.search
 
+import android.text.Spanned
+import androidx.core.text.HtmlCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -9,7 +11,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.dianqk.ruslin.data.NotesRepository
-import uniffi.ruslin.FfiSearchNote
 import javax.inject.Inject
 
 data class SearchUiState(
@@ -17,8 +18,14 @@ data class SearchUiState(
     val searchTerm: String = "",
     val searchingTerm: String = "",
     val isSearching: Boolean = false,
-    val searchNotes: List<FfiSearchNote> = emptyList(),
+    val searchedNotes: List<SearchedHighlightNote> = emptyList(),
     val notFound: Boolean = false
+)
+
+data class SearchedHighlightNote(
+    val id: String,
+    val title: Spanned,
+    val body: Spanned,
 )
 
 @HiltViewModel
@@ -47,7 +54,19 @@ class SearchViewModel @Inject constructor(
                 .onSuccess { notes ->
                     _uiState.update {
                         it.copy(
-                            searchNotes = notes,
+                            searchedNotes = notes.map { note ->
+                                SearchedHighlightNote(
+                                    id = note.id,
+                                    title = HtmlCompat.fromHtml(
+                                        note.title,
+                                        HtmlCompat.FROM_HTML_MODE_LEGACY
+                                    ),
+                                    body = HtmlCompat.fromHtml(
+                                        note.body,
+                                        HtmlCompat.FROM_HTML_MODE_LEGACY
+                                    )
+                                )
+                            },
                             isSearching = false,
                             notFound = notes.isEmpty()
                         )
