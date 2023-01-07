@@ -150,5 +150,5 @@ interface RuslinAndroidData {
     [Throws=DatabaseError]
     FFIStatus database_status();
     [Throws=DatabaseError]
-    sequence<FFISearchNote> search(string search_term, boolean enable_highlight);
+    sequence<FFISearchNote> search(string search_term);
 };

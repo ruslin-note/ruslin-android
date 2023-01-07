@@ -8,7 +8,7 @@ use log4rs::{
 };
 use ruslin_data::{
     sync::{SyncConfig, SyncError},
-    DatabaseError, Folder, Note, RuslinData, UpdateSource,
+    DatabaseError, Folder, Note, RuslinData, SearchBodyOption, UpdateSource,
 };
 use std::path::Path;
 use tokio::runtime::Runtime;
@@ -91,7 +91,7 @@ impl RuslinAndroidData {
         let db = data.db.clone();
         rt.spawn(async move {
             // prepare jieba
-            db.search_notes("", false).ok();
+            db.search_notes("", None).ok();
         });
         Ok(Self {
             data,
@@ -205,11 +205,10 @@ impl RuslinAndroidData {
         Ok(self.data.db.status()?)
     }
 
-    pub fn search(
-        &self,
-        search_term: String,
-        enable_highlight: bool,
-    ) -> Result<Vec<FFISearchNote>, DatabaseError> {
-        Ok(self.data.db.search_notes(&search_term, enable_highlight)?)
+    pub fn search(&self, search_term: String) -> Result<Vec<FFISearchNote>, DatabaseError> {
+        Ok(self.data.db.search_notes(
+            &search_term,
+            Some(SearchBodyOption::Snippet { max_tokens: 16 }),
+        )?)
     }
 }
