@@ -18,16 +18,29 @@ import org.intellij.markdown.flavours.gfm.GFMElementTypes
 import org.intellij.markdown.flavours.gfm.GFMFlavourDescriptor
 import org.intellij.markdown.parser.MarkdownParser
 
+data class ParsedTree(
+    internal val mdTree: ASTNode
+)
+
 class MarkdownVisualTransformation : VisualTransformation {
 
-    override fun filter(text: AnnotatedString): TransformedText {
-        val builder = AnnotatedString.Builder(text)
+    fun parse(text: AnnotatedString): ParsedTree {
         val flavour = GFMFlavourDescriptor()
-        val parsedTree = MarkdownParser(flavour).buildMarkdownTreeFromString(text.text)
+        return ParsedTree(MarkdownParser(flavour).buildMarkdownTreeFromString(text.text))
+    }
+
+    fun render(tree: ParsedTree, text: AnnotatedString): AnnotatedString {
+        val builder = AnnotatedString.Builder(text)
         val visitor = AnnotatedStringGeneratingVisitor(builder, PROVIDERS)
-        visitor.visitNode(parsedTree)
+        visitor.visitNode(tree.mdTree)
+        return builder.toAnnotatedString()
+    }
+
+    override fun filter(text: AnnotatedString): TransformedText {
+        val parsedTree = parse(text)
+        val renderText = render(parsedTree, text)
         return TransformedText(
-            text = builder.toAnnotatedString(),
+            text = renderText,
             offsetMapping = OffsetMapping.Identity
         )
     }
