@@ -1,4 +1,4 @@
-package org.dianqk.ruslin.ui.component
+package org.dianqk.mdrender
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.AnnotatedString

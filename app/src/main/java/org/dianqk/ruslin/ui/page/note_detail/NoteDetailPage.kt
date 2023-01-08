@@ -23,9 +23,9 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.dianqk.mdrender.MarkdownVisualTransformation
 import org.dianqk.ruslin.R
 import org.dianqk.ruslin.ui.component.BackButton
-import org.dianqk.ruslin.ui.component.MarkdownVisualTransformation
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLifecycleComposeApi::class)
 @Composable
