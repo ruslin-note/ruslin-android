@@ -34,7 +34,7 @@ export CXX=$ANDROID_NDK_TOOLCHAIN_BIN/aarch64-linux-android28-clang++
 export CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER=$ANDROID_NDK_TOOLCHAIN_BIN/aarch64-linux-android28-clang
 cargo build --target aarch64-linux-android
 
-mkdir -p ../app/src/main/jniLibs/arm64-v8a
-cp target/aarch64-linux-android/debug/libuniffi_ruslin.so ../app/src/main/jniLibs/arm64-v8a
+mkdir -p ../uniffi/src/main/jniLibs/arm64-v8a
+cp target/aarch64-linux-android/debug/libuniffi_ruslin.so ../uniffi/src/main/jniLibs/arm64-v8a
 
-uniffi-bindgen generate src/ruslin.udl --language kotlin --out-dir ../app/src/main/java
+uniffi-bindgen generate src/ruslin.udl --language kotlin --out-dir ../uniffi/src/main/java

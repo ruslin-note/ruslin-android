@@ -13,6 +13,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/mdrender" />
             <option value="$PROJECT_DIR$/mdrenderbenchmark" />
+            <option value="$PROJECT_DIR$/uniffi" />
           </set>
         </option>
       </GradleProjectSettings>

@@ -16,7 +16,7 @@
 		{
 			"type": "shell",
 			"command": "uniffi-bindgen",
-			"args": ["generate", "src/ruslin.udl", "--language", "kotlin", "--out-dir", "../app/src/main/java"],
+			"args": ["generate", "src/ruslin.udl", "--language", "kotlin", "--out-dir", "../uniffi/src/main/java"],
 			"group": {
 				"kind": "build",
 				"isDefault": false,
@@ -26,7 +26,7 @@
 		{
 			"type": "shell",
 			"command": "rsync",
-			"args": ["-avz", "--mkpath", "target/aarch64-linux-android/debug/libuniffi_ruslin.so", "../app/src/main/jniLibs/arm64-v8a/libuniffi_ruslin.so"],
+			"args": ["-avz", "--mkpath", "target/aarch64-linux-android/debug/libuniffi_ruslin.so", "../uniffi/src/main/jniLibs/arm64-v8a/libuniffi_ruslin.so"],
 			"group": {
 				"kind": "build",
 				"isDefault": true

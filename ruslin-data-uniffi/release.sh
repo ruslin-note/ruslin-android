@@ -17,7 +17,7 @@ export CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER=$ANDROID_NDK_TOOLCHAIN_BIN/aarc
 
 cargo build --target aarch64-linux-android --release
 
-mkdir -p ../app/src/main/jniLibs/arm64-v8a
-cp target/aarch64-linux-android/release/libuniffi_ruslin.so ../app/src/main/jniLibs/arm64-v8a
+mkdir -p ../uniffi/src/main/jniLibs/arm64-v8a
+cp target/aarch64-linux-android/release/libuniffi_ruslin.so ../uniffi/src/main/jniLibs/arm64-v8a
 
-uniffi-bindgen generate src/ruslin.udl --language kotlin --out-dir ../app/src/main/java
+uniffi-bindgen generate src/ruslin.udl --language kotlin --out-dir ../uniffi/src/main/java

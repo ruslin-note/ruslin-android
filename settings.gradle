@@ -16,3 +16,4 @@ rootProject.name = "Ruslin"
 include ':app'
 include ':mdrender'
 include ':mdrenderbenchmark'
+include ':uniffi'
