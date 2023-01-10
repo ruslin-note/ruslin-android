@@ -1,0 +1,2 @@
+-keep class com.sun.jna.** { *; }
+-keep class uniffi.ruslin.** { *; }
