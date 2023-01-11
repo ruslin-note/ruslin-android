@@ -86,7 +86,7 @@ impl RuslinAndroidData {
         let rt = tokio::runtime::Builder::new_multi_thread()
             .enable_all()
             .build()
-            .expect(&format!("unwrap error in {}:{}", file!(), line!()));
+            .unwrap_or_else(|_| panic!("unwrap error in {}:{}", file!(), line!()));
         let data = RuslinData::new(Path::new(&data_dir))?;
         let db = data.db.clone();
         rt.spawn(async move {
@@ -202,13 +202,66 @@ impl RuslinAndroidData {
     }
 
     pub fn database_status(&self) -> Result<FFIStatus, DatabaseError> {
-        Ok(self.data.db.status()?)
+        self.data.db.status()
     }
 
     pub fn search(&self, search_term: String) -> Result<Vec<FFISearchNote>, DatabaseError> {
-        Ok(self.data.db.search_notes(
+        self.data.db.search_notes(
             &search_term,
             Some(SearchBodyOption::Snippet { max_tokens: 16 }),
-        )?)
+        )
     }
+}
+
+#[derive(Debug)]
+pub enum MarkdownTagRange {
+    Heading { level: i32, start: i32, end: i32 },
+    Emphasis { start: i32, end: i32 },
+    Strong { start: i32, end: i32 },
+    Strikethrough { start: i32, end: i32 },
+}
+
+pub fn parse_markdown(s: String) -> Vec<MarkdownTagRange> {
+    use pulldown_cmark::{Event, Options, Parser, Tag};
+    let mut tag_ranges: Vec<MarkdownTagRange> = Vec::new();
+    let mut utf8_to_uft16_offsets: Vec<usize> = Vec::with_capacity(s.len());
+    let mut offset: usize = 0;
+    for c in s.chars() {
+        for _ in 0..c.len_utf8() {
+            utf8_to_uft16_offsets.push(offset);
+        }
+        offset += c.len_utf16();
+    }
+    utf8_to_uft16_offsets.push(offset);
+    let parser = Parser::new_ext(&s, Options::all());
+    for (event, range) in parser.into_offset_iter() {
+        let start = utf8_to_uft16_offsets[range.start] as i32;
+        let end = utf8_to_uft16_offsets[range.end] as i32;
+        match event {
+            Event::Start(tag) => {
+                let tag_range = match tag {
+                    Tag::Heading(level, _, _) => MarkdownTagRange::Heading {
+                        level: level as i32,
+                        start,
+                        end,
+                    },
+                    Tag::Emphasis => MarkdownTagRange::Emphasis { start, end },
+                    Tag::Strong => MarkdownTagRange::Strong { start, end },
+                    Tag::Strikethrough => MarkdownTagRange::Strikethrough { start, end },
+                    _ => continue,
+                };
+                tag_ranges.push(tag_range);
+            }
+            Event::End(_)
+            | Event::Text(_)
+            | Event::Code(_)
+            | Event::Html(_)
+            | Event::FootnoteReference(_)
+            | Event::SoftBreak
+            | Event::HardBreak
+            | Event::Rule
+            | Event::TaskListMarker(_) => {}
+        }
+    }
+    tag_ranges
 }

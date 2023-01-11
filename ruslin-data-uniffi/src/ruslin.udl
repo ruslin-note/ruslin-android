@@ -1,4 +1,13 @@
 namespace ruslin {
+    sequence<MarkdownTagRange> parse_markdown(string text);
+};
+
+[Enum]
+interface MarkdownTagRange {
+    Heading(i32 level, i32 start, i32 end);
+    Emphasis(i32 start, i32 end);
+    Strong(i32 start, i32 end);
+    Strikethrough(i32 start, i32 end);
 };
 
 dictionary FFIFolder {

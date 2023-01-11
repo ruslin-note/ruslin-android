@@ -9,30 +9,67 @@ import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
-import org.intellij.markdown.IElementType
-import org.intellij.markdown.MarkdownElementTypes
-import org.intellij.markdown.ast.ASTNode
-import org.intellij.markdown.ast.acceptChildren
-import org.intellij.markdown.ast.visitors.RecursiveVisitor
-import org.intellij.markdown.flavours.gfm.GFMElementTypes
-import org.intellij.markdown.flavours.gfm.GFMFlavourDescriptor
-import org.intellij.markdown.parser.MarkdownParser
+import uniffi.ruslin.MarkdownTagRange
+import uniffi.ruslin.parseMarkdown
 
-data class ParsedTree(
-    internal val mdTree: ASTNode
+data class ParsedTagRanges(
+    internal val markdownTagRanges: List<MarkdownTagRange>
 )
+
+private fun MarkdownTagRange.Heading.render(builder: AnnotatedString.Builder) {
+    val style = when (level) {
+        1 -> MarkdownDefaultTypography.titleLarge.toSpanStyle()
+        2 -> MarkdownDefaultTypography.titleMedium.toSpanStyle()
+        else -> MarkdownDefaultTypography.titleSmall.toSpanStyle()
+    }
+    builder.addStyle(
+        style,
+        start,
+        end
+    )
+}
+
+private fun MarkdownTagRange.Emphasis.render(builder: AnnotatedString.Builder) {
+    builder.addStyle(
+        MarkdownDefaultTypography.emph.toSpanStyle(),
+        start,
+        end
+    )
+}
+
+private fun MarkdownTagRange.Strong.render(builder: AnnotatedString.Builder) {
+    builder.addStyle(
+        MarkdownDefaultTypography.bold.toSpanStyle(),
+        start,
+        end
+    )
+}
+
+private fun MarkdownTagRange.Strikethrough.render(builder: AnnotatedString.Builder) {
+    builder.addStyle(
+        MarkdownDefaultTypography.strikethrough.toSpanStyle(),
+        start,
+        end
+    )
+}
 
 class MarkdownVisualTransformation : VisualTransformation {
 
-    fun parse(text: AnnotatedString): ParsedTree {
-        val flavour = GFMFlavourDescriptor()
-        return ParsedTree(MarkdownParser(flavour).buildMarkdownTreeFromString(text.text))
+    fun parse(text: AnnotatedString): ParsedTagRanges {
+        val markdownTagRanges = parseMarkdown(text.text)
+        return ParsedTagRanges(markdownTagRanges)
     }
 
-    fun render(tree: ParsedTree, text: AnnotatedString): AnnotatedString {
+    fun render(tree: ParsedTagRanges, text: AnnotatedString): AnnotatedString {
         val builder = AnnotatedString.Builder(text)
-        val visitor = AnnotatedStringGeneratingVisitor(builder, PROVIDERS)
-        visitor.visitNode(tree.mdTree)
+        for (tagRange in tree.markdownTagRanges) {
+            when (tagRange) {
+                is MarkdownTagRange.Heading -> tagRange.render(builder)
+                is MarkdownTagRange.Emphasis -> tagRange.render(builder)
+                is MarkdownTagRange.Strong -> tagRange.render(builder)
+                is MarkdownTagRange.Strikethrough -> tagRange.render(builder)
+            }
+        }
         return builder.toAnnotatedString()
     }
 
@@ -42,77 +79,6 @@ class MarkdownVisualTransformation : VisualTransformation {
         return TransformedText(
             text = renderText,
             offsetMapping = OffsetMapping.Identity
-        )
-    }
-
-    inner class AnnotatedStringGeneratingVisitor(
-        private val builder: AnnotatedString.Builder,
-        private val providers: Map<IElementType, GeneratingProvider>
-    ) : RecursiveVisitor() {
-        override fun visitNode(node: ASTNode) {
-            providers[node.type]?.processNode(this, builder, node) ?: node.acceptChildren(this)
-        }
-    }
-}
-
-val PROVIDERS: Map<IElementType, GeneratingProvider> = hashMapOf(
-    MarkdownElementTypes.STRONG to StrongGeneratingProvider(),
-    MarkdownElementTypes.EMPH to EmphGeneratingProvider(),
-    GFMElementTypes.STRIKETHROUGH to StrikethroughGeneratingProvider(),
-    MarkdownElementTypes.ATX_1 to ATXHeaderGeneratingProvider(level = 1),
-    MarkdownElementTypes.ATX_2 to ATXHeaderGeneratingProvider(level = 2),
-    MarkdownElementTypes.ATX_3 to ATXHeaderGeneratingProvider(level = 3),
-    MarkdownElementTypes.ATX_4 to ATXHeaderGeneratingProvider(level = 4),
-    MarkdownElementTypes.ATX_5 to ATXHeaderGeneratingProvider(level = 5),
-    MarkdownElementTypes.ATX_6 to ATXHeaderGeneratingProvider(level = 6)
-)
-
-interface GeneratingProvider {
-    fun processNode(
-        visitor: MarkdownVisualTransformation.AnnotatedStringGeneratingVisitor,
-        builder: AnnotatedString.Builder,
-        node: ASTNode
-    )
-}
-
-class StrongGeneratingProvider : GeneratingProvider {
-    override fun processNode(
-        visitor: MarkdownVisualTransformation.AnnotatedStringGeneratingVisitor,
-        builder: AnnotatedString.Builder,
-        node: ASTNode
-    ) {
-        builder.addStyle(
-            style = MarkdownDefaultTypography.bold.toSpanStyle(),
-            node.startOffset,
-            node.endOffset
-        )
-    }
-}
-
-class EmphGeneratingProvider : GeneratingProvider {
-    override fun processNode(
-        visitor: MarkdownVisualTransformation.AnnotatedStringGeneratingVisitor,
-        builder: AnnotatedString.Builder,
-        node: ASTNode
-    ) {
-        builder.addStyle(
-            style = MarkdownDefaultTypography.emph.toSpanStyle(),
-            node.startOffset,
-            node.endOffset
-        )
-    }
-}
-
-class StrikethroughGeneratingProvider : GeneratingProvider {
-    override fun processNode(
-        visitor: MarkdownVisualTransformation.AnnotatedStringGeneratingVisitor,
-        builder: AnnotatedString.Builder,
-        node: ASTNode
-    ) {
-        builder.addStyle(
-            style = MarkdownDefaultTypography.strikethrough.toSpanStyle(),
-            node.startOffset,
-            node.endOffset
         )
     }
 }
@@ -160,30 +126,3 @@ val MarkdownDefaultTypography = MarkdownTypography(
         textDecoration = TextDecoration.LineThrough
     )
 )
-
-class ATXHeaderGeneratingProvider(private val level: Int) : GeneratingProvider {
-    override fun processNode(
-        visitor: MarkdownVisualTransformation.AnnotatedStringGeneratingVisitor,
-        builder: AnnotatedString.Builder,
-        node: ASTNode
-    ) {
-        when (level) {
-            1 -> builder.addStyle(
-                style = MarkdownDefaultTypography.titleLarge.toSpanStyle(),
-                node.startOffset,
-                node.endOffset
-            )
-            2 -> builder.addStyle(
-                style = MarkdownDefaultTypography.titleMedium.toSpanStyle(),
-                node.startOffset,
-                node.endOffset
-            )
-            else -> builder.addStyle(
-                style = MarkdownDefaultTypography.titleSmall.toSpanStyle(),
-                node.startOffset,
-                node.endOffset
-            )
-        }
-        node.acceptChildren(visitor)
-    }
-}

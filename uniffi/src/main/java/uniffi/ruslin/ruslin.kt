@@ -44,7 +44,7 @@ open class RustBuffer : Structure() {
 
     companion object {
         internal fun alloc(size: Int = 0) = rustCall() { status ->
-            _UniFFILib.INSTANCE.ffi_ruslin_1a15_rustbuffer_alloc(size, status).also {
+            _UniFFILib.INSTANCE.ffi_ruslin_401d_rustbuffer_alloc(size, status).also {
                 if (it.data == null) {
                     throw RuntimeException("RustBuffer.alloc() returned null data pointer (size=$size)")
                 }
@@ -52,7 +52,7 @@ open class RustBuffer : Structure() {
         }
 
         internal fun free(buf: RustBuffer.ByValue) = rustCall() { status ->
-            _UniFFILib.INSTANCE.ffi_ruslin_1a15_rustbuffer_free(buf, status)
+            _UniFFILib.INSTANCE.ffi_ruslin_401d_rustbuffer_free(buf, status)
         }
     }
 
@@ -264,69 +264,69 @@ internal interface _UniFFILib : Library {
         }
     }
 
-    fun ffi_ruslin_1a15_RuslinAndroidData_object_free(
+    fun ffi_ruslin_401d_RuslinAndroidData_object_free(
         `ptr`: Pointer,
         _uniffi_out_err: RustCallStatus,
     ): Unit
 
-    fun ruslin_1a15_RuslinAndroidData_new(
+    fun ruslin_401d_RuslinAndroidData_new(
         `dataDir`: RustBuffer.ByValue,
         `logTextFile`: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus,
     ): Pointer
 
-    fun ruslin_1a15_RuslinAndroidData_sync_config_exists(
+    fun ruslin_401d_RuslinAndroidData_sync_config_exists(
         `ptr`: Pointer,
         _uniffi_out_err: RustCallStatus,
     ): Byte
 
-    fun ruslin_1a15_RuslinAndroidData_save_sync_config(
+    fun ruslin_401d_RuslinAndroidData_save_sync_config(
         `ptr`: Pointer,
         `config`: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus,
     ): Unit
 
-    fun ruslin_1a15_RuslinAndroidData_get_sync_config(
+    fun ruslin_401d_RuslinAndroidData_get_sync_config(
         `ptr`: Pointer,
         _uniffi_out_err: RustCallStatus,
     ): RustBuffer.ByValue
 
-    fun ruslin_1a15_RuslinAndroidData_sync(
+    fun ruslin_401d_RuslinAndroidData_sync(
         `ptr`: Pointer,
         _uniffi_out_err: RustCallStatus,
     ): RustBuffer.ByValue
 
-    fun ruslin_1a15_RuslinAndroidData_new_folder(
+    fun ruslin_401d_RuslinAndroidData_new_folder(
         `ptr`: Pointer,
         `parentId`: RustBuffer.ByValue,
         `title`: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus,
     ): RustBuffer.ByValue
 
-    fun ruslin_1a15_RuslinAndroidData_replace_folder(
+    fun ruslin_401d_RuslinAndroidData_replace_folder(
         `ptr`: Pointer,
         `folder`: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus,
     ): Unit
 
-    fun ruslin_1a15_RuslinAndroidData_load_folders(
+    fun ruslin_401d_RuslinAndroidData_load_folders(
         `ptr`: Pointer,
         _uniffi_out_err: RustCallStatus,
     ): RustBuffer.ByValue
 
-    fun ruslin_1a15_RuslinAndroidData_delete_folder(
+    fun ruslin_401d_RuslinAndroidData_delete_folder(
         `ptr`: Pointer,
         `id`: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus,
     ): Unit
 
-    fun ruslin_1a15_RuslinAndroidData_load_abbr_notes(
+    fun ruslin_401d_RuslinAndroidData_load_abbr_notes(
         `ptr`: Pointer,
         `parentId`: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus,
     ): RustBuffer.ByValue
 
-    fun ruslin_1a15_RuslinAndroidData_new_note(
+    fun ruslin_401d_RuslinAndroidData_new_note(
         `ptr`: Pointer,
         `parentId`: RustBuffer.ByValue,
         `title`: RustBuffer.ByValue,
@@ -334,61 +334,66 @@ internal interface _UniFFILib : Library {
         _uniffi_out_err: RustCallStatus,
     ): RustBuffer.ByValue
 
-    fun ruslin_1a15_RuslinAndroidData_load_note(
+    fun ruslin_401d_RuslinAndroidData_load_note(
         `ptr`: Pointer,
         `id`: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus,
     ): RustBuffer.ByValue
 
-    fun ruslin_1a15_RuslinAndroidData_replace_note(
+    fun ruslin_401d_RuslinAndroidData_replace_note(
         `ptr`: Pointer,
         `note`: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus,
     ): Unit
 
-    fun ruslin_1a15_RuslinAndroidData_delete_note(
+    fun ruslin_401d_RuslinAndroidData_delete_note(
         `ptr`: Pointer,
         `id`: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus,
     ): Unit
 
-    fun ruslin_1a15_RuslinAndroidData_conflict_note_exists(
+    fun ruslin_401d_RuslinAndroidData_conflict_note_exists(
         `ptr`: Pointer,
         _uniffi_out_err: RustCallStatus,
     ): Byte
 
-    fun ruslin_1a15_RuslinAndroidData_load_abbr_conflict_notes(
+    fun ruslin_401d_RuslinAndroidData_load_abbr_conflict_notes(
         `ptr`: Pointer,
         _uniffi_out_err: RustCallStatus,
     ): RustBuffer.ByValue
 
-    fun ruslin_1a15_RuslinAndroidData_database_status(
+    fun ruslin_401d_RuslinAndroidData_database_status(
         `ptr`: Pointer,
         _uniffi_out_err: RustCallStatus,
     ): RustBuffer.ByValue
 
-    fun ruslin_1a15_RuslinAndroidData_search(
+    fun ruslin_401d_RuslinAndroidData_search(
         `ptr`: Pointer,
         `searchTerm`: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus,
     ): RustBuffer.ByValue
 
-    fun ffi_ruslin_1a15_rustbuffer_alloc(
+    fun ruslin_401d_parse_markdown(
+        `text`: RustBuffer.ByValue,
+        _uniffi_out_err: RustCallStatus,
+    ): RustBuffer.ByValue
+
+    fun ffi_ruslin_401d_rustbuffer_alloc(
         `size`: Int,
         _uniffi_out_err: RustCallStatus,
     ): RustBuffer.ByValue
 
-    fun ffi_ruslin_1a15_rustbuffer_from_bytes(
+    fun ffi_ruslin_401d_rustbuffer_from_bytes(
         `bytes`: ForeignBytes.ByValue,
         _uniffi_out_err: RustCallStatus,
     ): RustBuffer.ByValue
 
-    fun ffi_ruslin_1a15_rustbuffer_free(
+    fun ffi_ruslin_401d_rustbuffer_free(
         `buf`: RustBuffer.ByValue,
         _uniffi_out_err: RustCallStatus,
     ): Unit
 
-    fun ffi_ruslin_1a15_rustbuffer_reserve(
+    fun ffi_ruslin_401d_rustbuffer_reserve(
         `buf`: RustBuffer.ByValue,
         `additional`: Int,
         _uniffi_out_err: RustCallStatus,
@@ -742,7 +747,7 @@ class RuslinAndroidData(
     constructor(`dataDir`: String, `logTextFile`: String) :
         this(
             rustCallWithError(SyncException) { _status ->
-                _UniFFILib.INSTANCE.ruslin_1a15_RuslinAndroidData_new(FfiConverterString.lower(`dataDir`), FfiConverterString.lower(`logTextFile`), _status)
+                _UniFFILib.INSTANCE.ruslin_401d_RuslinAndroidData_new(FfiConverterString.lower(`dataDir`), FfiConverterString.lower(`logTextFile`), _status)
             },
         )
 
@@ -756,14 +761,14 @@ class RuslinAndroidData(
      */
     protected override fun freeRustArcPtr() {
         rustCall() { status ->
-            _UniFFILib.INSTANCE.ffi_ruslin_1a15_RuslinAndroidData_object_free(this.pointer, status)
+            _UniFFILib.INSTANCE.ffi_ruslin_401d_RuslinAndroidData_object_free(this.pointer, status)
         }
     }
 
     override fun `syncConfigExists`(): Boolean =
         callWithPointer {
             rustCall() { _status ->
-                _UniFFILib.INSTANCE.ruslin_1a15_RuslinAndroidData_sync_config_exists(it, _status)
+                _UniFFILib.INSTANCE.ruslin_401d_RuslinAndroidData_sync_config_exists(it, _status)
             }
         }.let {
             FfiConverterBoolean.lift(it)
@@ -773,7 +778,7 @@ class RuslinAndroidData(
     override fun `saveSyncConfig`(`config`: SyncConfig) =
         callWithPointer {
             rustCallWithError(SyncException) { _status ->
-                _UniFFILib.INSTANCE.ruslin_1a15_RuslinAndroidData_save_sync_config(it, FfiConverterTypeSyncConfig.lower(`config`), _status)
+                _UniFFILib.INSTANCE.ruslin_401d_RuslinAndroidData_save_sync_config(it, FfiConverterTypeSyncConfig.lower(`config`), _status)
             }
         }
 
@@ -781,7 +786,7 @@ class RuslinAndroidData(
     override fun `getSyncConfig`(): SyncConfig? =
         callWithPointer {
             rustCallWithError(SyncException) { _status ->
-                _UniFFILib.INSTANCE.ruslin_1a15_RuslinAndroidData_get_sync_config(it, _status)
+                _UniFFILib.INSTANCE.ruslin_401d_RuslinAndroidData_get_sync_config(it, _status)
             }
         }.let {
             FfiConverterOptionalTypeSyncConfig.lift(it)
@@ -791,7 +796,7 @@ class RuslinAndroidData(
     override fun `sync`(): FfiSyncInfo =
         callWithPointer {
             rustCallWithError(SyncException) { _status ->
-                _UniFFILib.INSTANCE.ruslin_1a15_RuslinAndroidData_sync(it, _status)
+                _UniFFILib.INSTANCE.ruslin_401d_RuslinAndroidData_sync(it, _status)
             }
         }.let {
             FfiConverterTypeFfiSyncInfo.lift(it)
@@ -799,7 +804,7 @@ class RuslinAndroidData(
     override fun `newFolder`(`parentId`: String?, `title`: String): FfiFolder =
         callWithPointer {
             rustCall() { _status ->
-                _UniFFILib.INSTANCE.ruslin_1a15_RuslinAndroidData_new_folder(it, FfiConverterOptionalString.lower(`parentId`), FfiConverterString.lower(`title`), _status)
+                _UniFFILib.INSTANCE.ruslin_401d_RuslinAndroidData_new_folder(it, FfiConverterOptionalString.lower(`parentId`), FfiConverterString.lower(`title`), _status)
             }
         }.let {
             FfiConverterTypeFfiFolder.lift(it)
@@ -809,7 +814,7 @@ class RuslinAndroidData(
     override fun `replaceFolder`(`folder`: FfiFolder) =
         callWithPointer {
             rustCallWithError(DatabaseException) { _status ->
-                _UniFFILib.INSTANCE.ruslin_1a15_RuslinAndroidData_replace_folder(it, FfiConverterTypeFfiFolder.lower(`folder`), _status)
+                _UniFFILib.INSTANCE.ruslin_401d_RuslinAndroidData_replace_folder(it, FfiConverterTypeFfiFolder.lower(`folder`), _status)
             }
         }
 
@@ -817,7 +822,7 @@ class RuslinAndroidData(
     override fun `loadFolders`(): List<FfiFolder> =
         callWithPointer {
             rustCallWithError(DatabaseException) { _status ->
-                _UniFFILib.INSTANCE.ruslin_1a15_RuslinAndroidData_load_folders(it, _status)
+                _UniFFILib.INSTANCE.ruslin_401d_RuslinAndroidData_load_folders(it, _status)
             }
         }.let {
             FfiConverterSequenceTypeFfiFolder.lift(it)
@@ -827,7 +832,7 @@ class RuslinAndroidData(
     override fun `deleteFolder`(`id`: String) =
         callWithPointer {
             rustCallWithError(DatabaseException) { _status ->
-                _UniFFILib.INSTANCE.ruslin_1a15_RuslinAndroidData_delete_folder(it, FfiConverterString.lower(`id`), _status)
+                _UniFFILib.INSTANCE.ruslin_401d_RuslinAndroidData_delete_folder(it, FfiConverterString.lower(`id`), _status)
             }
         }
 
@@ -835,7 +840,7 @@ class RuslinAndroidData(
     override fun `loadAbbrNotes`(`parentId`: String?): List<FfiAbbrNote> =
         callWithPointer {
             rustCallWithError(DatabaseException) { _status ->
-                _UniFFILib.INSTANCE.ruslin_1a15_RuslinAndroidData_load_abbr_notes(it, FfiConverterOptionalString.lower(`parentId`), _status)
+                _UniFFILib.INSTANCE.ruslin_401d_RuslinAndroidData_load_abbr_notes(it, FfiConverterOptionalString.lower(`parentId`), _status)
             }
         }.let {
             FfiConverterSequenceTypeFfiAbbrNote.lift(it)
@@ -843,7 +848,7 @@ class RuslinAndroidData(
     override fun `newNote`(`parentId`: String?, `title`: String, `body`: String): FfiNote =
         callWithPointer {
             rustCall() { _status ->
-                _UniFFILib.INSTANCE.ruslin_1a15_RuslinAndroidData_new_note(it, FfiConverterOptionalString.lower(`parentId`), FfiConverterString.lower(`title`), FfiConverterString.lower(`body`), _status)
+                _UniFFILib.INSTANCE.ruslin_401d_RuslinAndroidData_new_note(it, FfiConverterOptionalString.lower(`parentId`), FfiConverterString.lower(`title`), FfiConverterString.lower(`body`), _status)
             }
         }.let {
             FfiConverterTypeFfiNote.lift(it)
@@ -853,7 +858,7 @@ class RuslinAndroidData(
     override fun `loadNote`(`id`: String): FfiNote =
         callWithPointer {
             rustCallWithError(DatabaseException) { _status ->
-                _UniFFILib.INSTANCE.ruslin_1a15_RuslinAndroidData_load_note(it, FfiConverterString.lower(`id`), _status)
+                _UniFFILib.INSTANCE.ruslin_401d_RuslinAndroidData_load_note(it, FfiConverterString.lower(`id`), _status)
             }
         }.let {
             FfiConverterTypeFfiNote.lift(it)
@@ -863,7 +868,7 @@ class RuslinAndroidData(
     override fun `replaceNote`(`note`: FfiNote) =
         callWithPointer {
             rustCallWithError(DatabaseException) { _status ->
-                _UniFFILib.INSTANCE.ruslin_1a15_RuslinAndroidData_replace_note(it, FfiConverterTypeFfiNote.lower(`note`), _status)
+                _UniFFILib.INSTANCE.ruslin_401d_RuslinAndroidData_replace_note(it, FfiConverterTypeFfiNote.lower(`note`), _status)
             }
         }
 
@@ -871,7 +876,7 @@ class RuslinAndroidData(
     override fun `deleteNote`(`id`: String) =
         callWithPointer {
             rustCallWithError(DatabaseException) { _status ->
-                _UniFFILib.INSTANCE.ruslin_1a15_RuslinAndroidData_delete_note(it, FfiConverterString.lower(`id`), _status)
+                _UniFFILib.INSTANCE.ruslin_401d_RuslinAndroidData_delete_note(it, FfiConverterString.lower(`id`), _status)
             }
         }
 
@@ -879,7 +884,7 @@ class RuslinAndroidData(
     override fun `conflictNoteExists`(): Boolean =
         callWithPointer {
             rustCallWithError(DatabaseException) { _status ->
-                _UniFFILib.INSTANCE.ruslin_1a15_RuslinAndroidData_conflict_note_exists(it, _status)
+                _UniFFILib.INSTANCE.ruslin_401d_RuslinAndroidData_conflict_note_exists(it, _status)
             }
         }.let {
             FfiConverterBoolean.lift(it)
@@ -889,7 +894,7 @@ class RuslinAndroidData(
     override fun `loadAbbrConflictNotes`(): List<FfiAbbrNote> =
         callWithPointer {
             rustCallWithError(DatabaseException) { _status ->
-                _UniFFILib.INSTANCE.ruslin_1a15_RuslinAndroidData_load_abbr_conflict_notes(it, _status)
+                _UniFFILib.INSTANCE.ruslin_401d_RuslinAndroidData_load_abbr_conflict_notes(it, _status)
             }
         }.let {
             FfiConverterSequenceTypeFfiAbbrNote.lift(it)
@@ -899,7 +904,7 @@ class RuslinAndroidData(
     override fun `databaseStatus`(): FfiStatus =
         callWithPointer {
             rustCallWithError(DatabaseException) { _status ->
-                _UniFFILib.INSTANCE.ruslin_1a15_RuslinAndroidData_database_status(it, _status)
+                _UniFFILib.INSTANCE.ruslin_401d_RuslinAndroidData_database_status(it, _status)
             }
         }.let {
             FfiConverterTypeFfiStatus.lift(it)
@@ -909,7 +914,7 @@ class RuslinAndroidData(
     override fun `search`(`searchTerm`: String): List<FfiSearchNote> =
         callWithPointer {
             rustCallWithError(DatabaseException) { _status ->
-                _UniFFILib.INSTANCE.ruslin_1a15_RuslinAndroidData_search(it, FfiConverterString.lower(`searchTerm`), _status)
+                _UniFFILib.INSTANCE.ruslin_401d_RuslinAndroidData_search(it, FfiConverterString.lower(`searchTerm`), _status)
             }
         }.let {
             FfiConverterSequenceTypeFfiSearchNote.lift(it)
@@ -1278,6 +1283,117 @@ public object FfiConverterTypeFfiSyncInfo : FfiConverterRustBuffer<FfiSyncInfo> 
     }
 }
 
+sealed class MarkdownTagRange {
+    data class Heading(
+        val `level`: Int,
+        val `start`: Int,
+        val `end`: Int,
+    ) : MarkdownTagRange()
+    data class Emphasis(
+        val `start`: Int,
+        val `end`: Int,
+    ) : MarkdownTagRange()
+    data class Strong(
+        val `start`: Int,
+        val `end`: Int,
+    ) : MarkdownTagRange()
+    data class Strikethrough(
+        val `start`: Int,
+        val `end`: Int,
+    ) : MarkdownTagRange()
+}
+
+public object FfiConverterTypeMarkdownTagRange : FfiConverterRustBuffer<MarkdownTagRange> {
+    override fun read(buf: ByteBuffer): MarkdownTagRange {
+        return when (buf.getInt()) {
+            1 -> MarkdownTagRange.Heading(
+                FfiConverterInt.read(buf),
+                FfiConverterInt.read(buf),
+                FfiConverterInt.read(buf),
+            )
+            2 -> MarkdownTagRange.Emphasis(
+                FfiConverterInt.read(buf),
+                FfiConverterInt.read(buf),
+            )
+            3 -> MarkdownTagRange.Strong(
+                FfiConverterInt.read(buf),
+                FfiConverterInt.read(buf),
+            )
+            4 -> MarkdownTagRange.Strikethrough(
+                FfiConverterInt.read(buf),
+                FfiConverterInt.read(buf),
+            )
+            else -> throw RuntimeException("invalid enum value, something is very wrong!!")
+        }
+    }
+
+    override fun allocationSize(value: MarkdownTagRange) = when (value) {
+        is MarkdownTagRange.Heading -> {
+            // Add the size for the Int that specifies the variant plus the size needed for all fields
+            (
+                4 +
+                    FfiConverterInt.allocationSize(value.`level`) +
+                    FfiConverterInt.allocationSize(value.`start`) +
+                    FfiConverterInt.allocationSize(value.`end`)
+                )
+        }
+        is MarkdownTagRange.Emphasis -> {
+            // Add the size for the Int that specifies the variant plus the size needed for all fields
+            (
+                4 +
+                    FfiConverterInt.allocationSize(value.`start`) +
+                    FfiConverterInt.allocationSize(value.`end`)
+                )
+        }
+        is MarkdownTagRange.Strong -> {
+            // Add the size for the Int that specifies the variant plus the size needed for all fields
+            (
+                4 +
+                    FfiConverterInt.allocationSize(value.`start`) +
+                    FfiConverterInt.allocationSize(value.`end`)
+                )
+        }
+        is MarkdownTagRange.Strikethrough -> {
+            // Add the size for the Int that specifies the variant plus the size needed for all fields
+            (
+                4 +
+                    FfiConverterInt.allocationSize(value.`start`) +
+                    FfiConverterInt.allocationSize(value.`end`)
+                )
+        }
+    }
+
+    override fun write(value: MarkdownTagRange, buf: ByteBuffer) {
+        when (value) {
+            is MarkdownTagRange.Heading -> {
+                buf.putInt(1)
+                FfiConverterInt.write(value.`level`, buf)
+                FfiConverterInt.write(value.`start`, buf)
+                FfiConverterInt.write(value.`end`, buf)
+                Unit
+            }
+            is MarkdownTagRange.Emphasis -> {
+                buf.putInt(2)
+                FfiConverterInt.write(value.`start`, buf)
+                FfiConverterInt.write(value.`end`, buf)
+                Unit
+            }
+            is MarkdownTagRange.Strong -> {
+                buf.putInt(3)
+                FfiConverterInt.write(value.`start`, buf)
+                FfiConverterInt.write(value.`end`, buf)
+                Unit
+            }
+            is MarkdownTagRange.Strikethrough -> {
+                buf.putInt(4)
+                FfiConverterInt.write(value.`start`, buf)
+                FfiConverterInt.write(value.`end`, buf)
+                Unit
+            }
+        }.let { /* this makes the `when` an expression, which ensures it is exhaustive */ }
+    }
+}
+
 sealed class SyncConfig {
     data class JoplinServer(
         val `host`: String,
@@ -1635,4 +1751,34 @@ public object FfiConverterSequenceTypeFfiSearchNote : FfiConverterRustBuffer<Lis
             FfiConverterTypeFfiSearchNote.write(it, buf)
         }
     }
+}
+
+public object FfiConverterSequenceTypeMarkdownTagRange : FfiConverterRustBuffer<List<MarkdownTagRange>> {
+    override fun read(buf: ByteBuffer): List<MarkdownTagRange> {
+        val len = buf.getInt()
+        return List<MarkdownTagRange>(len) {
+            FfiConverterTypeMarkdownTagRange.read(buf)
+        }
+    }
+
+    override fun allocationSize(value: List<MarkdownTagRange>): Int {
+        val sizeForLength = 4
+        val sizeForItems = value.map { FfiConverterTypeMarkdownTagRange.allocationSize(it) }.sum()
+        return sizeForLength + sizeForItems
+    }
+
+    override fun write(value: List<MarkdownTagRange>, buf: ByteBuffer) {
+        buf.putInt(value.size)
+        value.forEach {
+            FfiConverterTypeMarkdownTagRange.write(it, buf)
+        }
+    }
+}
+
+fun `parseMarkdown`(`text`: String): List<MarkdownTagRange> {
+    return FfiConverterSequenceTypeMarkdownTagRange.lift(
+        rustCall() { _status ->
+            _UniFFILib.INSTANCE.ruslin_401d_parse_markdown(FfiConverterString.lower(`text`), _status)
+        },
+    )
 }
