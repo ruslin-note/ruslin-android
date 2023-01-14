@@ -93,9 +93,7 @@ private fun NoteDetailContent(
     onBodyChanged: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val keyboardController = LocalSoftwareKeyboardController.current
     val bringIntoViewRequester = remember { BringIntoViewRequester() }
-    val scope = rememberCoroutineScope()
 
     if (loading) {
         val pullRefreshState =

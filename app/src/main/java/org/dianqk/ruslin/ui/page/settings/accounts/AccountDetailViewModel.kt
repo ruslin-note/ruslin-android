@@ -90,6 +90,12 @@ class AccountDetailViewModel @Inject constructor(
                     }
                 }
                 .onFailure { e ->
+                    _uiState.update {
+                        it.copy(
+                            email = e.toString(),
+                            url = e.toString(),
+                        )
+                    }
                 }
         }
     }
