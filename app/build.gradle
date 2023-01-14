@@ -59,6 +59,9 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix ".debug"
+            if (keystorePropertiesFile.exists()) {
+                signingConfig signingConfigs.release
+            }
         }
         release {
             minifyEnabled true
