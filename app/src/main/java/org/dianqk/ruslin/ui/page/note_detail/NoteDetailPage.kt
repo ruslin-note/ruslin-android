@@ -15,7 +15,6 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -94,7 +93,8 @@ private fun NoteDetailContent(
     modifier: Modifier = Modifier
 ) {
     val bringIntoViewRequester = remember { BringIntoViewRequester() }
-    val visualTransformation = remember { MarkdownVisualTransformation() }
+    val colorScheme = MaterialTheme.colorScheme
+    val visualTransformation = remember(colorScheme) { MarkdownVisualTransformation(colorScheme) }
 
     if (loading) {
         val pullRefreshState =

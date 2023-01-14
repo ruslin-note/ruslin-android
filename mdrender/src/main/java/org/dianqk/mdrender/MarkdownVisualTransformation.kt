@@ -1,7 +1,10 @@
 package org.dianqk.mdrender
 
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.Typography
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -16,7 +19,11 @@ data class ParsedTagRanges(
     internal val markdownTagRanges: List<MarkdownTagRange>
 )
 
-private fun MarkdownTagRange.Heading.render(builder: AnnotatedString.Builder) {
+private fun MarkdownTagRange.Heading.render(
+    builder: AnnotatedString.Builder,
+    colorScheme: ColorScheme
+) {
+    builder.addStyle(SpanStyle(color = colorScheme.primary), start, start + level)
     val style = when (level) {
         1 -> MarkdownDefaultTypography.titleLarge.toSpanStyle()
         2 -> MarkdownDefaultTypography.titleMedium.toSpanStyle()
@@ -29,7 +36,12 @@ private fun MarkdownTagRange.Heading.render(builder: AnnotatedString.Builder) {
     )
 }
 
-private fun MarkdownTagRange.Emphasis.render(builder: AnnotatedString.Builder) {
+private fun MarkdownTagRange.Emphasis.render(
+    builder: AnnotatedString.Builder,
+    colorScheme: ColorScheme
+) {
+    builder.addStyle(SpanStyle(color = colorScheme.primary), start, start + 1)
+    builder.addStyle(SpanStyle(color = colorScheme.primary), end - 1, end)
     builder.addStyle(
         MarkdownDefaultTypography.emph.toSpanStyle(),
         start,
@@ -37,7 +49,12 @@ private fun MarkdownTagRange.Emphasis.render(builder: AnnotatedString.Builder) {
     )
 }
 
-private fun MarkdownTagRange.Strong.render(builder: AnnotatedString.Builder) {
+private fun MarkdownTagRange.Strong.render(
+    builder: AnnotatedString.Builder,
+    colorScheme: ColorScheme
+) {
+    builder.addStyle(SpanStyle(color = colorScheme.primary), start, start + 2)
+    builder.addStyle(SpanStyle(color = colorScheme.primary), end - 2, end)
     builder.addStyle(
         MarkdownDefaultTypography.bold.toSpanStyle(),
         start,
@@ -53,7 +70,7 @@ private fun MarkdownTagRange.Strikethrough.render(builder: AnnotatedString.Build
     )
 }
 
-class MarkdownVisualTransformation : VisualTransformation {
+class MarkdownVisualTransformation(private val colorScheme: ColorScheme) : VisualTransformation {
 
     private var cacheRenderText: AnnotatedString? = null
 
@@ -70,9 +87,9 @@ class MarkdownVisualTransformation : VisualTransformation {
         val builder = AnnotatedString.Builder(text)
         for (tagRange in tree.markdownTagRanges) {
             when (tagRange) {
-                is MarkdownTagRange.Heading -> tagRange.render(builder)
-                is MarkdownTagRange.Emphasis -> tagRange.render(builder)
-                is MarkdownTagRange.Strong -> tagRange.render(builder)
+                is MarkdownTagRange.Heading -> tagRange.render(builder, colorScheme)
+                is MarkdownTagRange.Emphasis -> tagRange.render(builder, colorScheme)
+                is MarkdownTagRange.Strong -> tagRange.render(builder, colorScheme)
                 is MarkdownTagRange.Strikethrough -> tagRange.render(builder)
             }
         }
@@ -137,6 +154,7 @@ val MarkdownDefaultTypography = MarkdownTypography(
         fontStyle = FontStyle.Italic
     ),
     strikethrough = TextStyle(
+        color = Color.Black.copy(alpha = 0.5f),
         textDecoration = TextDecoration.LineThrough
     )
 )
