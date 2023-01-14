@@ -16,7 +16,8 @@ data class LoginInfoUiState(
     val url: String = "",
     val email: String = "",
     val password: String = "",
-    val errorMessage: String? = null
+    val errorMessage: String? = null,
+    var loginSuccess: Boolean = false,
 )
 
 @HiltViewModel
@@ -44,6 +45,9 @@ class LoginViewModel @Inject constructor(
                     }
                 }
                 .onFailure { e ->
+                    _uiState.update {
+                        it.copy(errorMessage = e.toString())
+                    }
                 }
         }
     }
@@ -72,15 +76,31 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    suspend fun login(): Result<Unit> {
-        val syncConfig = SyncConfig.JoplinServer(
-            host = uiState.value.url,
-            email = uiState.value.email,
-            password = uiState.value.password
-        )
-        return notesRepository.saveSyncConfig(syncConfig)
-            .onSuccess {
-                notesRepository.doSync(false)
-            }
+    fun dismissSnackBar() {
+        _uiState.update {
+            it.copy(errorMessage = null)
+        }
+    }
+
+    fun login() {
+        viewModelScope.launch {
+            val syncConfig = SyncConfig.JoplinServer(
+                host = uiState.value.url,
+                email = uiState.value.email,
+                password = uiState.value.password
+            )
+            notesRepository.saveSyncConfig(syncConfig)
+                .onSuccess {
+                    notesRepository.doSync(false)
+                    _uiState.update {
+                        it.copy(loginSuccess = true)
+                    }
+                }
+                .onFailure { e ->
+                    _uiState.update {
+                        it.copy(errorMessage = e.toString())
+                    }
+                }
+        }
     }
 }

@@ -37,7 +37,7 @@ fun SettingItem(title: String, description: String, icon: ImageVector, onClick: 
             Column(
                 modifier = Modifier
                     .weight(1f)
-                    .padding(start = if (icon == null) 12.dp else 0.dp)
+                    .padding(start = 0.dp)
             ) {
                 Text(
                     text = title,

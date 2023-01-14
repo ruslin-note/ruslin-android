@@ -6,9 +6,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Login
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -26,7 +26,6 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.coroutines.launch
 import org.dianqk.ruslin.R
 import org.dianqk.ruslin.ui.component.BackButton
 import org.dianqk.ruslin.ui.component.FilledButtonWithIcon
@@ -42,10 +41,22 @@ fun LoginPage(
     onPopBack: () -> Unit
 ) {
     val snackbarState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val autofill = LocalAutofill.current
+
+    uiState.errorMessage?.let { errorMessage ->
+        LaunchedEffect(errorMessage) {
+            snackbarState.showSnackbar(errorMessage)
+            viewModel.dismissSnackBar()
+        }
+    }
+
+    if (uiState.loginSuccess) {
+        LaunchedEffect(Unit) {
+            onLoginSuccess()
+        }
+    }
 
     Scaffold(
         modifier = Modifier.imePadding(),
@@ -158,17 +169,7 @@ fun LoginPage(
                     modifier = Modifier
                         .padding(vertical = 12.dp)
                         .fillMaxWidth(),
-                    onClick = {
-                        scope.launch {
-                            viewModel.login()
-                                .onSuccess {
-                                    onLoginSuccess()
-                                }
-                                .onFailure { e ->
-                                    e.localizedMessage?.let { snackbarState.showSnackbar(it) }
-                                }
-                        }
-                    },
+                    onClick = viewModel::login,
                     icon = Icons.Outlined.Login,
                     text = stringResource(id = R.string.sign_in)
                 )
