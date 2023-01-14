@@ -15,9 +15,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.dianqk.ruslin.R
+import org.dianqk.ruslin.ui.component.ContentEmptyState
 import org.dianqk.ruslin.ui.ext.formatAsYmdHms
 import org.dianqk.ruslin.ui.theme.RuslinTheme
 import uniffi.ruslin.FfiAbbrNote
@@ -30,20 +33,26 @@ fun NoteList(
     navigateToNoteDetail: (String) -> Unit,
     showActionBottomDrawer: (FfiAbbrNote) -> Unit
 ) {
-    LazyColumn(
-        modifier = modifier
-            .fillMaxSize()
-    ) {
-        items(notes, key = { it.id }) { note ->
-            NoteAbbrCard(
-                note = note,
-                navigateToNoteDetail = navigateToNoteDetail,
-                showActionBottomDrawer
-            )
-            Divider(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f)
-            )
+    if (notes.isEmpty()) {
+        ContentEmptyState {
+            Text(text = stringResource(id = R.string.create_a_note))
+        }
+    } else {
+        LazyColumn(
+            modifier = modifier
+                .fillMaxSize()
+        ) {
+            items(notes, key = { it.id }) { note ->
+                NoteAbbrCard(
+                    note = note,
+                    navigateToNoteDetail = navigateToNoteDetail,
+                    showActionBottomDrawer
+                )
+                Divider(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f)
+                )
+            }
         }
     }
 }

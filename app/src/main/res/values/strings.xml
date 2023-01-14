@@ -56,4 +56,6 @@
     <string name="search">Search</string>
     <string name="not_found">No notes found for "%s"</string>
     <string name="searching">Searching for "%s" notes</string>
+    <string name="notes_loading">Loading notes</string>
+    <string name="create_a_note">Create a note?</string>
 </resources>

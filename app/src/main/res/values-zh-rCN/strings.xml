@@ -55,4 +55,6 @@
     <string name="search">搜索</string>
     <string name="not_found">找不到 “%s” 相关笔记</string>
     <string name="searching">正在查找 “%s” 相关的笔记</string>
+    <string name="notes_loading">笔记加载中</string>
+    <string name="create_a_note">创建一条笔记？</string>
 </resources>

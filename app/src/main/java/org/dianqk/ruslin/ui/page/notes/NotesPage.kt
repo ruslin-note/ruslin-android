@@ -24,6 +24,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import org.dianqk.ruslin.R
 import org.dianqk.ruslin.ui.component.BottomDrawer
+import org.dianqk.ruslin.ui.component.ContentLoadingState
 import org.dianqk.ruslin.ui.component.FilledTonalButtonWithIcon
 import org.dianqk.ruslin.ui.component.OutlinedButtonWithIcon
 
@@ -43,6 +44,7 @@ fun NotesPage(
     val scope = rememberCoroutineScope()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val showActionBottomDrawerState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+    val notes = uiState.items
 
     val openCreateFolderDialog = remember { mutableStateOf(false) }
 
@@ -150,19 +152,25 @@ fun NotesPage(
                     }
                 }
             ) { innerPadding ->
-                NoteList(
-                    modifier = Modifier.padding(innerPadding),
-                    notes = uiState.items,
-                    navigateToNoteDetail = {
-                        navigateToNoteDetail(uiState.selectedFolder?.id, it)
-                    },
-                    showActionBottomDrawer = { note ->
-                        scope.launch {
-                            viewModel.selectNote(note)
-                            showActionBottomDrawerState.show()
+                if (notes != null) {
+                    NoteList(
+                        modifier = Modifier.padding(innerPadding),
+                        notes = notes,
+                        navigateToNoteDetail = {
+                            navigateToNoteDetail(uiState.selectedFolder?.id, it)
+                        },
+                        showActionBottomDrawer = { note ->
+                            scope.launch {
+                                viewModel.selectNote(note)
+                                showActionBottomDrawerState.show()
+                            }
                         }
+                    )
+                } else {
+                    ContentLoadingState {
+                        Text(text = stringResource(id = R.string.notes_loading))
                     }
-                )
+                }
             }
         }
     )

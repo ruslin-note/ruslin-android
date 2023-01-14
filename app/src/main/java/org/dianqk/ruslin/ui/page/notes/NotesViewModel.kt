@@ -28,7 +28,7 @@ data class Folder(
 }
 
 data class NotesUiState(
-    val items: List<FfiAbbrNote> = emptyList(),
+    val items: List<FfiAbbrNote>? = null,
     val folders: List<Folder> = emptyList(),
     val selectedFolder: FfiFolder? = null,
     val isLoading: Boolean = false,
@@ -161,7 +161,7 @@ class NotesViewModel @Inject constructor(
                 .onSuccess {
                     _uiState.update {
                         it.copy(
-                            items = it.items.filter { note -> note.id != noteId }
+                            items = it.items?.filter { note -> note.id != noteId }
                         )
                     }
                 }
