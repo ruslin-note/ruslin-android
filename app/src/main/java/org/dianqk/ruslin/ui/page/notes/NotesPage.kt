@@ -20,7 +20,6 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import org.dianqk.ruslin.R
@@ -30,7 +29,6 @@ import org.dianqk.ruslin.ui.component.OutlinedButtonWithIcon
 
 @OptIn(
     ExperimentalMaterial3Api::class,
-    ExperimentalLifecycleComposeApi::class,
     ExperimentalMaterialApi::class
 )
 @Composable

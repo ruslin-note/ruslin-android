@@ -7,6 +7,14 @@ plugins {
 android {
     namespace 'org.dianqk.mdrenderbenchmark'
     compileSdk project.compile_sdk_version
+    ndkVersion project.ndk_version
+    buildToolsVersion project.build_tools_version
+
+    defaultConfig {
+        minSdk project.min_sdk_version
+        targetSdk project.target_sdk_version
+        testInstrumentationRunner 'androidx.benchmark.junit4.AndroidBenchmarkRunner'
+    }
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -15,13 +23,6 @@ android {
 
     kotlinOptions {
         jvmTarget = "1.8"
-    }
-
-    defaultConfig {
-        minSdk project.min_sdk_version
-        targetSdk project.target_sdk_version
-
-        testInstrumentationRunner 'androidx.benchmark.junit4.AndroidBenchmarkRunner'
     }
 
     testBuildType = "release"

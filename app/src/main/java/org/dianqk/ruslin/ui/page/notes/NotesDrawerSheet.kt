@@ -25,7 +25,6 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.dianqk.ruslin.R
 import org.dianqk.ruslin.ui.component.SubTitle
@@ -193,7 +192,6 @@ fun CreateFolderDialog(
     )
 }
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 @ExperimentalMaterial3Api
 fun ExpandableNavigationDrawerFolderItem(

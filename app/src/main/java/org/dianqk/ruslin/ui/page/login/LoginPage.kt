@@ -25,7 +25,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import org.dianqk.ruslin.R
@@ -34,7 +33,6 @@ import org.dianqk.ruslin.ui.component.FilledButtonWithIcon
 
 @OptIn(
     ExperimentalMaterial3Api::class,
-    ExperimentalLifecycleComposeApi::class,
     ExperimentalComposeUiApi::class
 )
 @Composable

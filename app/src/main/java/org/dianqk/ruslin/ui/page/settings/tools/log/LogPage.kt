@@ -12,12 +12,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.dianqk.ruslin.R
 import org.dianqk.ruslin.ui.component.BackButton
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLifecycleComposeApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LogPage(
     viewModel: LogViewModel = hiltViewModel(),

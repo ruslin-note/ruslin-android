@@ -32,14 +32,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.text.getSpans
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.dianqk.ruslin.R
 import org.dianqk.ruslin.ui.component.BackButton
 
 @OptIn(
     ExperimentalMaterial3Api::class,
-    ExperimentalLifecycleComposeApi::class,
     ExperimentalComposeUiApi::class
 )
 @Composable
