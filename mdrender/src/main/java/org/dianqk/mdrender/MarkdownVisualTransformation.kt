@@ -55,6 +55,12 @@ private fun MarkdownTagRange.Strikethrough.render(builder: AnnotatedString.Build
 
 class MarkdownVisualTransformation : VisualTransformation {
 
+    private var cacheRenderText: AnnotatedString? = null
+
+    fun invalid() {
+        cacheRenderText = null
+    }
+
     fun parse(text: AnnotatedString): ParsedTagRanges {
         val markdownTagRanges = parseMarkdown(text.text)
         return ParsedTagRanges(markdownTagRanges)
@@ -74,8 +80,16 @@ class MarkdownVisualTransformation : VisualTransformation {
     }
 
     override fun filter(text: AnnotatedString): TransformedText {
+        val currentCacheRenderText = cacheRenderText
+        if (currentCacheRenderText != null) {
+            return TransformedText(
+                text = currentCacheRenderText,
+                offsetMapping = OffsetMapping.Identity
+            )
+        }
         val parsedTree = parse(text)
         val renderText = render(parsedTree, text)
+        cacheRenderText = renderText
         return TransformedText(
             text = renderText,
             offsetMapping = OffsetMapping.Identity

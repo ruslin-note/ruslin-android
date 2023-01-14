@@ -94,6 +94,7 @@ private fun NoteDetailContent(
     modifier: Modifier = Modifier
 ) {
     val bringIntoViewRequester = remember { BringIntoViewRequester() }
+    val visualTransformation = remember { MarkdownVisualTransformation() }
 
     if (loading) {
         val pullRefreshState =
@@ -141,7 +142,10 @@ private fun NoteDetailContent(
 //                    .verticalScroll(rememberScrollState())
                     .fillMaxHeight(),
                 value = body,
-                onValueChange = onBodyChanged,
+                onValueChange = {
+                    onBodyChanged(it)
+                    visualTransformation.invalid()
+                },
                 placeholder = {
                     Text(text = stringResource(id = R.string.content))
                 },
@@ -150,7 +154,7 @@ private fun NoteDetailContent(
                     unfocusedIndicatorColor = Color.Transparent,
                     containerColor = Color.Transparent
                 ),
-                visualTransformation = MarkdownVisualTransformation()
+                visualTransformation = visualTransformation
             )
         }
     }
