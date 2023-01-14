@@ -62,18 +62,16 @@ fun FilledTonalButtonWithIcon(
 fun FilledButtonWithIcon(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
-    icon: ImageVector,
+    enabled: Boolean = true,
+    icon: @Composable () -> Unit,
     text: String
 ) {
     Button(
         modifier = modifier,
-        onClick = onClick
+        onClick = onClick,
+        enabled = enabled
     ) {
-        Icon(
-            modifier = Modifier.size(18.dp),
-            imageVector = icon,
-            contentDescription = null
-        )
+        icon()
         Text(
             modifier = Modifier.padding(start = 6.dp),
             text = text

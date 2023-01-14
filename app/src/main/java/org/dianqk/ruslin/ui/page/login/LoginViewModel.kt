@@ -18,6 +18,7 @@ data class LoginInfoUiState(
     val password: String = "",
     val errorMessage: String? = null,
     var loginSuccess: Boolean = false,
+    val isLoggingIn: Boolean = false,
 )
 
 @HiltViewModel
@@ -83,6 +84,9 @@ class LoginViewModel @Inject constructor(
     }
 
     fun login() {
+        _uiState.update {
+            it.copy(isLoggingIn = true)
+        }
         viewModelScope.launch {
             val syncConfig = SyncConfig.JoplinServer(
                 host = uiState.value.url,
@@ -93,12 +97,18 @@ class LoginViewModel @Inject constructor(
                 .onSuccess {
                     notesRepository.doSync(false)
                     _uiState.update {
-                        it.copy(loginSuccess = true)
+                        it.copy(
+                            isLoggingIn = false,
+                            loginSuccess = true
+                        )
                     }
                 }
                 .onFailure { e ->
                     _uiState.update {
-                        it.copy(errorMessage = e.toString())
+                        it.copy(
+                            isLoggingIn = false,
+                            errorMessage = e.toString()
+                        )
                     }
                 }
         }

@@ -1,9 +1,11 @@
 package org.dianqk.ruslin.ui.page.login
 
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Login
+import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -14,6 +16,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.AutofillNode
 import androidx.compose.ui.autofill.AutofillType
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -41,9 +44,15 @@ fun LoginPage(
     onPopBack: () -> Unit
 ) {
     val snackbarState = remember { SnackbarHostState() }
-
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val autofill = LocalAutofill.current
+    val syncAngle by rememberInfiniteTransition().animateFloat(
+        initialValue = 0f,
+        targetValue = 360f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1000, easing = LinearEasing)
+        )
+    )
 
     uiState.errorMessage?.let { errorMessage ->
         LaunchedEffect(errorMessage) {
@@ -170,7 +179,16 @@ fun LoginPage(
                         .padding(vertical = 12.dp)
                         .fillMaxWidth(),
                     onClick = viewModel::login,
-                    icon = Icons.Outlined.Login,
+                    enabled = !uiState.isLoggingIn,
+                    icon = {
+                        Icon(
+                            modifier = Modifier
+                                .size(18.dp)
+                                .rotate(if (uiState.isLoggingIn) syncAngle else 0f),
+                            imageVector = if (uiState.isLoggingIn) Icons.Outlined.Refresh else Icons.Outlined.Login,
+                            contentDescription = null
+                        )
+                    },
                     text = stringResource(id = R.string.sign_in)
                 )
             }
