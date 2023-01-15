@@ -19,7 +19,7 @@
 Supported features:
 
 - ✅ Create, modify and delete notes
-- ✅ Create folders
+- ✅ Create, modify and delete folders
 - ✅ A simple Markdown editor
 - ✅ Full-text search using jieba-rs (Chinese and English supported)
 - ✅ Sync notes using a self-hosted Joplin server

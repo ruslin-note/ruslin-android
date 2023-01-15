@@ -80,6 +80,8 @@ fun NotesPage(
                     viewModel.selectFolder(it)
                 },
                 onCreateFolder = viewModel::createFolder,
+                onRenameFolder = viewModel::changeFolder,
+                onDeleteFolder = viewModel::deleteFolder,
                 openCreateFolderDialog = openCreateFolderDialog.value,
                 onChangeOpenCreateFolderDialogVisible = {
                     openCreateFolderDialog.value = it

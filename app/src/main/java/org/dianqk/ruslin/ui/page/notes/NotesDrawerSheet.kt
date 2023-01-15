@@ -1,13 +1,10 @@
 package org.dianqk.ruslin.ui.page.notes
 
 import androidx.compose.animation.*
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CreateNewFolder
 import androidx.compose.material.icons.outlined.*
@@ -27,6 +24,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.dianqk.ruslin.R
+import org.dianqk.ruslin.ui.component.CombinedClickableSurface
+import org.dianqk.ruslin.ui.component.OutlinedButtonWithIcon
 import org.dianqk.ruslin.ui.component.SubTitle
 import org.dianqk.ruslin.ui.theme.Shape32
 import uniffi.ruslin.FfiFolder
@@ -42,27 +41,44 @@ fun NotesDrawerSheet(
     onSelectedFolderChanged: (FfiFolder?) -> Unit,
     openCreateFolderDialog: Boolean,
     onCreateFolder: (String) -> Unit,
+    onRenameFolder: (FfiFolder) -> Unit,
+    onDeleteFolder: (FfiFolder) -> Unit,
     onChangeOpenCreateFolderDialogVisible: (Boolean) -> Unit,
     onShowSettingsPage: () -> Unit
 ) {
-    val createFolderTitle: MutableState<String> = remember { mutableStateOf("") }
     val scroll = rememberScrollState(0)
+    var openEditFolderDialog: Folder? by remember {
+        mutableStateOf(null)
+    }
+
+    openEditFolderDialog?.let { editFolder ->
+        FolderDialog(
+            isCreated = false,
+            onDismissRequest = {
+                openEditFolderDialog = null
+            },
+            onConfirmRequest = {
+                onRenameFolder(editFolder.ffiFolder.copy(title = it))
+                openEditFolderDialog = null
+            },
+            onDeleteRequest = {
+                onDeleteFolder(editFolder.ffiFolder)
+                openEditFolderDialog = null
+            },
+            initTitle = { editFolder.ffiFolder.title }
+        )
+    }
 
     if (openCreateFolderDialog) {
-        CreateFolderDialog(
+        FolderDialog(
             onDismissRequest = {
                 onChangeOpenCreateFolderDialogVisible(false)
-                createFolderTitle.value = ""
             },
             onConfirmRequest = {
                 onChangeOpenCreateFolderDialogVisible(false)
-                onCreateFolder(createFolderTitle.value)
-                createFolderTitle.value = ""
+                onCreateFolder(it)
             },
-            title = createFolderTitle.value,
-            onTitleChanged = {
-                createFolderTitle.value = it
-            }
+            initTitle = { "" }
         )
     }
     ModalDrawerSheet(
@@ -93,6 +109,9 @@ fun NotesDrawerSheet(
                 selectedFolderId = if (conflictNoteFolderSelected) null else selectedFolderId,
                 onClick = { clickedFolder ->
                     onSelectedFolderChanged(clickedFolder.ffiFolder)
+                },
+                openEditFolderDialog = { editFolder ->
+                    openEditFolderDialog = editFolder
                 },
                 modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
             )
@@ -147,51 +166,6 @@ fun NotesDrawerSheet(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun CreateFolderDialog(
-    onDismissRequest: () -> Unit,
-    onConfirmRequest: () -> Unit,
-    title: String,
-    onTitleChanged: (String) -> Unit,
-    focusRequest: FocusRequester = remember { FocusRequester() }
-) {
-    LaunchedEffect(Unit) {
-        focusRequest.requestFocus()
-    }
-    AlertDialog(
-        onDismissRequest = onDismissRequest,
-        icon = { Icon(Icons.Filled.CreateNewFolder, contentDescription = null) },
-        title = {
-            Text(text = stringResource(id = R.string.new_folder))
-        },
-        text = {
-            TextField(
-                modifier = Modifier.focusRequester(focusRequest),
-                colors = TextFieldDefaults.textFieldColors(
-                    containerColor = Color.Transparent
-                ),
-                value = title,
-                onValueChange = onTitleChanged,
-                singleLine = true
-            )
-        },
-        confirmButton = {
-            TextButton(
-                enabled = title.isNotEmpty(),
-                onClick = onConfirmRequest
-            ) {
-                Text(text = stringResource(id = R.string.confirm))
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismissRequest) {
-                Text(text = stringResource(id = R.string.cancel))
-            }
-        }
-    )
-}
-
 @Composable
 @ExperimentalMaterial3Api
 fun ExpandableNavigationDrawerFolderItem(
@@ -199,6 +173,7 @@ fun ExpandableNavigationDrawerFolderItem(
     level: Int,
     selectedFolderId: String?,
     onClick: (Folder) -> Unit,
+    openEditFolderDialog: (Folder) -> Unit,
     modifier: Modifier = Modifier,
     shape: Shape = Shape32,
     colors: NavigationDrawerItemColors = NavigationDrawerItemDefaults.colors(),
@@ -208,10 +183,12 @@ fun ExpandableNavigationDrawerFolderItem(
     val selected = folder.ffiFolder.id == selectedFolderId
     val isExpanded by folder.isExpanded.collectAsStateWithLifecycle()
 
-    Surface(
-        selected = selected,
+    CombinedClickableSurface(
         onClick = {
             onClick(folder)
+        },
+        onLongClick = {
+            openEditFolderDialog(folder)
         },
         modifier = modifier
             .height(56.dp)
@@ -278,9 +255,74 @@ fun ExpandableNavigationDrawerFolderItem(
                     level = level + 1,
                     selectedFolderId = selectedFolderId,
                     onClick = onClick,
+                    openEditFolderDialog = openEditFolderDialog,
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                 )
             }
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun FolderDialog(
+    onDismissRequest: () -> Unit,
+    onConfirmRequest: (String) -> Unit,
+    onDeleteRequest: () -> Unit = {},
+    isCreated: Boolean = true,
+    initTitle: () -> String,
+    focusRequest: FocusRequester = remember { FocusRequester() }
+) {
+    var folderTitle by remember { mutableStateOf(initTitle()) }
+
+    LaunchedEffect(Unit) {
+        focusRequest.requestFocus()
+    }
+
+    AlertDialog(
+        onDismissRequest = onDismissRequest,
+        icon = { Icon(Icons.Filled.CreateNewFolder, contentDescription = null) },
+        title = {
+            Text(text = stringResource(id = if (isCreated) R.string.new_folder else R.string.delete))
+        },
+        text = {
+            TextField(
+                modifier = Modifier.focusRequester(focusRequest),
+                colors = TextFieldDefaults.textFieldColors(
+                    containerColor = Color.Transparent
+                ),
+                value = folderTitle,
+                onValueChange = {
+                    folderTitle = it
+                },
+                singleLine = true
+            )
+        },
+        confirmButton = {
+            Row(modifier = Modifier) {
+                TextButton(
+                    enabled = folderTitle.isNotEmpty(),
+                    onClick = {
+                        onConfirmRequest(folderTitle)
+                    }
+                ) {
+                    Text(text = stringResource(id = R.string.confirm))
+                }
+            }
+        },
+        dismissButton = {
+            if (!isCreated) {
+                OutlinedButtonWithIcon(
+                    modifier = Modifier
+                        .padding(horizontal = 12.dp),
+                    onClick = onDeleteRequest,
+                    icon = Icons.Outlined.Delete,
+                    text = stringResource(id = R.string.delete)
+                )
+            }
+            TextButton(onClick = onDismissRequest) {
+                Text(text = stringResource(id = R.string.cancel))
+            }
+        }
+    )
 }

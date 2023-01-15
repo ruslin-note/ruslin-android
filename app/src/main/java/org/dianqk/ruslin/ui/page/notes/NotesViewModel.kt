@@ -171,6 +171,20 @@ class NotesViewModel @Inject constructor(
         }
     }
 
+    fun changeFolder(folder: FfiFolder) {
+        viewModelScope.launch {
+            notesRepository.replaceFolder(folder)
+            loadFoldersFromRepo()
+        }
+    }
+
+    fun deleteFolder(folder: FfiFolder) {
+        viewModelScope.launch {
+            notesRepository.deleteFolder(folder.id)
+            loadFoldersFromRepo()
+        }
+    }
+
     fun createFolder(title: String) {
         viewModelScope.launch {
             val folder = notesRepository.newFolder(parentId = null, title = title)
@@ -184,6 +198,11 @@ class NotesViewModel @Inject constructor(
             .onSuccess { folders ->
                 withContext(Dispatchers.Default) {
                     updateFoldersFromFfi(folders)
+                }
+                withContext(Dispatchers.Default) {
+                    if (folders.find { it.id == _uiState.value.selectedFolder?.id } == null) {
+                        selectFolder(null)
+                    }
                 }
             }
             .onFailure { e ->
