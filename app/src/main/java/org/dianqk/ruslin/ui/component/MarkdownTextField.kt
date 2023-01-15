@@ -10,6 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
+import org.dianqk.mdrender.MarkdownTheme
 import org.dianqk.mdrender.MarkdownVisualTransformation
 import org.dianqk.ruslin.R
 
@@ -20,7 +21,8 @@ fun MarkdownTextField(
     onValueChange: (String) -> Unit
 ) {
     val colorScheme = MaterialTheme.colorScheme
-    val visualTransformation = remember(colorScheme) { MarkdownVisualTransformation(colorScheme) }
+    val visualTransformation =
+        remember(colorScheme) { MarkdownVisualTransformation(MarkdownTheme.from(colorScheme = colorScheme)) }
 
     // See BasicTextField
 

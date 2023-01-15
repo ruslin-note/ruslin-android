@@ -54,9 +54,9 @@ class MarkdownRenderBenchmark {
     fun benchmarkText1Render() {
         val text = readText(R.raw.text1)
         val markdownVisualTransformation = MarkdownVisualTransformation()
-        val tree = markdownVisualTransformation.parse(text)
+        val parsedTagRanges = markdownVisualTransformation.parse(text)
         benchmarkRule.measureRepeated {
-            markdownVisualTransformation.render(tree, text)
+            markdownVisualTransformation.render(parsedTagRanges, text)
         }
     }
 
