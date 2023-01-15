@@ -57,4 +57,7 @@
     <string name="searching">正在查找 “%s” 相关的笔记</string>
     <string name="notes_loading">笔记加载中</string>
     <string name="create_a_note">创建一条笔记？</string>
+    <string name="ask_delete_folder_title">删除 "%s"?</string>
+    <string name="ask_delete_folder_description">这个文件夹下所有的笔记和子文件夹都会被删除。</string>
+    <string name="edit_folder">编辑文件夹</string>
 </resources>

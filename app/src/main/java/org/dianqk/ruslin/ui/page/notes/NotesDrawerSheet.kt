@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CreateNewFolder
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material.icons.rounded.ExpandLess
 import androidx.compose.material.icons.rounded.ExpandMore
@@ -50,6 +52,9 @@ fun NotesDrawerSheet(
     var openEditFolderDialog: Folder? by remember {
         mutableStateOf(null)
     }
+    var openDeleteFolderAlertDialog: Folder? by remember {
+        mutableStateOf(null)
+    }
 
     openEditFolderDialog?.let { editFolder ->
         FolderDialog(
@@ -62,11 +67,47 @@ fun NotesDrawerSheet(
                 openEditFolderDialog = null
             },
             onDeleteRequest = {
-                onDeleteFolder(editFolder.ffiFolder)
                 openEditFolderDialog = null
+                openDeleteFolderAlertDialog = editFolder
             },
             initTitle = { editFolder.ffiFolder.title }
         )
+    }
+
+    openDeleteFolderAlertDialog?.let { deleteFolder ->
+        AlertDialog(
+            onDismissRequest = {
+                openDeleteFolderAlertDialog = null
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    onDeleteFolder(deleteFolder.ffiFolder)
+                    openDeleteFolderAlertDialog = null
+                }) {
+                    Text(text = stringResource(id = R.string.confirm))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = {
+                    openDeleteFolderAlertDialog = null
+                }) {
+                    Text(text = stringResource(id = R.string.cancel))
+                }
+            },
+            icon = {
+                Icon(imageVector = Icons.Default.Warning, contentDescription = null)
+            },
+            title = {
+                Text(
+                    text = stringResource(
+                        id = R.string.ask_delete_folder_title,
+                        deleteFolder.ffiFolder.title
+                    )
+                )
+            },
+            text = {
+                Text(text = stringResource(id = R.string.ask_delete_folder_description))
+            })
     }
 
     if (openCreateFolderDialog) {
@@ -281,9 +322,14 @@ fun FolderDialog(
 
     AlertDialog(
         onDismissRequest = onDismissRequest,
-        icon = { Icon(Icons.Filled.CreateNewFolder, contentDescription = null) },
+        icon = {
+            Icon(
+                if (isCreated) Icons.Filled.CreateNewFolder else Icons.Filled.Edit,
+                contentDescription = null
+            )
+        },
         title = {
-            Text(text = stringResource(id = if (isCreated) R.string.new_folder else R.string.delete))
+            Text(text = stringResource(id = if (isCreated) R.string.new_folder else R.string.edit_folder))
         },
         text = {
             TextField(
