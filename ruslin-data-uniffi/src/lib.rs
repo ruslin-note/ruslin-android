@@ -219,6 +219,7 @@ pub enum MarkdownTagRange {
     Emphasis { start: i32, end: i32 },
     Strong { start: i32, end: i32 },
     Strikethrough { start: i32, end: i32 },
+    InlineCode { start: i32, end: i32 },
 }
 
 pub fn parse_markdown(s: String) -> Vec<MarkdownTagRange> {
@@ -252,9 +253,11 @@ pub fn parse_markdown(s: String) -> Vec<MarkdownTagRange> {
                 };
                 tag_ranges.push(tag_range);
             }
+            Event::Code(_) => {
+                tag_ranges.push(MarkdownTagRange::InlineCode { start, end });
+            }
             Event::End(_)
             | Event::Text(_)
-            | Event::Code(_)
             | Event::Html(_)
             | Event::FootnoteReference(_)
             | Event::SoftBreak

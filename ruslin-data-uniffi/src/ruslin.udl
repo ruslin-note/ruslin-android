@@ -8,6 +8,7 @@ interface MarkdownTagRange {
     Emphasis(i32 start, i32 end);
     Strong(i32 start, i32 end);
     Strikethrough(i32 start, i32 end);
+    InlineCode(i32 start, i32 end);
 };
 
 dictionary FFIFolder {
