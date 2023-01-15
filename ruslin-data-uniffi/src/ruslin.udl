@@ -9,6 +9,15 @@ interface MarkdownTagRange {
     Strong(i32 start, i32 end);
     Strikethrough(i32 start, i32 end);
     InlineCode(i32 start, i32 end);
+    MList(i32 start, i32 end, i32 order, i32 nested_level);
+    ListItem(i32 start, i32 end, i32 nested_level, boolean ordered);
+    Paragraph(i32 start, i32 end);
+    Link(i32 start, i32 end, i32 url_offset);
+    Image(i32 start, i32 end, i32 url_offset);
+    Rule(i32 start, i32 end);
+    BlockQuote(i32 start, i32 end);
+    TaskListMarker(i32 start, i32 end, boolean is_checked);
+    CodeBlock(i32 start, i32 end);
 };
 
 dictionary FFIFolder {

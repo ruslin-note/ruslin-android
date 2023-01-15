@@ -4,6 +4,7 @@ import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.Typography
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -13,6 +14,8 @@ import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextIndent
+import androidx.compose.ui.unit.em
 import uniffi.ruslin.MarkdownTagRange
 import uniffi.ruslin.parseMarkdown
 
@@ -42,6 +45,15 @@ class MarkdownVisualTransformation(private val colorScheme: ColorScheme) : Visua
                 is MarkdownTagRange.Strong -> tagRange.render(builder, colorScheme)
                 is MarkdownTagRange.Strikethrough -> tagRange.render(builder)
                 is MarkdownTagRange.InlineCode -> tagRange.render(builder, colorScheme)
+                is MarkdownTagRange.ListItem -> tagRange.render(builder, colorScheme)
+                is MarkdownTagRange.MList -> tagRange.render(builder, colorScheme)
+                is MarkdownTagRange.Paragraph -> {}
+                is MarkdownTagRange.Link -> tagRange.render(builder, colorScheme)
+                is MarkdownTagRange.Image -> tagRange.render(builder, colorScheme)
+                is MarkdownTagRange.Rule -> tagRange.render(builder, colorScheme)
+                is MarkdownTagRange.BlockQuote -> tagRange.render(builder, colorScheme)
+                is MarkdownTagRange.TaskListMarker -> tagRange.render(builder, colorScheme)
+                is MarkdownTagRange.CodeBlock -> tagRange.render(builder, colorScheme)
             }
         }
         return builder.toAnnotatedString()
@@ -174,6 +186,113 @@ private fun MarkdownTagRange.InlineCode.render(
     builder.addStyle(SpanStyle(color = colorScheme.primary), end - 1, end)
     builder.addStyle(
         MarkdownDefaultTypography.inlineCode.toSpanStyle(),
+        start,
+        end
+    )
+}
+
+private fun MarkdownTagRange.ListItem.render(
+    builder: AnnotatedString.Builder,
+    colorScheme: ColorScheme
+) {
+    builder.addStyle(
+        SpanStyle(
+            color = colorScheme.tertiary,
+            fontFamily = FontFamily.Monospace,
+            fontWeight = FontWeight.Bold
+        ),
+        start = start,
+        end = kotlin.math.min(start + (if (ordered) 3 else 2), end)
+    )
+//    debug
+//    builder.addStyle(SpanStyle(background = Color.Black.copy(alpha = 0.3f)), start = start + (if (ordered) 3 else 2), end = end)
+}
+
+private fun MarkdownTagRange.MList.render(
+    builder: AnnotatedString.Builder,
+    colorScheme: ColorScheme
+) {
+    val firstLine = (nestedLevel * 0.5).em
+    val restLine = (nestedLevel * 0.5 + (if (order > 0) 1.85f else 1.25f)).em
+    builder.addStyle(
+        ParagraphStyle(
+            textIndent = TextIndent(firstLine = firstLine, restLine = restLine),
+        ), start, end
+    )
+}
+
+private fun MarkdownTagRange.Link.render(
+    builder: AnnotatedString.Builder,
+    colorScheme: ColorScheme
+) {
+    // []
+    builder.addStyle(SpanStyle(color = colorScheme.tertiary), start, start + 1)
+    builder.addStyle(SpanStyle(color = colorScheme.tertiary), urlOffset - 2, urlOffset - 1)
+
+    // ()
+    builder.addStyle(SpanStyle(color = colorScheme.secondary), urlOffset - 1, urlOffset)
+    builder.addStyle(SpanStyle(color = colorScheme.secondary), end - 1, end)
+
+    // url
+    builder.addStyle(SpanStyle(color = colorScheme.primary), urlOffset, end - 1);
+}
+
+private fun MarkdownTagRange.Image.render(
+    builder: AnnotatedString.Builder,
+    colorScheme: ColorScheme
+) {
+    // []
+    builder.addStyle(SpanStyle(color = colorScheme.tertiary), start, start + 2)
+    builder.addStyle(SpanStyle(color = colorScheme.tertiary), urlOffset - 2, urlOffset - 1)
+
+    // ()
+    builder.addStyle(SpanStyle(color = colorScheme.secondary), urlOffset - 1, urlOffset)
+    builder.addStyle(SpanStyle(color = colorScheme.secondary), end - 1, end)
+
+    // url
+    builder.addStyle(SpanStyle(color = colorScheme.primary), urlOffset, end - 1);
+}
+
+private fun MarkdownTagRange.Rule.render(
+    builder: AnnotatedString.Builder,
+    colorScheme: ColorScheme
+) {
+    builder.addStyle(
+        SpanStyle(color = colorScheme.tertiary, fontFamily = FontFamily.Monospace),
+        start,
+        end
+    )
+}
+
+private fun MarkdownTagRange.BlockQuote.render(
+    builder: AnnotatedString.Builder,
+    colorScheme: ColorScheme
+) {
+    builder.addStyle(
+        SpanStyle(color = colorScheme.tertiary, fontFamily = FontFamily.Monospace),
+        start,
+        start + 1
+    )
+    builder.addStyle(SpanStyle(color = colorScheme.secondary), start + 1, end)
+}
+
+private fun MarkdownTagRange.TaskListMarker.render(
+    builder: AnnotatedString.Builder,
+    colorScheme: ColorScheme
+) {
+    builder.addStyle(
+        SpanStyle(color = colorScheme.tertiary, fontFamily = FontFamily.Monospace),
+        start,
+        end
+    )
+}
+
+private fun MarkdownTagRange.CodeBlock.render(
+    builder: AnnotatedString.Builder,
+    colorScheme: ColorScheme
+) {
+    builder.addStyle(
+        SpanStyle(color = colorScheme.tertiary, fontFamily = FontFamily.Monospace),
         start,
         end
     )

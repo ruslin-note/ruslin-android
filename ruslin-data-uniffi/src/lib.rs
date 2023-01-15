@@ -215,15 +215,74 @@ impl RuslinAndroidData {
 
 #[derive(Debug)]
 pub enum MarkdownTagRange {
-    Heading { level: i32, start: i32, end: i32 },
-    Emphasis { start: i32, end: i32 },
-    Strong { start: i32, end: i32 },
-    Strikethrough { start: i32, end: i32 },
-    InlineCode { start: i32, end: i32 },
+    Heading {
+        level: i32,
+        start: i32,
+        end: i32,
+    },
+    Emphasis {
+        start: i32,
+        end: i32,
+    },
+    Strong {
+        start: i32,
+        end: i32,
+    },
+    Strikethrough {
+        start: i32,
+        end: i32,
+    },
+    InlineCode {
+        start: i32,
+        end: i32,
+    },
+    MList {
+        start: i32,
+        end: i32,
+        order: i32,
+        nested_level: i32,
+    },
+    ListItem {
+        start: i32,
+        end: i32,
+        nested_level: i32,
+        ordered: bool,
+    },
+    Paragraph {
+        start: i32,
+        end: i32,
+    },
+    Link {
+        start: i32,
+        end: i32,
+        url_offset: i32,
+    },
+    Image {
+        start: i32,
+        end: i32,
+        url_offset: i32,
+    },
+    Rule {
+        start: i32,
+        end: i32,
+    },
+    BlockQuote {
+        start: i32,
+        end: i32,
+    },
+    TaskListMarker {
+        start: i32,
+        end: i32,
+        is_checked: bool,
+    },
+    CodeBlock {
+        start: i32,
+        end: i32,
+    },
 }
 
 pub fn parse_markdown(s: String) -> Vec<MarkdownTagRange> {
-    use pulldown_cmark::{Event, Options, Parser, Tag};
+    use pulldown_cmark::{CodeBlockKind, Event, LinkType, Options, Parser, Tag};
     let mut tag_ranges: Vec<MarkdownTagRange> = Vec::new();
     let mut utf8_to_uft16_offsets: Vec<usize> = Vec::with_capacity(s.len());
     let mut offset: usize = 0;
@@ -235,6 +294,8 @@ pub fn parse_markdown(s: String) -> Vec<MarkdownTagRange> {
     }
     utf8_to_uft16_offsets.push(offset);
     let parser = Parser::new_ext(&s, Options::all());
+    let mut list_nested_level: i32 = 0;
+    let mut is_ordered_list: bool = false;
     for (event, range) in parser.into_offset_iter() {
         let start = utf8_to_uft16_offsets[range.start] as i32;
         let end = utf8_to_uft16_offsets[range.end] as i32;
@@ -249,6 +310,59 @@ pub fn parse_markdown(s: String) -> Vec<MarkdownTagRange> {
                     Tag::Emphasis => MarkdownTagRange::Emphasis { start, end },
                     Tag::Strong => MarkdownTagRange::Strong { start, end },
                     Tag::Strikethrough => MarkdownTagRange::Strikethrough { start, end },
+                    Tag::List(order) => {
+                        list_nested_level += 1;
+                        is_ordered_list = order.is_some();
+                        MarkdownTagRange::MList {
+                            start,
+                            end,
+                            order: order.unwrap_or(0) as i32,
+                            nested_level: list_nested_level,
+                        }
+                    }
+                    Tag::Item => MarkdownTagRange::ListItem {
+                        start,
+                        end,
+                        nested_level: list_nested_level,
+                        ordered: is_ordered_list,
+                    },
+                    Tag::Paragraph => MarkdownTagRange::Paragraph { start, end },
+                    Tag::Link(link_type, url, title) => {
+                        if link_type == LinkType::Inline {
+                            let url_offset = if title.is_empty() {
+                                1 + url.len()
+                            } else {
+                                2 + url.len() + title.len()
+                            };
+                            MarkdownTagRange::Link {
+                                start,
+                                end,
+                                url_offset: utf8_to_uft16_offsets[range.end - url_offset] as i32,
+                            }
+                        } else {
+                            continue;
+                        }
+                    }
+                    Tag::Image(link_type, url, title) => {
+                        if link_type == LinkType::Inline {
+                            let url_offset = if title.is_empty() {
+                                1 + url.len()
+                            } else {
+                                2 + url.len() + title.len()
+                            };
+                            MarkdownTagRange::Image {
+                                start,
+                                end,
+                                url_offset: utf8_to_uft16_offsets[range.end - url_offset] as i32,
+                            }
+                        } else {
+                            continue;
+                        }
+                    }
+                    Tag::BlockQuote => MarkdownTagRange::BlockQuote { start, end },
+                    Tag::CodeBlock(CodeBlockKind::Fenced(_)) => {
+                        MarkdownTagRange::CodeBlock { start, end }
+                    }
                     _ => continue,
                 };
                 tag_ranges.push(tag_range);
@@ -256,14 +370,27 @@ pub fn parse_markdown(s: String) -> Vec<MarkdownTagRange> {
             Event::Code(_) => {
                 tag_ranges.push(MarkdownTagRange::InlineCode { start, end });
             }
-            Event::End(_)
-            | Event::Text(_)
+            Event::End(tag) => match tag {
+                Tag::List(_) => {
+                    list_nested_level -= 1;
+                }
+                _ => continue,
+            },
+            Event::Rule => {
+                tag_ranges.push(MarkdownTagRange::Rule { start, end });
+            }
+            Event::TaskListMarker(is_checked) => {
+                tag_ranges.push(MarkdownTagRange::TaskListMarker {
+                    start,
+                    end,
+                    is_checked,
+                });
+            }
+            Event::Text(_)
             | Event::Html(_)
             | Event::FootnoteReference(_)
             | Event::SoftBreak
-            | Event::HardBreak
-            | Event::Rule
-            | Event::TaskListMarker(_) => {}
+            | Event::HardBreak => {}
         }
     }
     tag_ranges
