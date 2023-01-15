@@ -1,10 +1,11 @@
 package org.dianqk.mdrender
 
+import android.util.Log
+import android.util.Range
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.Typography
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -14,8 +15,6 @@ import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.style.TextIndent
-import androidx.compose.ui.unit.em
 import uniffi.ruslin.MarkdownTagRange
 import uniffi.ruslin.parseMarkdown
 
@@ -25,10 +24,18 @@ data class ParsedTagRanges(
 
 class MarkdownVisualTransformation(private val colorScheme: ColorScheme) : VisualTransformation {
 
-    private var cacheRenderText: AnnotatedString? = null
+    private var cachedRenderText: AnnotatedString? = null
+    var cachedParsedTagRanges: ParsedTagRanges = ParsedTagRanges(emptyList())
+        private set
+
+    var unorderedListRanges: MutableList<Range<Int>> = mutableListOf()
+    var orderedListRanges: MutableList<Range<Int>> = mutableListOf()
 
     fun invalid() {
-        cacheRenderText = null
+        cachedRenderText = null
+        cachedParsedTagRanges = ParsedTagRanges(emptyList())
+        unorderedListRanges.clear()
+        orderedListRanges.clear()
     }
 
     fun parse(text: AnnotatedString): ParsedTagRanges {
@@ -46,7 +53,7 @@ class MarkdownVisualTransformation(private val colorScheme: ColorScheme) : Visua
                 is MarkdownTagRange.Strikethrough -> tagRange.render(builder)
                 is MarkdownTagRange.InlineCode -> tagRange.render(builder, colorScheme)
                 is MarkdownTagRange.ListItem -> tagRange.render(builder, colorScheme)
-                is MarkdownTagRange.MList -> tagRange.render(builder, colorScheme)
+                is MarkdownTagRange.MList -> tagRange.render(this, builder, colorScheme)
                 is MarkdownTagRange.Paragraph -> {}
                 is MarkdownTagRange.Link -> tagRange.render(builder, colorScheme)
                 is MarkdownTagRange.Image -> tagRange.render(builder, colorScheme)
@@ -59,17 +66,37 @@ class MarkdownVisualTransformation(private val colorScheme: ColorScheme) : Visua
         return builder.toAnnotatedString()
     }
 
+    fun matchTag(
+        index: Int,
+        onMatchUnOrderList: () -> Unit,
+        onMatchOrderList: () -> Unit
+    ) {
+        for (unorderedListRange in unorderedListRanges) {
+            if (unorderedListRange.contains(index)) {
+                onMatchUnOrderList()
+                return
+            }
+        }
+        for (orderedListRange in orderedListRanges) {
+            if (orderedListRange.contains(index)) {
+                onMatchOrderList()
+                return
+            }
+        }
+    }
+
     override fun filter(text: AnnotatedString): TransformedText {
-        val currentCacheRenderText = cacheRenderText
-        if (currentCacheRenderText != null) {
+        val currentCachedRenderText = cachedRenderText
+        if (currentCachedRenderText != null) {
             return TransformedText(
-                text = currentCacheRenderText,
+                text = currentCachedRenderText,
                 offsetMapping = OffsetMapping.Identity
             )
         }
-        val parsedTree = parse(text)
-        val renderText = render(parsedTree, text)
-        cacheRenderText = renderText
+        val parsedTagRanges = parse(text)
+        cachedParsedTagRanges = parsedTagRanges
+        val renderText = render(parsedTagRanges, text)
+        cachedRenderText = renderText
         return TransformedText(
             text = renderText,
             offsetMapping = OffsetMapping.Identity
@@ -209,16 +236,23 @@ private fun MarkdownTagRange.ListItem.render(
 }
 
 private fun MarkdownTagRange.MList.render(
+    transformation: MarkdownVisualTransformation,
     builder: AnnotatedString.Builder,
     colorScheme: ColorScheme
 ) {
-    val firstLine = (nestedLevel * 0.5).em
-    val restLine = (nestedLevel * 0.5 + (if (order > 0) 1.85f else 1.25f)).em
-    builder.addStyle(
-        ParagraphStyle(
-            textIndent = TextIndent(firstLine = firstLine, restLine = restLine),
-        ), start, end
-    )
+//    val firstLine = (nestedLevel * 0.5).em
+//    val restLine = (nestedLevel * 0.5 + (if (order > 0) 1.85f else 1.25f)).em
+//    builder.addStyle(
+//        ParagraphStyle(
+//            textIndent = TextIndent(firstLine = firstLine, restLine = restLine),
+//        ), start, end
+//    )
+    if (order == 0) {
+        transformation.unorderedListRanges.add(Range(start, end))
+    } else {
+        transformation.orderedListRanges.add(Range(start, end))
+    }
+    Log.d("RuslinRust", "order $order")
 }
 
 private fun MarkdownTagRange.Link.render(

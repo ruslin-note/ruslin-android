@@ -24,6 +24,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.dianqk.mdrender.MarkdownVisualTransformation
 import org.dianqk.ruslin.R
 import org.dianqk.ruslin.ui.component.BackButton
+import org.dianqk.ruslin.ui.component.MarkdownTextField
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -135,26 +136,11 @@ private fun NoteDetailContent(
 //                singleLine = true,
             )
             Divider(modifier = Modifier.fillMaxWidth())
-            TextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .imePadding()
-//                    .verticalScroll(rememberScrollState())
-                    .fillMaxHeight(),
+            MarkdownTextField(
                 value = body,
                 onValueChange = {
                     onBodyChanged(it)
-                    visualTransformation.invalid()
-                },
-                placeholder = {
-                    Text(text = stringResource(id = R.string.content))
-                },
-                colors = TextFieldDefaults.textFieldColors(
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    containerColor = Color.Transparent
-                ),
-                visualTransformation = visualTransformation
+                }
             )
         }
     }
