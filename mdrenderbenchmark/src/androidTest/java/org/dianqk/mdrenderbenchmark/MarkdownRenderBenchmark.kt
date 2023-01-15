@@ -37,6 +37,7 @@ class MarkdownRenderBenchmark {
         val text = readText(R.raw.text1)
         val markdownVisualTransformation = MarkdownVisualTransformation()
         benchmarkRule.measureRepeated {
+            markdownVisualTransformation.invalid()
             markdownVisualTransformation.filter(text)
         }
     }
