@@ -34,8 +34,13 @@ object RepositoryModel {
                 logTxtFile.delete()
             }
         }
+        val resourceDir = appContext.filesDir.resolve("resource")
+        if (!resourceDir.exists()) {
+            resourceDir.mkdirs()
+        }
         Log.d("RepositoryModel", "provideNotesRepository $databaseDir")
         return RuslinNotesRepository(
+            resourceDir = resourceDir,
             databaseDir = databaseDir,
             logTxtFile = logTxtFile,
             workManager = WorkManager.getInstance(appContext),

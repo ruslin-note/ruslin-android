@@ -13,6 +13,7 @@ import javax.inject.Inject
 
 class RuslinNotesRepository @Inject constructor(
     databaseDir: String,
+    override val resourceDir: File,
     private val logTxtFile: File,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val workManager: WorkManager,
@@ -28,7 +29,8 @@ class RuslinNotesRepository @Inject constructor(
     private val _notesChangedManually = MutableSharedFlow<Unit>(replay = 0)
     override val notesChangedManually: SharedFlow<Unit> = _notesChangedManually.asSharedFlow()
 
-    private val data: RuslinAndroidData = RuslinAndroidData(databaseDir, logTxtFile.absolutePath)
+    private val data: RuslinAndroidData =
+        RuslinAndroidData(databaseDir, resourceDir.absolutePath, logTxtFile.absolutePath)
 
     override fun syncConfigExists(): Boolean = data.syncConfigExists()
 
@@ -145,4 +147,14 @@ class RuslinNotesRepository @Inject constructor(
             )
         }
     }
+
+    override fun createResource(): FfiResource = data.createResource()
+
+    override suspend fun saveResource(resource: FfiResource): Result<Unit> =
+        withContext(ioDispatcher) {
+            kotlin.runCatching {
+                data.saveResource(resource)
+            }
+        }
+
 }

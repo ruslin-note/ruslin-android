@@ -99,6 +99,25 @@ dictionary FFISyncInfo {
     f64 elapsed_time;
 };
 
+dictionary FFIResource {
+    string id;
+    string title;
+    string mime;
+    string filename;
+    i64 created_time;
+    i64 updated_time;
+    i64 user_created_time;
+    i64 user_updated_time;
+    string file_extension;
+    string encryption_cipher_text;
+    boolean encryption_applied;
+    boolean encryption_blob_encrypted;
+    i32 size;
+    boolean is_shared;
+    string share_id;
+    string master_key_id;
+};
+
 [Error]
 enum SyncError {
     "IOError",
@@ -138,7 +157,7 @@ interface SyncConfig {
 
 interface RuslinAndroidData {
     [Throws=SyncError]
-    constructor(string data_dir, string log_text_file);
+    constructor(string data_dir, string resource_dir, string log_text_file);
     boolean sync_config_exists();
     [Throws=SyncError]
     void save_sync_config(SyncConfig config);
@@ -170,4 +189,7 @@ interface RuslinAndroidData {
     FFIStatus database_status();
     [Throws=DatabaseError]
     sequence<FFISearchNote> search(string search_term);
+    FFIResource create_resource();
+    [Throws=DatabaseError]
+    void save_resource(FFIResource resource);
 };

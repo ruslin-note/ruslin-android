@@ -1,7 +1,9 @@
 package org.dianqk.ruslin.data
 
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.withContext
 import uniffi.ruslin.*
+import java.io.File
 
 interface NotesRepository {
 
@@ -17,6 +19,8 @@ interface NotesRepository {
     val syncFinished: SharedFlow<Result<FfiSyncInfo>>
 
     val notesChangedManually: SharedFlow<Unit>
+
+    val resourceDir: File
 
     fun doSync(isOnStart: Boolean)
 
@@ -47,4 +51,9 @@ interface NotesRepository {
     suspend fun readDatabaseStatus(): Result<FfiStatus>
 
     suspend fun search(searchTerm: String): Result<List<FfiSearchNote>>
+
+    fun createResource(): FfiResource
+
+    suspend fun saveResource(resource: FfiResource): Result<Unit>
+
 }

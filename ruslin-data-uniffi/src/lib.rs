@@ -8,13 +8,13 @@ use log4rs::{
 };
 use ruslin_data::{
     sync::{SyncConfig, SyncError},
-    DatabaseError, Folder, Note, RuslinData, SearchBodyOption, UpdateSource,
+    DatabaseError, Folder, Note, RuslinData, SearchBodyOption, UpdateSource, Resource,
 };
 use std::path::Path;
 use tokio::runtime::Runtime;
 
 mod ffi;
-use ffi::{FFIAbbrNote, FFIFolder, FFINote, FFISearchNote, FFIStatus, FFISyncInfo};
+use ffi::{FFIAbbrNote, FFIFolder, FFINote, FFISearchNote, FFIStatus, FFISyncInfo, FFIResource};
 
 uniffi_macros::include_scaffolding!("ruslin");
 
@@ -81,7 +81,7 @@ pub struct RuslinAndroidData {
 }
 
 impl RuslinAndroidData {
-    pub fn new(data_dir: String, log_text_file: String) -> Result<Self, SyncError> {
+    pub fn new(data_dir: String, resource_dir: String, log_text_file: String) -> Result<Self, SyncError> {
         let log_handle = init_log(&log_text_file);
         let rt = tokio::runtime::Builder::new_multi_thread()
             .enable_all()
@@ -210,6 +210,15 @@ impl RuslinAndroidData {
             &search_term,
             Some(SearchBodyOption::Snippet { max_tokens: 16 }),
         )
+    }
+
+    pub fn create_resource(&self) -> FFIResource {
+        Resource::new_empty().into()
+    }
+
+    pub fn save_resource(&self, resource: FFIResource) -> Result<(), DatabaseError> {
+        // TODO: change resource path exist
+        self.data.db.replace_resource(&resource.into(), UpdateSource::LocalEdit)
     }
 }
 

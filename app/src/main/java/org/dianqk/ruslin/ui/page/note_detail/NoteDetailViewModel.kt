@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 import org.dianqk.ruslin.data.NotesRepository
 import org.dianqk.ruslin.ui.RuslinDestinationsArgs
 import uniffi.ruslin.FfiNote
+import uniffi.ruslin.FfiResource
 import javax.inject.Inject
 
 data class NoteDetailUiState(
@@ -107,4 +108,6 @@ class NoteDetailViewModel @Inject constructor(
                 }
         }
     }
+
+    fun createFfiResource(): FfiResource = notesRepository.createResource()
 }

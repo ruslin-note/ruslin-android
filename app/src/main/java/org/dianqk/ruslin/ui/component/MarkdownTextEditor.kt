@@ -1,28 +1,35 @@
 package org.dianqk.ruslin.ui.component
 
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.imeAnimationTarget
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import org.dianqk.mdrender.MarkdownTheme
 import org.dianqk.mdrender.MarkdownVisualTransformation
 import org.dianqk.ruslin.R
+import uniffi.ruslin.FfiResource
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-fun MarkdownTextField(
+fun MarkdownTextEditor(
+    modifier: Modifier = Modifier,
+    createFfiResource: () -> FfiResource,
     value: String,
     onValueChange: (String) -> Unit
 ) {
     val colorScheme = MaterialTheme.colorScheme
     val visualTransformation =
         remember(colorScheme) { MarkdownVisualTransformation(MarkdownTheme.from(colorScheme = colorScheme)) }
+//    val markdownInsertTag = markdownInsertTagFlow.collectAsStateWithLifecycle(initialValue = MarkdownInsertTagType.None())
+    
 
     // See BasicTextField
 
@@ -47,10 +54,8 @@ fun MarkdownTextField(
     var lastTextValue by remember(value) { mutableStateOf(value) }
 
     TextField(
-        modifier = Modifier
-            .fillMaxWidth()
-            .imePadding()
-            .fillMaxHeight(),
+        modifier = modifier
+            .fillMaxWidth(),
         value = textFieldValue,
         onValueChange = { newTextFieldValueState ->
             val stringChangedSinceLastInvocation = lastTextValue != newTextFieldValueState.text
@@ -90,7 +95,7 @@ fun MarkdownTextField(
                                 text = text,
                                 selection = TextRange(
                                     start = newTextFieldValueState.selection.start + selectOffset,
-                                    newTextFieldValueState.selection.end + selectOffset
+                                    end = newTextFieldValueState.selection.end + selectOffset
                                 )
                             )
                         },
@@ -117,7 +122,7 @@ fun MarkdownTextField(
                                 text = text,
                                 selection = TextRange(
                                     start = newTextFieldValueState.selection.start + selectOffset,
-                                    newTextFieldValueState.selection.end + selectOffset
+                                    end = newTextFieldValueState.selection.end + selectOffset
                                 )
                             )
                         }
@@ -143,4 +148,49 @@ fun MarkdownTextField(
         ),
         visualTransformation = visualTransformation
     )
+
+    val density = LocalDensity.current
+    val imeTargetBottom = WindowInsets.imeAnimationTarget.getBottom(density = density)
+    val isImeVisible = imeTargetBottom != 0
+//    val isImeVisible = WindowInsets.isImeVisible
+
+    if (isImeVisible) {
+        Divider(modifier = Modifier.fillMaxWidth())
+        EditorToolBar(createFfiResource = createFfiResource) { tagType ->
+            val insertedTextFieldValueState = when (tagType) {
+                is MarkdownInsertTagType.Heading -> tagType.insert(
+                    textFieldValue = textFieldValueState,
+                    markdownVisualTransformation = visualTransformation
+                )
+                is MarkdownInsertTagType.Bold -> tagType.insert(
+                    textFieldValue = textFieldValueState,
+                    markdownVisualTransformation = visualTransformation
+                )
+                is MarkdownInsertTagType.Italic -> tagType.insert(
+                    textFieldValue = textFieldValueState,
+                    markdownVisualTransformation = visualTransformation
+                )
+                is MarkdownInsertTagType.ListBulleted -> tagType.insert(
+                    textFieldValue = textFieldValueState,
+                    markdownVisualTransformation = visualTransformation
+                )
+                is MarkdownInsertTagType.ListNumbered -> tagType.insert(
+                    textFieldValue = textFieldValueState,
+                    markdownVisualTransformation = visualTransformation
+                )
+                is MarkdownInsertTagType.Quote -> tagType.insert(
+                    textFieldValue = textFieldValueState,
+                    markdownVisualTransformation = visualTransformation
+                )
+                is MarkdownInsertTagType.Strikethrough -> tagType.insert(
+                    textFieldValue = textFieldValueState,
+                    markdownVisualTransformation = visualTransformation
+                )
+            }
+            textFieldValueState = insertedTextFieldValueState
+            lastTextValue = insertedTextFieldValueState.text
+            onValueChange(insertedTextFieldValueState.text)
+            visualTransformation.invalid()
+        }
+    }
 }
