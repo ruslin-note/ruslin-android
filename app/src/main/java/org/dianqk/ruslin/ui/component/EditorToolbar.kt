@@ -31,15 +31,15 @@ import java.io.FileOutputStream
 import java.io.OutputStream
 
 sealed class MarkdownInsertTagType {
-    class Heading(val level: Int): MarkdownInsertTagType()
+    class Heading(val level: Int) : MarkdownInsertTagType()
     object Bold : MarkdownInsertTagType()
     object Italic : MarkdownInsertTagType()
-    object ListBulleted: MarkdownInsertTagType()
-    object ListNumbered: MarkdownInsertTagType()
+    object ListBulleted : MarkdownInsertTagType()
+    object ListNumbered : MarkdownInsertTagType()
 
-    object Strikethrough: MarkdownInsertTagType()
+    object Strikethrough : MarkdownInsertTagType()
 
-    object Quote: MarkdownInsertTagType()
+    object Quote : MarkdownInsertTagType()
 
 }
 
@@ -57,7 +57,8 @@ fun MarkdownInsertTagType.Heading.insert(
             start = textFieldValue.selection.start + level + 1,
             end = textFieldValue.selection.end + level + 1,
         )
-    )}
+    )
+}
 
 fun MarkdownInsertTagType.Bold.insert(
     textFieldValue: TextFieldValue,
@@ -122,7 +123,8 @@ fun MarkdownInsertTagType.ListNumbered.insert(
             start = textFieldValue.selection.start + 3,
             end = textFieldValue.selection.end + 3,
         )
-    )}
+    )
+}
 
 fun MarkdownInsertTagType.Strikethrough.insert(
     textFieldValue: TextFieldValue,
@@ -154,7 +156,8 @@ fun MarkdownInsertTagType.Quote.insert(
             start = textFieldValue.selection.start + 2,
             end = textFieldValue.selection.end + 2,
         )
-    )}
+    )
+}
 
 @Composable
 fun EditorToolbar(
@@ -196,12 +199,16 @@ fun EditorToolbar(
             }
         }
 
-    Row(modifier = modifier
-        .padding(horizontal = 6.dp)
-        .horizontalScroll(rememberScrollState())) {
+    Row(
+        modifier = modifier
+            .padding(horizontal = 6.dp)
+            .horizontalScroll(rememberScrollState())
+    ) {
 
         Box(modifier = Modifier) {
-            IconButton(onClick = { expanded = true }) {
+            IconButton(
+                enabled = !expanded,
+                onClick = { expanded = true }) {
                 Icon(Icons.Default.Title, contentDescription = null)
             }
             DropdownMenu(
@@ -212,27 +219,27 @@ fun EditorToolbar(
                 }
             ) {
                 Row() {
-                    HeadingDropdownMenuItem("H6", 6, R.drawable.format_h6) {
+                    HeadingDropdownMenuItem(6, R.drawable.format_h6) {
                         onInsertMarkdownTag(it)
                         expanded = false
                     }
-                    HeadingDropdownMenuItem("H5", 5, R.drawable.format_h5) {
+                    HeadingDropdownMenuItem(5, R.drawable.format_h5) {
                         onInsertMarkdownTag(it)
                         expanded = false
                     }
-                    HeadingDropdownMenuItem("H4", 4, R.drawable.format_h4)  {
+                    HeadingDropdownMenuItem(4, R.drawable.format_h4) {
                         onInsertMarkdownTag(it)
                         expanded = false
                     }
-                    HeadingDropdownMenuItem("H3", 3, R.drawable.format_h3) {
+                    HeadingDropdownMenuItem(3, R.drawable.format_h3) {
                         onInsertMarkdownTag(it)
                         expanded = false
                     }
-                    HeadingDropdownMenuItem("H2", 2, R.drawable.format_h2) {
+                    HeadingDropdownMenuItem(2, R.drawable.format_h2) {
                         onInsertMarkdownTag(it)
                         expanded = false
                     }
-                    HeadingDropdownMenuItem("H1", 1, R.drawable.format_h1)  {
+                    HeadingDropdownMenuItem(1, R.drawable.format_h1) {
                         onInsertMarkdownTag(it)
                         expanded = false
                     }
@@ -268,7 +275,11 @@ fun EditorToolbar(
 
 
 @Composable
-fun HeadingDropdownMenuItem(text: String, level: Int, @DrawableRes resourceId: Int, onInsertMarkdownTag: (MarkdownInsertTagType.Heading) -> Unit) {
+fun HeadingDropdownMenuItem(
+    level: Int,
+    @DrawableRes resourceId: Int,
+    onInsertMarkdownTag: (MarkdownInsertTagType.Heading) -> Unit
+) {
     IconButton(onClick = { onInsertMarkdownTag(MarkdownInsertTagType.Heading(level = level)) }) {
         Icon(ImageVector.vectorResource(id = resourceId), contentDescription = null)
     }
