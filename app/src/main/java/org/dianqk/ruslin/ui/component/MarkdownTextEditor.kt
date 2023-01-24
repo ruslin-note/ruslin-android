@@ -156,7 +156,7 @@ fun MarkdownTextEditor(
 
     if (isImeVisible) {
         Divider(modifier = Modifier.fillMaxWidth())
-        EditorToolBar(createFfiResource = createFfiResource) { tagType ->
+        EditorToolbar(createFfiResource = createFfiResource) { tagType ->
             val insertedTextFieldValueState = when (tagType) {
                 is MarkdownInsertTagType.Heading -> tagType.insert(
                     textFieldValue = textFieldValueState,

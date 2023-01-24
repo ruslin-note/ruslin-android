@@ -14,7 +14,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -23,10 +22,8 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.launch
 import org.dianqk.ruslin.R
 import org.dianqk.ruslin.ui.component.BackButton
-import org.dianqk.ruslin.ui.component.EditorToolBar
 import org.dianqk.ruslin.ui.component.MarkdownInsertTagType
 import org.dianqk.ruslin.ui.component.MarkdownTextEditor
 import uniffi.ruslin.FfiResource
