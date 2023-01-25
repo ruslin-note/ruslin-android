@@ -148,7 +148,13 @@ class RuslinNotesRepository @Inject constructor(
         }
     }
 
-    override fun createResource(): FfiResource = data.createResource()
+    override fun createResource(
+        title: String,
+        mime: String,
+        fileExtension: String,
+        size: Int
+    ): FfiResource =
+        data.createResource(title = title, mime = mime, fileExtension = fileExtension, size = size)
 
     override suspend fun saveResource(resource: FfiResource): Result<Unit> =
         withContext(ioDispatcher) {

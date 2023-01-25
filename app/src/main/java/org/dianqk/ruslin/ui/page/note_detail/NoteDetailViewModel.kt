@@ -1,5 +1,8 @@
 package org.dianqk.ruslin.ui.page.note_detail
 
+import android.content.Context
+import android.net.Uri
+import android.provider.OpenableColumns
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -13,7 +16,8 @@ import kotlinx.coroutines.launch
 import org.dianqk.ruslin.data.NotesRepository
 import org.dianqk.ruslin.ui.RuslinDestinationsArgs
 import uniffi.ruslin.FfiNote
-import uniffi.ruslin.FfiResource
+import java.io.FileOutputStream
+import java.io.OutputStream
 import javax.inject.Inject
 
 data class NoteDetailUiState(
@@ -23,6 +27,12 @@ data class NoteDetailUiState(
 )
 
 const val TAG = "NoteDetailViewModel"
+
+data class SavedResource(
+    val id: String,
+    val isImage: Boolean,
+    val filename: String,
+)
 
 @HiltViewModel
 class NoteDetailViewModel @Inject constructor(
@@ -109,5 +119,41 @@ class NoteDetailViewModel @Inject constructor(
         }
     }
 
-    fun createFfiResource(): FfiResource = notesRepository.createResource()
+    fun saveResource(context: Context, uri: Uri): SavedResource? {
+        val mime = context.contentResolver.getType(uri) ?: "application/octet-stream"
+        val isImage = mime.startsWith("image/")
+        return context.contentResolver.query(uri, null, null, null, null)?.let { cursor ->
+            val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+            val sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
+            cursor.moveToFirst()
+            val filename = cursor.getString(nameIndex)
+            val size = cursor.getInt(sizeIndex)
+            val fileExtension = filename.substring(filename.lastIndexOf('.') + 1)
+
+            val resource = notesRepository.createResource(
+                title = filename,
+                mime = mime,
+                fileExtension = fileExtension,
+                size = size
+            )
+            val resourceDir = notesRepository.resourceDir
+            val resourceFile = resourceDir.resolve("${resource.id}.${resource.fileExtension}")
+            resourceFile.createNewFile()
+            val inputStream = context.contentResolver.openInputStream(uri)!!
+            val outputStream: OutputStream = FileOutputStream(resourceFile)
+            val buf = ByteArray(1024)
+            var len: Int
+            while (inputStream.read(buf).also { len = it } > 0) outputStream.write(buf, 0, len)
+            outputStream.close()
+            inputStream.close()
+            cursor.close()
+            viewModelScope.launch {
+                notesRepository.saveResource(resource)
+                    .onFailure { e ->
+                        throw e
+                    }
+            }
+            return@let SavedResource(id = resource.id, isImage = isImage, filename = filename)
+        }
+    }
 }

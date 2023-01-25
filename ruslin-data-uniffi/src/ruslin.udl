@@ -189,7 +189,7 @@ interface RuslinAndroidData {
     FFIStatus database_status();
     [Throws=DatabaseError]
     sequence<FFISearchNote> search(string search_term);
-    FFIResource create_resource();
+    FFIResource create_resource(string title, string mime, string file_extension, i32 size);
     [Throws=DatabaseError]
     void save_resource(FFIResource resource);
 };

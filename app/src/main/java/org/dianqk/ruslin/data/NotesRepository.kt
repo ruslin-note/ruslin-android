@@ -51,7 +51,7 @@ interface NotesRepository {
 
     suspend fun search(searchTerm: String): Result<List<FfiSearchNote>>
 
-    fun createResource(): FfiResource
+    fun createResource(title: String, mime: String, fileExtension: String, size: Int): FfiResource
 
     suspend fun saveResource(resource: FfiResource): Result<Unit>
 

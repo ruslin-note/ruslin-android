@@ -1,5 +1,6 @@
 package org.dianqk.ruslin.ui.page.note_detail
 
+import android.net.Uri
 import androidx.compose.animation.*
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
@@ -14,6 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -26,7 +28,6 @@ import org.dianqk.ruslin.R
 import org.dianqk.ruslin.ui.component.BackButton
 import org.dianqk.ruslin.ui.component.MarkdownInsertTagType
 import org.dianqk.ruslin.ui.component.MarkdownTextEditor
-import uniffi.ruslin.FfiResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,6 +37,7 @@ fun NoteDetailPage(
     viewModel: NoteDetailViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     Scaffold(
         topBar = {
@@ -60,7 +62,9 @@ fun NoteDetailPage(
             onBodyChanged = viewModel::updateBody,
             modifier = Modifier
                 .padding(innerPadding),
-            createFfiResource = viewModel::createFfiResource,
+            onSaveResource = { uri: Uri ->
+                viewModel.saveResource(context = context, uri = uri)
+            },
         )
     }
 
@@ -94,7 +98,7 @@ private fun NoteDetailContent(
     body: String,
     onTitleChanged: (String) -> Unit,
     onBodyChanged: (String) -> Unit,
-    createFfiResource: () -> FfiResource,
+    onSaveResource: (Uri) -> SavedResource?,
 ) {
     val bringIntoViewRequester = remember { BringIntoViewRequester() }
     val markdownInsertTag = remember {
@@ -143,7 +147,7 @@ private fun NoteDetailContent(
             Divider(modifier = Modifier.fillMaxWidth())
             MarkdownTextEditor(
                 modifier = Modifier.weight(1f),
-                createFfiResource = createFfiResource,
+                onSaveResource = onSaveResource,
                 value = body,
                 onValueChange = {
                     onBodyChanged(it)

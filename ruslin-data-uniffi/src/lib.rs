@@ -87,7 +87,7 @@ impl RuslinAndroidData {
             .enable_all()
             .build()
             .unwrap_or_else(|_| panic!("unwrap error in {}:{}", file!(), line!()));
-        let data = RuslinData::new(Path::new(&data_dir))?;
+        let data = RuslinData::new(Path::new(&data_dir), Path::new(&resource_dir))?;
         let db = data.db.clone();
         rt.spawn(async move {
             // prepare jieba
@@ -212,12 +212,11 @@ impl RuslinAndroidData {
         )
     }
 
-    pub fn create_resource(&self) -> FFIResource {
-        Resource::new_empty().into()
+    pub fn create_resource(&self, title: String, mime: String, file_extension: String, size: i32) -> FFIResource {
+        Resource::new(title, mime, file_extension, size).into()
     }
 
     pub fn save_resource(&self, resource: FFIResource) -> Result<(), DatabaseError> {
-        // TODO: change resource path exist
         self.data.db.replace_resource(&resource.into(), UpdateSource::LocalEdit)
     }
 }
