@@ -1,5 +1,6 @@
 namespace ruslin {
     sequence<MarkdownTagRange> parse_markdown(string text);
+    string parse_markdown_to_html(string text);
 };
 
 [Enum]
@@ -192,4 +193,6 @@ interface RuslinAndroidData {
     FFIResource create_resource(string title, string mime, string file_extension, i32 size);
     [Throws=DatabaseError]
     void save_resource(FFIResource resource);
+    [Throws=DatabaseError]
+    FFIResource load_resource(string id);
 };

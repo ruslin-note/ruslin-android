@@ -10,6 +10,7 @@ import org.dianqk.ruslin.ui.RuslinPages.LOGIN_PAGE
 import org.dianqk.ruslin.ui.RuslinPages.LOG_PAGE
 import org.dianqk.ruslin.ui.RuslinPages.NOTES_PAGE
 import org.dianqk.ruslin.ui.RuslinPages.NOTE_DETAIL_PAGE
+import org.dianqk.ruslin.ui.RuslinPages.PREVIEW_PAGE
 import org.dianqk.ruslin.ui.RuslinPages.SEARCH_PAGE
 import org.dianqk.ruslin.ui.RuslinPages.SETTINGS_PAGE
 import org.dianqk.ruslin.ui.RuslinPages.TOOLS_PAGE
@@ -24,6 +25,7 @@ object RuslinPages {
     const val LOG_PAGE = "log"
     const val DATABASE_STATUS_PAGE = "database_status"
     const val SEARCH_PAGE = "search"
+    const val PREVIEW_PAGE = "preview"
 }
 
 object RuslinDestinationsArgs {
@@ -42,6 +44,7 @@ object RuslinDestinations {
     const val LOG_ROUTE = LOG_PAGE
     const val DATABASE_STATUS_ROUTE = DATABASE_STATUS_PAGE
     const val SEARCH_ROUTE = SEARCH_PAGE
+    const val PREVIEW_ROUTE = "$PREVIEW_PAGE?$NOTE_ID_ARG={$NOTE_ID_ARG}"
 }
 
 class RuslinNavigationActions(private val navController: NavHostController) {
@@ -102,6 +105,16 @@ class RuslinNavigationActions(private val navController: NavHostController) {
 
     fun navigateToSearch() {
         navController.navigate(RuslinDestinations.SEARCH_ROUTE) {
+            launchSingleTop = true
+        }
+    }
+
+    fun navigateToPreview(noteId: String) {
+        val builder = Uri.Builder()
+        builder.path(PREVIEW_PAGE)
+        builder.appendQueryParameter(NOTE_ID_ARG, noteId)
+        val url = builder.build().toString()
+        navController.navigate(url) {
             launchSingleTop = true
         }
     }

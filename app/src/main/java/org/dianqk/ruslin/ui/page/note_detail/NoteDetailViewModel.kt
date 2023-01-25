@@ -21,6 +21,7 @@ import java.io.OutputStream
 import javax.inject.Inject
 
 data class NoteDetailUiState(
+    val noteId: String? = null, // TODO: new note also can preview
     val title: String = "",
     val body: String = "",
     val isLoading: Boolean = false
@@ -45,7 +46,7 @@ class NoteDetailViewModel @Inject constructor(
     private var note: FfiNote? = null
     private var edited: Boolean = false
 
-    private val _uiState = MutableStateFlow(NoteDetailUiState())
+    private val _uiState = MutableStateFlow(NoteDetailUiState(noteId = noteId))
     val uiState: StateFlow<NoteDetailUiState> = _uiState.asStateFlow()
 
     init {
@@ -62,11 +63,8 @@ class NoteDetailViewModel @Inject constructor(
         if (!edited) {
             return
         }
-        val title: String
-        if (uiState.value.title.isEmpty()) {
-            title = uiState.value.body.split("\n").getOrNull(0) ?: ""
-        } else {
-            title = uiState.value.title
+        val title: String = uiState.value.title.ifEmpty {
+            uiState.value.body.split("\n").getOrNull(0) ?: ""
         }
         val body = uiState.value.body
         if (note != null) {

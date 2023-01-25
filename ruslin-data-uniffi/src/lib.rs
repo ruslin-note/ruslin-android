@@ -8,15 +8,17 @@ use log4rs::{
 };
 use ruslin_data::{
     sync::{SyncConfig, SyncError},
-    DatabaseError, Folder, Note, RuslinData, SearchBodyOption, UpdateSource, Resource,
+    DatabaseError, Folder, Note, Resource, RuslinData, SearchBodyOption, UpdateSource,
 };
 use std::path::Path;
 use tokio::runtime::Runtime;
-
 mod ffi;
-use ffi::{FFIAbbrNote, FFIFolder, FFINote, FFISearchNote, FFIStatus, FFISyncInfo, FFIResource};
+mod html;
+use ffi::{FFIAbbrNote, FFIFolder, FFINote, FFIResource, FFISearchNote, FFIStatus, FFISyncInfo};
 
 uniffi_macros::include_scaffolding!("ruslin");
+
+pub use html::parse_markdown_to_html;
 
 struct AndroidAppender(AndroidLogger);
 
@@ -81,7 +83,11 @@ pub struct RuslinAndroidData {
 }
 
 impl RuslinAndroidData {
-    pub fn new(data_dir: String, resource_dir: String, log_text_file: String) -> Result<Self, SyncError> {
+    pub fn new(
+        data_dir: String,
+        resource_dir: String,
+        log_text_file: String,
+    ) -> Result<Self, SyncError> {
         let log_handle = init_log(&log_text_file);
         let rt = tokio::runtime::Builder::new_multi_thread()
             .enable_all()
@@ -212,12 +218,25 @@ impl RuslinAndroidData {
         )
     }
 
-    pub fn create_resource(&self, title: String, mime: String, file_extension: String, size: i32) -> FFIResource {
+    pub fn create_resource(
+        &self,
+        title: String,
+        mime: String,
+        file_extension: String,
+        size: i32,
+    ) -> FFIResource {
         Resource::new(title, mime, file_extension, size).into()
     }
 
     pub fn save_resource(&self, resource: FFIResource) -> Result<(), DatabaseError> {
-        self.data.db.replace_resource(&resource.into(), UpdateSource::LocalEdit)
+        self.data
+            .db
+            .replace_resource(&resource.into(), UpdateSource::LocalEdit)
+    }
+
+    pub fn load_resource(&self, id: String) -> Result<FFIResource, DatabaseError> {
+        let resource = self.data.db.load_resource(&id)?;
+        Ok(resource.into())
     }
 }
 

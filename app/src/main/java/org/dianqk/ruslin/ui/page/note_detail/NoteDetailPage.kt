@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Preview
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -32,12 +34,13 @@ import org.dianqk.ruslin.ui.component.MarkdownTextEditor
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NoteDetailPage(
+    navigationPreview: (String) -> Unit,
     onPopBack: () -> Unit = {},
-    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
     viewModel: NoteDetailViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
 
     Scaffold(
         topBar = {
@@ -45,12 +48,14 @@ fun NoteDetailPage(
                 title = {},
                 navigationIcon = {
                     BackButton(onClick = onPopBack)
+                },
+                actions = {
+                    uiState.noteId?.let { noteId ->
+                        IconButton(onClick = { navigationPreview(noteId) }) {
+                            Icon(Icons.Default.Preview, stringResource(id = R.string.desc_more))
+                        }
+                    }
                 }
-//                actions = {
-//                    IconButton(onClick = { /*TODO*/ }) {
-//                        Icon(Icons.Default.MoreVert, stringResource(id = R.string.desc_more))
-//                    }
-//                }
             )
         },
     ) { innerPadding ->
