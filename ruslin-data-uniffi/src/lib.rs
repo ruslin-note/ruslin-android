@@ -1,5 +1,5 @@
 use android_logger::AndroidLogger;
-use log::{Level, LevelFilter, Log};
+use log::{LevelFilter, Log};
 use log4rs::{
     append::{file::FileAppender, Append},
     config::{Appender, Root},
@@ -44,16 +44,12 @@ impl Append for AndroidAppender {
 fn init_log(log_text_file: &str) -> log4rs::Handle {
     #[cfg(debug_assertions)]
     let level_filter = LevelFilter::Debug;
-    #[cfg(debug_assertions)]
-    let level = Level::Debug;
     #[cfg(not(debug_assertions))]
     let level_filter = LevelFilter::Info;
-    #[cfg(not(debug_assertions))]
-    let level = Level::Info;
 
     let android_appender = AndroidAppender(AndroidLogger::new(
         android_logger::Config::default()
-            .with_min_level(level)
+            .with_max_level(level_filter)
             .with_tag("RuslinRust"),
     ));
 

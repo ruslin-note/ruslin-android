@@ -259,10 +259,7 @@ where
             Tag::Link(_link_type, dest, title) => {
                 self.write("<a href=\"")?;
                 if dest.len() == 34 && dest.starts_with(":/") {
-                    escape_href(
-                        &mut self.writer,
-                        &format!("ruslin-files:///{}", &dest[2..]),
-                    )?;
+                    escape_href(&mut self.writer, &format!("ruslin-files:///{}", &dest[2..]))?;
                 } else {
                     escape_href(&mut self.writer, &dest)?;
                 }
@@ -275,10 +272,7 @@ where
             Tag::Image(_link_type, dest, title) => {
                 self.write("<img src=\"")?;
                 if dest.len() == 34 && dest.starts_with(":/") {
-                    escape_href(
-                        &mut self.writer,
-                        &format!("ruslin-files:///{}", &dest[2..]),
-                    )?;
+                    escape_href(&mut self.writer, &format!("ruslin-files:///{}", &dest[2..]))?;
                 } else {
                     escape_href(&mut self.writer, &dest)?;
                 }
@@ -296,7 +290,7 @@ where
                 } else {
                     self.write("\n<div class=\"footnote-definition\" id=\"")?;
                 }
-                escape_html(&mut self.writer, &*name)?;
+                escape_html(&mut self.writer, &name)?;
                 self.write("\"><sup class=\"footnote-definition-label\">")?;
                 let len = self.numbers.len() + 1;
                 let number = *self.numbers.entry(name).or_insert(len);
