@@ -129,8 +129,8 @@ impl RuslinAndroidData {
         self.data.get_sync_config()
     }
 
-    pub fn sync(&self) -> Result<FFISyncInfo, SyncError> {
-        let result = self.rt.block_on(self.data.sync());
+    pub fn synchronize(&self, from_scratch: bool) -> Result<FFISyncInfo, SyncError> {
+        let result = self.rt.block_on(self.data.synchronize(from_scratch));
         if let Err(e) = &result {
             log::error!("sync error: {e}");
         }

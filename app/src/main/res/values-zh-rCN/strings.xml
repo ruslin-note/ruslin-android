@@ -60,4 +60,5 @@
     <string name="ask_delete_folder_title">删除 "%s"?</string>
     <string name="ask_delete_folder_description">这个文件夹下所有的笔记和子文件夹都会被删除。</string>
     <string name="edit_folder">编辑文件夹</string>
+    <string name="resynchronize_from_scratch">从头开始重新同步</string>
 </resources>

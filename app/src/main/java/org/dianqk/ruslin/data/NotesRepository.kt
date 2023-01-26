@@ -12,7 +12,7 @@ interface NotesRepository {
 
     suspend fun getSyncConfig(): Result<SyncConfig?>
 
-    suspend fun sync(): Result<FfiSyncInfo>
+    suspend fun synchronize(fromScratch: Boolean): Result<FfiSyncInfo>
 
     val isSyncing: SharedFlow<Boolean>
     val syncFinished: SharedFlow<Result<FfiSyncInfo>>
@@ -21,7 +21,7 @@ interface NotesRepository {
 
     val resourceDir: File
 
-    fun doSync(isOnStart: Boolean)
+    fun doSync(isOnStart: Boolean, fromScratch: Boolean)
 
     fun newFolder(parentId: String?, title: String): FfiFolder
 

@@ -61,4 +61,5 @@
     <string name="ask_delete_folder_title">Delete "%s"?</string>
     <string name="ask_delete_folder_description">All notes and sub-folders within this folder will also be deleted.</string>
     <string name="edit_folder">Edit Folder</string>
+    <string name="resynchronize_from_scratch">Resynchronize from scratch</string>
 </resources>

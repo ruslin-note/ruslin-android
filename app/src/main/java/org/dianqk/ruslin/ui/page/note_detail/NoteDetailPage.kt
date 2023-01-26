@@ -25,10 +25,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.coroutines.flow.MutableSharedFlow
 import org.dianqk.ruslin.R
 import org.dianqk.ruslin.ui.component.BackButton
-import org.dianqk.ruslin.ui.component.MarkdownInsertTagType
 import org.dianqk.ruslin.ui.component.MarkdownTextEditor
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -106,9 +104,6 @@ private fun NoteDetailContent(
     onSaveResource: (Uri) -> SavedResource?,
 ) {
     val bringIntoViewRequester = remember { BringIntoViewRequester() }
-    val markdownInsertTag = remember {
-        MutableSharedFlow<MarkdownInsertTagType>(replay = 0)
-    }
 
     if (loading) {
         val pullRefreshState =

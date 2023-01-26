@@ -43,25 +43,25 @@ class RuslinNotesRepository @Inject constructor(
         kotlin.runCatching { data.getSyncConfig() }
     }
 
-    override suspend fun sync(): Result<FfiSyncInfo> =
+    override suspend fun synchronize(fromScratch: Boolean): Result<FfiSyncInfo> =
         withContext(ioDispatcher) {
             _isSyncing.emit(true)
-            val syncResult = kotlin.runCatching { data.sync() }
+            val syncResult = kotlin.runCatching { data.synchronize(fromScratch = fromScratch) }
             _isSyncing.emit(false)
             _syncFinished.emit(syncResult)
             syncResult
         }
 
-    override fun doSync(isOnStart: Boolean) {
+    override fun doSync(isOnStart: Boolean, fromScratch: Boolean) {
         applicationScope.launch {
             workManager.cancelAllWork()
             val syncStrategy = appContext.dataStore.syncStrategy().first()
             if (isOnStart) {
                 if (syncStrategy.syncOnStart) {
-                    SyncWorker.enqueueOneTimeWork(workManager)
+                    SyncWorker.enqueueOneTimeWork(workManager, fromScratch = fromScratch)
                 }
             } else {
-                SyncWorker.enqueueOneTimeWork(workManager)
+                SyncWorker.enqueueOneTimeWork(workManager, fromScratch = fromScratch)
             }
             if (syncStrategy.syncInterval > 0) {
                 SyncWorker.enqueuePeriodicWork(

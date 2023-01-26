@@ -115,7 +115,7 @@ class NotesViewModel @Inject constructor(
 
     fun sync() {
         viewModelScope.launch {
-            notesRepository.doSync(isOnStart = false)
+            notesRepository.doSync(isOnStart = false, fromScratch = false)
         }
     }
 

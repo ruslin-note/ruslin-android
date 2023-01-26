@@ -64,6 +64,7 @@ fun ContentEmptyState(
     text: @Composable () -> Unit,
 ) {
     ContentState(
+        modifier = modifier,
         icon = {
             Icon(
                 modifier = Modifier

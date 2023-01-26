@@ -165,7 +165,7 @@ interface RuslinAndroidData {
     [Throws=SyncError]
     SyncConfig? get_sync_config();
     [Throws=SyncError]
-    FFISyncInfo sync();
+    FFISyncInfo synchronize(boolean from_scratch);
     FFIFolder new_folder(string? parent_id, string title);
     [Throws=DatabaseError]
     void replace_folder(FFIFolder folder);

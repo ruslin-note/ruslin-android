@@ -95,7 +95,7 @@ class LoginViewModel @Inject constructor(
             )
             notesRepository.saveSyncConfig(syncConfig)
                 .onSuccess {
-                    notesRepository.doSync(false)
+                    notesRepository.doSync(isOnStart = false, fromScratch = false)
                     _uiState.update {
                         it.copy(
                             isLoggingIn = false,

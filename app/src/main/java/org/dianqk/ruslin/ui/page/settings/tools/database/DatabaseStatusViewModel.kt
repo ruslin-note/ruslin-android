@@ -9,11 +9,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.dianqk.ruslin.data.NotesRepository
-import uniffi.ruslin.FfiStatus
 import javax.inject.Inject
 
 data class DatabaseUiState(
-    val status: String = ""
+    val status: String = "",
+    val isSyncing: Boolean = false,
+    val syncResult: Result<String>? = null,
 )
 
 @HiltViewModel
@@ -24,22 +25,54 @@ class DatabaseStatusViewModel @Inject constructor(
     val uiState: StateFlow<DatabaseUiState> = _uiState.asStateFlow()
 
     init {
+        updateStatus()
         viewModelScope.launch {
-            notesRepository.readDatabaseStatus()
-                .onSuccess {
-                    updateStatus(it)
+            notesRepository.syncFinished.collect { syncResult ->
+                syncResult.onSuccess { syncInfo ->
+                    _uiState.update {
+                        it.copy(
+                            syncResult = Result.success("$syncInfo")
+                        )
+                    }
+                }.onFailure { e ->
+                    _uiState.update {
+                        it.copy(
+                            syncResult = Result.failure(e)
+                        )
+                    }
                 }
+            }
+        }
+        viewModelScope.launch {
+            notesRepository.isSyncing.collect { isSyncing ->
+                _uiState.update {
+                    it.copy(isSyncing = isSyncing)
+                }
+            }
         }
     }
 
-    private fun updateStatus(status: FfiStatus) {
-        val statusText = "Note: ${status.noteCount}\n" +
-                "Folder: ${status.folderCount}\n" +
-                "Resource: ${status.resourceCount}\n" +
-                "Tag: ${status.tagCount}\n" +
-                "NoteTag: ${status.noteTagCount}"
+    fun resync() {
         _uiState.update {
-            it.copy(status = statusText)
+            it.copy(isSyncing = true, syncResult = null)
         }
+        notesRepository.doSync(isOnStart = false, fromScratch = true)
+    }
+
+    fun updateStatus() {
+        viewModelScope.launch {
+            notesRepository.readDatabaseStatus()
+                .onSuccess { status ->
+                    val statusText = "Note: ${status.noteCount}\n" +
+                            "Folder: ${status.folderCount}\n" +
+                            "Resource: ${status.resourceCount}\n" +
+                            "Tag: ${status.tagCount}\n" +
+                            "NoteTag: ${status.noteTagCount}"
+                    _uiState.update {
+                        it.copy(status = statusText)
+                    }
+                }
+        }
+
     }
 }

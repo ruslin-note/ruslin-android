@@ -1,17 +1,13 @@
 package org.dianqk.ruslin.data
 
 import android.content.Context
-import android.util.Log
 import androidx.hilt.work.HiltWorker
 import androidx.work.*
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.util.*
 import java.util.concurrent.TimeUnit
-
-private val TAG = "SyncWorker"
 
 @HiltWorker
 class SyncWorker @AssistedInject constructor(
@@ -21,20 +17,20 @@ class SyncWorker @AssistedInject constructor(
 ) : CoroutineWorker(appContext, workerParams) {
 
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
-        Log.i(TAG, "syncing")
-        setProgress(setIsSyncing(true))
-        val syncResult = notesRepository.sync()
-        setProgress(setIsSyncing(false))
+        val fromScratch = inputData.getBoolean(FROM_SCRATCH, false)
+        val syncResult = notesRepository.synchronize(fromScratch = fromScratch)
         return@withContext if (syncResult.isSuccess) Result.success() else Result.failure()
     }
 
     companion object {
-        private const val IS_SYNCING = "isSyncing"
-        const val WORK_NAME = "Ruslin"
-        lateinit var uuid: UUID
+        private const val FROM_SCRATCH = "fromScratch"
+        private const val WORK_NAME = "Ruslin"
 
-        fun enqueueOneTimeWork(workerManager: WorkManager) {
-            workerManager.enqueue(OneTimeWorkRequestBuilder<SyncWorker>().addTag(WORK_NAME).build())
+        fun enqueueOneTimeWork(workerManager: WorkManager, fromScratch: Boolean) {
+            workerManager.enqueue(
+                OneTimeWorkRequestBuilder<SyncWorker>().addTag(WORK_NAME)
+                    .setInputData(workDataOf(FROM_SCRATCH to fromScratch)).build()
+            )
         }
 
         fun enqueuePeriodicWork(
@@ -56,12 +52,10 @@ class SyncWorker @AssistedInject constructor(
                             .build()
                     )
                     .addTag(WORK_NAME)
+                    .setInputData(workDataOf(FROM_SCRATCH to false))
                     .setInitialDelay(15, TimeUnit.MINUTES)
                     .build()
             )
         }
-
-        fun setIsSyncing(boolean: Boolean) = workDataOf(IS_SYNCING to boolean)
-        fun Data.getIsSyncing(): Boolean = getBoolean(IS_SYNCING, false)
     }
 }
