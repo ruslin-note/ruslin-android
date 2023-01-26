@@ -47,9 +47,11 @@ class NotePreviewViewModel @Inject constructor(
                         val htmlText = buildString {
                             append(
                                 """
+                                <!DOCTYPE html>
                                 <html>
                                     <head>
-                                        <meta name="viewport" content="width=device-width, initial-scale=1">
+                                        <meta charset="UTF-8">
+                                        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
                                         <link rel="stylesheet" href="ruslin-assets:///github-markdown.min.css">
                                         <style>
                                             .markdown-body {
