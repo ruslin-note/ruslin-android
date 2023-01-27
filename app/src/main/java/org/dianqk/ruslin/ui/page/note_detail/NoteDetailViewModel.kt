@@ -75,6 +75,7 @@ class NoteDetailViewModel @Inject constructor(
         }
         viewModelScope.launch {
             notesRepository.replaceNote(note!!)
+            edited = false
         }
     }
 
