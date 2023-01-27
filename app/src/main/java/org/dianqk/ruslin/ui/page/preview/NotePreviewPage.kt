@@ -14,6 +14,7 @@ import org.dianqk.ruslin.ui.component.MarkdownRichText
 @Composable
 fun NotePreviewPage(
     onPopBack: () -> Unit,
+    navigateToNote: (String) -> Unit,
     viewModel: NotePreviewViewModel = hiltViewModel()
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
@@ -30,7 +31,7 @@ fun NotePreviewPage(
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             uiState.value.htmlText?.let {
-                MarkdownRichText(htmlBodyText = it)
+                MarkdownRichText(htmlBodyText = it, navigateToNote = navigateToNote)
             }
         }
     }

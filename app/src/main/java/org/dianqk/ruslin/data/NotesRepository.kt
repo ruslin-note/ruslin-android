@@ -57,4 +57,6 @@ interface NotesRepository {
 
     fun loadResource(id: String): Result<FfiResource>
 
+    suspend fun parseMarkdownToPreviewHtml(text: String): String
+
 }

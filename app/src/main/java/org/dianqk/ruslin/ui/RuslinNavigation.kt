@@ -52,6 +52,14 @@ class RuslinNavigationActions(private val navController: NavHostController) {
         navController.navigate(RuslinDestinations.NOTES_ROUTE)
     }
 
+    fun navigateToNote(noteId: String) {
+        val builder = Uri.Builder()
+        builder.path(NOTE_DETAIL_PAGE)
+        builder.appendQueryParameter(NOTE_ID_ARG, noteId)
+        val url = builder.build().toString()
+        navController.navigate(url)
+    }
+
     fun navigateToNoteDetail(folderId: String?, noteId: String?) {
         val builder = Uri.Builder()
         builder.path(NOTE_DETAIL_PAGE)

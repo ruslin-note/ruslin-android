@@ -133,6 +133,8 @@ fun RuslinNavGraph(
         ) {
             NotePreviewPage(onPopBack = {
                 navController.popBackStack()
+            }, navigateToNote = {
+                navigationActions.navigateToNote(it)
             })
         }
     }

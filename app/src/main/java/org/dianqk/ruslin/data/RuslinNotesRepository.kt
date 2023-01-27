@@ -163,6 +163,12 @@ class RuslinNotesRepository @Inject constructor(
             }
         }
 
-    override fun loadResource(id: String): Result<FfiResource> = kotlin.runCatching { data.loadResource(id = id) }
+    override fun loadResource(id: String): Result<FfiResource> =
+        kotlin.runCatching { data.loadResource(id = id) }
+
+    override suspend fun parseMarkdownToPreviewHtml(text: String): String =
+        withContext(ioDispatcher) {
+            data.parseMarkdownToPreviewHtml(text = text)
+        }
 
 }

@@ -15,7 +15,6 @@ import kotlinx.coroutines.withContext
 import org.dianqk.ruslin.data.NotesRepository
 import org.dianqk.ruslin.ui.RuslinDestinationsArgs
 import org.dianqk.ruslin.ui.page.note_detail.TAG
-import uniffi.ruslin.parseMarkdownToHtml
 import javax.inject.Inject
 
 data class NotePreviewUiState(
@@ -79,7 +78,7 @@ class NotePreviewViewModel @Inject constructor(
                                     <article class="markdown-body">
                             """.trimIndent()
                             )
-                            append(parseMarkdownToHtml(note.body))
+                            append(notesRepository.parseMarkdownToPreviewHtml(note.body))
                             append("</article></html>")
                         }
                         _uiState.update {

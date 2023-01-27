@@ -28,6 +28,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import org.dianqk.ruslin.data.NotesRepository
 import org.dianqk.ruslin.ui.component.LocalContentWebViewClient.Companion.FILES_SCHEME
+import org.dianqk.ruslin.ui.component.LocalContentWebViewClient.Companion.NOTES_SCHEME
 import org.dianqk.ruslin.ui.ext.getCacheSharedDir
 import java.io.*
 import java.net.URLConnection
@@ -66,7 +67,8 @@ class MarkdownRichTextViewModel @Inject constructor(
 @Composable
 fun MarkdownRichText(
     viewModel: MarkdownRichTextViewModel = hiltViewModel(),
-    htmlBodyText: String
+    htmlBodyText: String,
+    navigateToNote: (String) -> Unit,
 ) {
     val context = LocalContext.current
     val webViewState = rememberWebViewStateWithHTMLData(
@@ -91,7 +93,7 @@ fun MarkdownRichText(
                                     type = localResource.mime
                                     val sharedFile =
                                         context.getCacheSharedDir().resolve(localResource.title)
-                                    localResource.file.copyTo(sharedFile)
+                                    localResource.file.copyTo(sharedFile, true)
                                     val shareUri = FileProvider.getUriForFile(
                                         context,
                                         "org.dianqk.ruslin.fileprovider",
@@ -108,6 +110,7 @@ fun MarkdownRichText(
                                     )
                                 )
                             } catch (e: Exception) {
+                                Log.d("RuslinRust", "$e")
                                 Toast.makeText(
                                     context,
                                     e.localizedMessage ?: e.toString(),
@@ -116,13 +119,22 @@ fun MarkdownRichText(
                             }
                         }
                     }
-                    return@LocalContentWebViewClient true
-                }
-                try {
-                    context.startActivity(Intent(Intent.ACTION_VIEW, url))
-                } catch (e: ActivityNotFoundException) {
-                    Toast.makeText(context, e.localizedMessage ?: e.toString(), Toast.LENGTH_SHORT)
-                        .show()
+                } else if (url.scheme == NOTES_SCHEME) {
+                    url.path?.let {
+                        val noteId = AssetHelper.removeLeadingSlash(it)
+                        navigateToNote(noteId)
+                    }
+                } else {
+                    try {
+                        context.startActivity(Intent(Intent.ACTION_VIEW, url))
+                    } catch (e: ActivityNotFoundException) {
+                        Toast.makeText(
+                            context,
+                            e.localizedMessage ?: e.toString(),
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                    }
                 }
                 true
             })
@@ -173,6 +185,8 @@ private class LocalContentWebViewClient(
     companion object {
         const val ASSETS_SCHEME = "ruslin-assets"
         const val FILES_SCHEME = "ruslin-files"
+        const val NOTES_SCHEME = "ruslin-notes"
+        const val CORRUPT_FILES_SCHEME = "ruslin-corrupt-files"
     }
 }
 

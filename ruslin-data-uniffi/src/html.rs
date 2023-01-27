@@ -6,11 +6,12 @@ use pulldown_cmark::CowStr;
 use pulldown_cmark::Event::*;
 use pulldown_cmark::{Alignment, CodeBlockKind, Event, LinkType, Tag};
 use pulldown_cmark::{Options, Parser};
+use ruslin_data::{ModelType, RuslinData};
 
-pub fn parse_markdown_to_html(text: String) -> String {
+pub fn parse_markdown_to_preview_html(data: &RuslinData, text: String) -> String {
     let parser = Parser::new_ext(&text, Options::all());
     let mut html_output: String = String::with_capacity(text.len() * 3 / 2);
-    push_html(&mut html_output, parser);
+    push_html(&mut html_output, parser, data);
     html_output
 }
 
@@ -35,6 +36,7 @@ struct HtmlWriter<'a, I, W> {
     table_alignments: Vec<Alignment>,
     table_cell_index: usize,
     numbers: HashMap<CowStr<'a>, usize>,
+    data: &'a RuslinData,
 }
 
 impl<'a, I, W> HtmlWriter<'a, I, W>
@@ -42,7 +44,7 @@ where
     I: Iterator<Item = Event<'a>>,
     W: StrWrite,
 {
-    fn new(iter: I, writer: W) -> Self {
+    fn new(iter: I, writer: W, data: &'a RuslinData) -> Self {
         Self {
             iter,
             writer,
@@ -51,6 +53,7 @@ where
             table_alignments: vec![],
             table_cell_index: 0,
             numbers: HashMap::new(),
+            data,
         }
     }
 
@@ -259,7 +262,17 @@ where
             Tag::Link(_link_type, dest, title) => {
                 self.write("<a href=\"")?;
                 if dest.len() == 34 && dest.starts_with(":/") {
-                    escape_href(&mut self.writer, &format!("ruslin-files:///{}", &dest[2..]))?;
+                    let id = &dest[2..];
+                    let scheme = self
+                        .data
+                        .db
+                        .load_sync_item(id)
+                        .map(|t| match t.item_type {
+                            ModelType::Note => "ruslin-notes",
+                            _ => "ruslin-files",
+                        })
+                        .unwrap_or("ruslin-corrupt-files");
+                    escape_href(&mut self.writer, &format!("{}:///{}", scheme, id))?;
                 } else {
                     escape_href(&mut self.writer, &dest)?;
                 }
@@ -398,9 +411,9 @@ where
     }
 }
 
-pub fn push_html<'a, I>(s: &mut String, iter: I)
+pub fn push_html<'a, I>(s: &mut String, iter: I, data: &'a RuslinData)
 where
     I: Iterator<Item = Event<'a>>,
 {
-    HtmlWriter::new(iter, s).run().unwrap();
+    HtmlWriter::new(iter, s, data).run().unwrap();
 }

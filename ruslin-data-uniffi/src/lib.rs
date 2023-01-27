@@ -18,8 +18,6 @@ use ffi::{FFIAbbrNote, FFIFolder, FFINote, FFIResource, FFISearchNote, FFIStatus
 
 uniffi_macros::include_scaffolding!("ruslin");
 
-pub use html::parse_markdown_to_html;
-
 struct AndroidAppender(AndroidLogger);
 
 impl std::fmt::Debug for AndroidAppender {
@@ -233,6 +231,10 @@ impl RuslinAndroidData {
     pub fn load_resource(&self, id: String) -> Result<FFIResource, DatabaseError> {
         let resource = self.data.db.load_resource(&id)?;
         Ok(resource.into())
+    }
+
+    pub fn parse_markdown_to_preview_html(&self, text: String) -> String {
+        html::parse_markdown_to_preview_html(&self.data, text)
     }
 }
 
