@@ -19,7 +19,7 @@
 			"args": ["generate", "src/ruslin.udl", "--language", "kotlin", "--out-dir", "../uniffi/src/main/java"],
 			"group": {
 				"kind": "build",
-				"isDefault": false,
+				"isDefault": false
 			},
 			"label": "rust: uniffi generate"
 		},

@@ -22,12 +22,13 @@ data class AccountDetailUiState(
 @HiltViewModel
 class AccountDetailViewModel @Inject constructor(
     private val notesRepository: NotesRepository,
-    @ApplicationContext private val context: Context
+    @ApplicationContext context: Context
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AccountDetailUiState())
     val uiState: StateFlow<AccountDetailUiState> = _uiState.asStateFlow()
-    val syncStrategy: StateFlow<SyncStrategy> = context.dataStore.syncStrategy()
+    private val dataStore = context.dataStore
+    val syncStrategy: StateFlow<SyncStrategy> = dataStore.syncStrategy()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), SyncStrategy())
 
     init {
@@ -37,7 +38,7 @@ class AccountDetailViewModel @Inject constructor(
     fun setSyncInterval(syncInterval: Long) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                context.dataStore.edit {
+                dataStore.edit {
                     it[DataStoreKeys.SyncInterval.key] = syncInterval
                 }
             }
@@ -47,7 +48,7 @@ class AccountDetailViewModel @Inject constructor(
     fun setSyncOnStart(syncOnStart: Boolean) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                context.dataStore.edit {
+                dataStore.edit {
                     it[DataStoreKeys.SyncOnStart.key] = syncOnStart
                 }
             }
@@ -57,7 +58,7 @@ class AccountDetailViewModel @Inject constructor(
     fun setSyncOnlyWiFi(syncOnlyWiFi: Boolean) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                context.dataStore.edit {
+                dataStore.edit {
                     it[DataStoreKeys.SyncOnlyWiFi.key] = syncOnlyWiFi
                 }
             }
@@ -67,7 +68,7 @@ class AccountDetailViewModel @Inject constructor(
     fun setSyncOnlyWhenCharging(syncOnlyWhenCharging: Boolean) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                context.dataStore.edit {
+                dataStore.edit {
                     it[DataStoreKeys.SyncOnlyWhenCharging.key] = syncOnlyWhenCharging
                 }
             }

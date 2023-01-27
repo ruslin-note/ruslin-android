@@ -52,7 +52,7 @@ class MarkdownVisualTransformation(private val theme: MarkdownTheme = MarkdownDe
                 is MarkdownTagRange.Strikethrough -> tagRange.render(builder, theme)
                 is MarkdownTagRange.InlineCode -> tagRange.render(builder, theme)
                 is MarkdownTagRange.ListItem -> tagRange.render(builder, theme)
-                is MarkdownTagRange.MList -> tagRange.render(this, builder, theme)
+                is MarkdownTagRange.MList -> tagRange.render(this)
                 is MarkdownTagRange.Paragraph -> {}
                 is MarkdownTagRange.Link -> tagRange.render(builder, theme)
                 is MarkdownTagRange.Image -> tagRange.render(builder, theme)
@@ -257,16 +257,7 @@ private fun MarkdownTagRange.ListItem.render(
 
 private fun MarkdownTagRange.MList.render(
     transformation: MarkdownVisualTransformation,
-    builder: AnnotatedString.Builder,
-    theme: MarkdownTheme
 ) {
-//    val firstLine = (nestedLevel * 0.5).em
-//    val restLine = (nestedLevel * 0.5 + (if (order > 0) 1.85f else 1.25f)).em
-//    builder.addStyle(
-//        ParagraphStyle(
-//            textIndent = TextIndent(firstLine = firstLine, restLine = restLine),
-//        ), start, end
-//    )
     if (order == 0) {
         transformation.unorderedListRanges.add(Range(start, end))
     } else {

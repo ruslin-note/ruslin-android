@@ -1,9 +1,7 @@
 <div align="center">
     <h1>Ruslin</h1>
     <p>A simple notes application that supports syncing notes using a self-hosted Joplin server.</p>
-    <p>English by DeepL&nbsp;&nbsp;|&nbsp;&nbsp;
-    <a target="_blank" href="./README-zh-CN.md">简体中文<a>
-    </p>
+    <p>English by DeepL&nbsp;&nbsp;|&nbsp;&nbsp;<a target="_blank" href="./README-zh-CN.md">简体中文</a></p>
     <br/>
     <img src="./fastlane/metadata/android/zh-CN/images/notes.png" width="19.2%" alt="notes" />
     <img src="./fastlane/metadata/android/zh-CN/images/folders.png" width="19.2%" alt="folders" />
