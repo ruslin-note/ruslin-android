@@ -1,11 +1,15 @@
 package org.dianqk.ruslin.ui.component
 
+import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.Intent
 import android.content.res.AssetManager
+import android.net.Uri
 import android.util.Log
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
+import android.widget.Toast
 import androidx.annotation.WorkerThread
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -62,7 +66,17 @@ fun MarkdownRichText(
     )
 
     val client = remember {
-        LocalContentWebViewClient(context = context, getResource = viewModel::loadLocalResource)
+        LocalContentWebViewClient(
+            context = context,
+            getResource = viewModel::loadLocalResource,
+            handleUrl = { url ->
+                try {
+                    context.startActivity(Intent(Intent.ACTION_VIEW, url))
+                } catch (e: ActivityNotFoundException) {
+                    Toast.makeText(context, e.localizedMessage ?: e.toString(), Toast.LENGTH_SHORT).show()
+                }
+                true
+            })
     }
 
     WebView(
@@ -79,7 +93,11 @@ fun MarkdownRichText(
     )
 }
 
-private class LocalContentWebViewClient(context: Context, getResource: (String) -> LocalResource) :
+private class LocalContentWebViewClient(
+    context: Context,
+    getResource: (String) -> LocalResource,
+    private val handleUrl: (Uri) -> Boolean
+) :
     AccompanistWebViewClient() {
 
     private val localContentPathHandler =
@@ -97,6 +115,10 @@ private class LocalContentWebViewClient(context: Context, getResource: (String) 
             return localContentPathHandler.handleFile(path = path)
         }
         return null
+    }
+
+    override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+        return request?.url?.let { handleUrl(it) } ?: super.shouldOverrideUrlLoading(view, request)
     }
 
     companion object {
