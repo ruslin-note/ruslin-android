@@ -9,12 +9,12 @@ import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import org.dianqk.ruslin.ui.RuslinDestinationsArgs.FOLDER_ID_ARG
+import org.dianqk.ruslin.ui.RuslinDestinationsArgs.IS_PREVIEW_ARG
 import org.dianqk.ruslin.ui.RuslinDestinationsArgs.NOTE_ID_ARG
 import org.dianqk.ruslin.ui.ext.animatedComposable
 import org.dianqk.ruslin.ui.page.login.LoginPage
 import org.dianqk.ruslin.ui.page.note_detail.NoteDetailPage
 import org.dianqk.ruslin.ui.page.notes.NotesPage
-import org.dianqk.ruslin.ui.page.preview.NotePreviewPage
 import org.dianqk.ruslin.ui.page.search.SearchPage
 import org.dianqk.ruslin.ui.page.settings.SettingsPage
 import org.dianqk.ruslin.ui.page.settings.accounts.AccountDetailPage
@@ -37,8 +37,11 @@ fun RuslinNavGraph(
     ) {
         animatedComposable(RuslinDestinations.NOTES_ROUTE) {
             NotesPage(
-                navigateToNoteDetail = { parentId: String?, noteId: String? ->
-                    navigationActions.navigateToNoteDetail(folderId = parentId, noteId = noteId)
+                navigateToNote = { noteId ->
+                    navigationActions.navigateToNote(noteId = noteId)
+                },
+                navigateToNewNote = { folderId ->
+                    navigationActions.navigateToNewNote(folderId = folderId)
                 },
                 navigateToLogin = {
                     navigationActions.navigateToLogin()
@@ -56,11 +59,12 @@ fun RuslinNavGraph(
             arguments = listOf(
                 navArgument(NOTE_ID_ARG) { type = NavType.StringType; nullable = true },
                 navArgument(FOLDER_ID_ARG) { type = NavType.StringType; nullable = true },
+                navArgument(IS_PREVIEW_ARG) { type = NavType.BoolType; defaultValue = false },
             )
         ) {
             NoteDetailPage(
-                navigationPreview = {
-                    navigationActions.navigateToPreview(it)
+                navigateToNote = {
+                    navigationActions.navigateToNote(it)
                 },
                 onPopBack = {
                     navController.popBackStack()
@@ -119,23 +123,11 @@ fun RuslinNavGraph(
             }
         }
         animatedComposable(RuslinDestinations.SEARCH_ROUTE) {
-            SearchPage(navigateToNoteDetail = { noteId ->
-                navigationActions.navigateToNoteDetail(null, noteId)
+            SearchPage(navigateToNote = { noteId ->
+                navigationActions.navigateToNote(noteId)
             }) {
                 navController.popBackStack()
             }
-        }
-        animatedComposable(
-            RuslinDestinations.PREVIEW_ROUTE,
-            arguments = listOf(
-                navArgument(NOTE_ID_ARG) { type = NavType.StringType; nullable = false },
-            )
-        ) {
-            NotePreviewPage(onPopBack = {
-                navController.popBackStack()
-            }, navigateToNote = {
-                navigationActions.navigateToNote(it)
-            })
         }
     }
 }

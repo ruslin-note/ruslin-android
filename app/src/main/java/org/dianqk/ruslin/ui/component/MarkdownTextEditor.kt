@@ -26,8 +26,6 @@ fun MarkdownTextEditor(
     val colorScheme = MaterialTheme.colorScheme
     val visualTransformation =
         remember(colorScheme) { MarkdownVisualTransformation(MarkdownTheme.from(colorScheme = colorScheme)) }
-//    val markdownInsertTag = markdownInsertTagFlow.collectAsStateWithLifecycle(initialValue = MarkdownInsertTagType.None())
-
 
     // See BasicTextField
 

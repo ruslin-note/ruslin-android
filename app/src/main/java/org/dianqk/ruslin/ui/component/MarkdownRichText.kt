@@ -11,12 +11,15 @@ import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.widget.Toast
 import androidx.annotation.WorkerThread
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.FileProvider
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -66,14 +69,21 @@ class MarkdownRichTextViewModel @Inject constructor(
 
 @Composable
 fun MarkdownRichText(
+    modifier: Modifier = Modifier,
     viewModel: MarkdownRichTextViewModel = hiltViewModel(),
-    htmlBodyText: String,
+    htmlBodyText: String?,
     navigateToNote: (String) -> Unit,
 ) {
-    val context = LocalContext.current
+    if (htmlBodyText == null) {
+        Box(modifier = modifier.background(MaterialTheme.colorScheme.background)) {
+
+        }
+        return
+    }
     val webViewState = rememberWebViewStateWithHTMLData(
         data = htmlBodyText,
     )
+    val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
     val client = remember {
@@ -110,7 +120,6 @@ fun MarkdownRichText(
                                     )
                                 )
                             } catch (e: Exception) {
-                                Log.d("RuslinRust", "$e")
                                 Toast.makeText(
                                     context,
                                     e.localizedMessage ?: e.toString(),
@@ -140,18 +149,24 @@ fun MarkdownRichText(
             })
     }
 
-    WebView(
-        state = webViewState,
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight(),
-        onCreated = { webView ->
-            val webViewSettings = webView.settings
-            webViewSettings.allowFileAccess = false
-            webViewSettings.allowContentAccess = false
-        },
-        client = client
-    )
+    val background = MaterialTheme.colorScheme.background
+
+    Box(modifier = modifier.background(background)) {
+        WebView(
+            state = webViewState,
+            modifier = Modifier
+                .fillMaxSize()
+                .background(background),
+            captureBackPresses = false,
+            onCreated = { webView ->
+                webView.setBackgroundColor(background.toArgb())
+                val webViewSettings = webView.settings
+                webViewSettings.allowFileAccess = false
+                webViewSettings.allowContentAccess = false
+            },
+            client = client
+        )
+    }
 }
 
 private class LocalContentWebViewClient(

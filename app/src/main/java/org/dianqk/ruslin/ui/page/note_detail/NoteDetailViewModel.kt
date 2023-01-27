@@ -8,11 +8,13 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.dianqk.ruslin.data.NotesRepository
 import org.dianqk.ruslin.ui.RuslinDestinationsArgs
 import uniffi.ruslin.FfiNote
@@ -21,10 +23,11 @@ import java.io.OutputStream
 import javax.inject.Inject
 
 data class NoteDetailUiState(
-    val noteId: String? = null, // TODO: new note also can preview
+    val noteId: String? = null,
     val title: String = "",
     val body: String = "",
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
+    val previewHtml: String? = null,
 )
 
 const val TAG = "NoteDetailViewModel"
@@ -43,6 +46,7 @@ class NoteDetailViewModel @Inject constructor(
 
     private val folderId: String? = savedStateHandle[RuslinDestinationsArgs.FOLDER_ID_ARG]
     private val noteId: String? = savedStateHandle[RuslinDestinationsArgs.NOTE_ID_ARG]
+    val isPreview: Boolean = savedStateHandle[RuslinDestinationsArgs.IS_PREVIEW_ARG] ?: false
     private var note: FfiNote? = null
     private var edited: Boolean = false
 
@@ -108,6 +112,9 @@ class NoteDetailViewModel @Inject constructor(
                             isLoading = false
                         )
                     }
+                    if (isPreview) {
+                        setPreviewHtml(body = note.body)
+                    }
                 }
                 .onFailure { e ->
                     _uiState.update {
@@ -154,5 +161,70 @@ class NoteDetailViewModel @Inject constructor(
             }
             return@let SavedResource(id = resource.id, isImage = isImage, filename = filename)
         }
+    }
+
+    fun setPreviewHtml(body: String) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                // TODO: match m3 theme
+                val previewHtml = buildString {
+                    append(
+                        """
+                                <!DOCTYPE html>
+                                <html>
+                                    <head>
+                                        <meta charset="UTF-8">
+                                        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+                                        <link rel="stylesheet" href="ruslin-assets:///github-markdown.min.css">
+                                        <style>
+                                            @media (prefers-color-scheme: dark) {
+                                                html {
+                                                    background-color: #0d1117;
+                                                }
+                                            }
+                                            @media (prefers-color-scheme: light) {
+                                                html {
+                                                    background-color: #ffffff;
+                                                }
+                                            }
+                                            .markdown-body {
+                                                box-sizing: border-box;
+                                                min-width: 200px;
+                                                max-width: 980px;
+                                                margin: 0 auto;
+                                                padding: 45px;
+                                            }
+                                            @media (max-width: 767px) {
+                                                .markdown-body {
+                                                    padding: 15px;
+                                                }
+                                            }
+                                            p > img {
+                                              display: block;
+                                              margin-left: auto;
+                                              margin-right: auto;
+                                              max-height: 260px;
+                                              max-width: 100%;
+                                            }
+                                        </style>
+                                    </head>
+                                    <article class="markdown-body">
+                            """.trimIndent()
+                    )
+                    append(notesRepository.parseMarkdownToPreviewHtml(body))
+                    append("</article></html>")
+                }
+                _uiState.update {
+                    it.copy(previewHtml = previewHtml)
+                }
+            }
+        }
+    }
+
+    fun updatePreviewHtml() {
+        if (!edited && _uiState.value.previewHtml != null) {
+            return
+        }
+        setPreviewHtml(body = _uiState.value.body)
     }
 }

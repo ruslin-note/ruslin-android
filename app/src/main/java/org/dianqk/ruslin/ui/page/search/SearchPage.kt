@@ -43,7 +43,7 @@ import org.dianqk.ruslin.ui.component.BackButton
 @Composable
 fun SearchPage(
     viewModel: SearchViewModel = hiltViewModel(),
-    navigateToNoteDetail: (noteId: String) -> Unit,
+    navigateToNote: (noteId: String) -> Unit,
     onPopBack: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -106,7 +106,7 @@ fun SearchPage(
                 ) { note ->
                     SearchNote(
                         note = note,
-                        navigateToNoteDetail = navigateToNoteDetail
+                        navigateToNote = navigateToNote
                     )
                 }
             }
@@ -123,7 +123,7 @@ fun SearchPage(
 }
 
 @Composable
-fun SearchNote(note: SearchedHighlightNote, navigateToNoteDetail: (noteId: String) -> Unit) {
+fun SearchNote(note: SearchedHighlightNote, navigateToNote: (noteId: String) -> Unit) {
     val highlightSpanStyle = SpanStyle(
         color = MaterialTheme.colorScheme.onTertiary,
         fontWeight = FontWeight.Bold,
@@ -133,7 +133,7 @@ fun SearchNote(note: SearchedHighlightNote, navigateToNoteDetail: (noteId: Strin
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
-                navigateToNoteDetail(note.id)
+                navigateToNote(note.id)
             }
             .padding(horizontal = 16.dp, vertical = 10.dp)
     ) {

@@ -85,6 +85,9 @@ class MarkdownVisualTransformation(private val theme: MarkdownTheme = MarkdownDe
     }
 
     override fun filter(text: AnnotatedString): TransformedText {
+        if (text.isEmpty()) {
+            return TransformedText(text = text, offsetMapping = OffsetMapping.Identity)
+        }
         val currentCachedRenderText = cachedRenderText
         if (currentCachedRenderText != null) {
             return TransformedText(

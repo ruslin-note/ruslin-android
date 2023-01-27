@@ -30,7 +30,7 @@ import java.util.*
 fun NoteList(
     modifier: Modifier = Modifier,
     notes: List<FfiAbbrNote>,
-    navigateToNoteDetail: (String) -> Unit,
+    navigateToNote: (String) -> Unit,
     showActionBottomDrawer: (FfiAbbrNote) -> Unit
 ) {
     if (notes.isEmpty()) {
@@ -45,7 +45,7 @@ fun NoteList(
             items(notes, key = { it.id }) { note ->
                 NoteAbbrCard(
                     note = note,
-                    navigateToNoteDetail = navigateToNoteDetail,
+                    navigateToNote = navigateToNote,
                     showActionBottomDrawer
                 )
                 Divider(
@@ -61,14 +61,14 @@ fun NoteList(
 @Composable
 fun NoteAbbrCard(
     note: FfiAbbrNote,
-    navigateToNoteDetail: (String) -> Unit,
+    navigateToNote: (String) -> Unit,
     showActionBottomDrawer: (FfiAbbrNote) -> Unit
 ) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .combinedClickable(
-                onClick = { navigateToNoteDetail(note.id) },
+                onClick = { navigateToNote(note.id) },
                 onLongClick = { showActionBottomDrawer(note) }
             )
             .padding(horizontal = 16.dp, vertical = 10.dp)

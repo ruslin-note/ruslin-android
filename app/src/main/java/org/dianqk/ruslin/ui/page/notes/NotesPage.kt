@@ -35,7 +35,8 @@ import org.dianqk.ruslin.ui.component.OutlinedButtonWithIcon
 @Composable
 fun NotesPage(
     viewModel: NotesViewModel = hiltViewModel(),
-    navigateToNoteDetail: (parentId: String?, noteId: String?) -> Unit,
+    navigateToNote: (String) -> Unit,
+    navigateToNewNote: (String?) -> Unit,
     navigateToLogin: () -> Unit,
     navigateToSettings: () -> Unit,
     navigateToSearch: () -> Unit
@@ -149,7 +150,7 @@ fun NotesPage(
                                     stringResource(id = R.string.new_note)
                                 )
                             },
-                            onClick = { navigateToNoteDetail(uiState.selectedFolder?.id, null) }
+                            onClick = { navigateToNewNote(uiState.selectedFolder?.id) }
                         )
                     }
                 }
@@ -158,8 +159,8 @@ fun NotesPage(
                     NoteList(
                         modifier = Modifier.padding(innerPadding),
                         notes = notes,
-                        navigateToNoteDetail = {
-                            navigateToNoteDetail(uiState.selectedFolder?.id, it)
+                        navigateToNote = {
+                            navigateToNote(it)
                         },
                         showActionBottomDrawer = { note ->
                             scope.launch {
@@ -210,7 +211,7 @@ fun NotesPage(
                         FilledTonalButtonWithIcon(
                             onClick = {
                                 scope.launch { showActionBottomDrawerState.hide() }
-                                navigateToNoteDetail(uiState.selectedFolder?.id, note.id)
+                                navigateToNote(note.id)
                                 viewModel.unselectNote()
                             },
                             icon = Icons.Outlined.FileOpen,
