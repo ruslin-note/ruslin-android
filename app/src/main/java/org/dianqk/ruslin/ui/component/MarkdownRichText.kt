@@ -15,15 +15,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.FileProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import com.google.accompanist.web.AccompanistWebViewClient
 import com.google.accompanist.web.WebView
 import com.google.accompanist.web.rememberWebViewStateWithHTMLData
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import org.dianqk.ruslin.data.NotesRepository
+import org.dianqk.ruslin.ui.component.LocalContentWebViewClient.Companion.FILES_SCHEME
+import org.dianqk.ruslin.ui.ext.getCacheSharedDir
 import java.io.*
 import java.net.URLConnection
 import java.util.zip.GZIPInputStream
@@ -34,6 +39,7 @@ const val TAG = "MarkdownRichText"
 data class LocalResource(
     val file: File,
     val mime: String,
+    val title: String,
 )
 
 @HiltViewModel
@@ -41,16 +47,18 @@ class MarkdownRichTextViewModel @Inject constructor(
     private val notesRepository: NotesRepository,
 ) : ViewModel() {
 
-    fun loadLocalResource(id: String): LocalResource {
-        val resource = notesRepository.loadResource(id = id)
-        val file = notesRepository.resourceDir.resolve(buildString {
-            append(resource.id)
-            if (resource.fileExtension.isNotEmpty()) {
-                append(".")
-                append(resource.fileExtension)
+    fun loadLocalResource(id: String): Result<LocalResource> {
+        return notesRepository.loadResource(id = id)
+            .map { resource ->
+                val file = notesRepository.resourceDir.resolve(buildString {
+                    append(resource.id)
+                    if (resource.fileExtension.isNotEmpty()) {
+                        append(".")
+                        append(resource.fileExtension)
+                    }
+                })
+                LocalResource(file = file, mime = resource.mime, title = resource.title)
             }
-        })
-        return LocalResource(file = file, mime = resource.mime)
     }
 
 }
@@ -64,16 +72,57 @@ fun MarkdownRichText(
     val webViewState = rememberWebViewStateWithHTMLData(
         data = htmlBodyText,
     )
+    val scope = rememberCoroutineScope()
 
     val client = remember {
         LocalContentWebViewClient(
             context = context,
             getResource = viewModel::loadLocalResource,
             handleUrl = { url ->
+                if (url.scheme == FILES_SCHEME) {
+                    scope.launch {
+                        url.path?.let {
+                            try {
+                                val resourceId = AssetHelper.removeLeadingSlash(it)
+                                val localResource =
+                                    viewModel.loadLocalResource(resourceId).getOrThrow()
+                                val shareIntent: Intent = Intent().apply {
+                                    action = Intent.ACTION_SEND
+                                    type = localResource.mime
+                                    val sharedFile =
+                                        context.getCacheSharedDir().resolve(localResource.title)
+                                    localResource.file.copyTo(sharedFile)
+                                    val shareUri = FileProvider.getUriForFile(
+                                        context,
+                                        "org.dianqk.ruslin.fileprovider",
+                                        sharedFile
+                                    )
+                                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                                    putExtra(Intent.EXTRA_STREAM, shareUri)
+                                    putExtra(Intent.EXTRA_TITLE, localResource.title)
+                                }
+                                context.startActivity(
+                                    Intent.createChooser(
+                                        shareIntent,
+                                        localResource.title
+                                    )
+                                )
+                            } catch (e: Exception) {
+                                Toast.makeText(
+                                    context,
+                                    e.localizedMessage ?: e.toString(),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+                    }
+                    return@LocalContentWebViewClient true
+                }
                 try {
                     context.startActivity(Intent(Intent.ACTION_VIEW, url))
                 } catch (e: ActivityNotFoundException) {
-                    Toast.makeText(context, e.localizedMessage ?: e.toString(), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, e.localizedMessage ?: e.toString(), Toast.LENGTH_SHORT)
+                        .show()
                 }
                 true
             })
@@ -95,7 +144,7 @@ fun MarkdownRichText(
 
 private class LocalContentWebViewClient(
     context: Context,
-    getResource: (String) -> LocalResource,
+    getResource: (String) -> Result<LocalResource>,
     private val handleUrl: (Uri) -> Boolean
 ) :
     AccompanistWebViewClient() {
@@ -122,14 +171,14 @@ private class LocalContentWebViewClient(
     }
 
     companion object {
-        private const val ASSETS_SCHEME = "ruslin-assets"
-        private const val FILES_SCHEME = "ruslin-files"
+        const val ASSETS_SCHEME = "ruslin-assets"
+        const val FILES_SCHEME = "ruslin-files"
     }
 }
 
 private class LocalContentPathHandler(
     context: Context,
-    private val getResource: (String) -> LocalResource
+    private val getResource: (String) -> Result<LocalResource>
 ) {
 
     private var mAssetHelper: AssetHelper = AssetHelper(context)
@@ -150,7 +199,7 @@ private class LocalContentPathHandler(
     fun handleFile(path: String): WebResourceResponse? {
         return try {
             val resourceId = AssetHelper.removeLeadingSlash(path = path)
-            val localResource = getResource(resourceId)
+            val localResource = getResource(resourceId).getOrThrow()
             val data = AssetHelper.openFile(localResource.file)
             val mimeType = localResource.mime
             WebResourceResponse(mimeType, null, data)

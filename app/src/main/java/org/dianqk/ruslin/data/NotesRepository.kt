@@ -55,6 +55,6 @@ interface NotesRepository {
 
     suspend fun saveResource(resource: FfiResource): Result<Unit>
 
-    fun loadResource(id: String): FfiResource
+    fun loadResource(id: String): Result<FfiResource>
 
 }

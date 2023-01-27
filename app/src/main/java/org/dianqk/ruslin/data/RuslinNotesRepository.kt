@@ -163,6 +163,6 @@ class RuslinNotesRepository @Inject constructor(
             }
         }
 
-    override fun loadResource(id: String): FfiResource = data.loadResource(id = id)
+    override fun loadResource(id: String): Result<FfiResource> = kotlin.runCatching { data.loadResource(id = id) }
 
 }
