@@ -105,7 +105,7 @@ class NotesViewModel @Inject constructor(
         }
     }
 
-    fun unselecteNote() {
+    fun unselectNote() {
         _uiState.update {
             it.copy(selectedNote = null)
         }

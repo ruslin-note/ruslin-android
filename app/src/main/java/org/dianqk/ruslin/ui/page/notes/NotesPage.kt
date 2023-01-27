@@ -202,7 +202,7 @@ fun NotesPage(
                             onClick = {
                                 scope.launch { showActionBottomDrawerState.hide() }
                                 viewModel.deleteNote(note.id)
-                                viewModel.unselecteNote()
+                                viewModel.unselectNote()
                             },
                             icon = Icons.Outlined.Delete,
                             text = stringResource(id = R.string.delete)
@@ -211,7 +211,7 @@ fun NotesPage(
                             onClick = {
                                 scope.launch { showActionBottomDrawerState.hide() }
                                 navigateToNoteDetail(uiState.selectedFolder?.id, note.id)
-                                viewModel.unselecteNote()
+                                viewModel.unselectNote()
                             },
                             icon = Icons.Outlined.FileOpen,
                             text = stringResource(id = R.string.open)
