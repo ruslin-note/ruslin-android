@@ -1,5 +1,5 @@
 /keystore.properties
-/app/src/main/java/uniffi/ruslin/ruslin.kt
+/uniffi/src/main/java/uniffi/ruslin/ruslin.kt
 /uniffi/src/main/jniLibs
 *.iml
 .gradle
