@@ -1,0 +1,60 @@
+name: PR
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: 'recursive'
+        fetch-depth: 0
+    - name: Set up JDK 11
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+        cache: gradle
+    - name: Set up Rust
+      uses: dtolnay/rust-toolchain@stable
+      with:
+        targets: 'aarch64-linux-android'
+    - name: Run uniffi-bindgen
+      working-directory: ./ruslin-data-uniffi
+      run: cargo run --target $(rustc -vV | awk '/^host/ { print $2 }') --features=uniffi/cli --bin uniffi-bindgen generate src/ruslin.udl --language kotlin --out-dir "${GITHUB_WORKSPACE}"/uniffi/src/main/java
+    # See https://github.com/Bromeon/godot-rust/blob/master/.github/workflows/full-ci.yml
+    - name: "Find highest Android NDK version"
+      run: |
+        echo $ANDROID_SDK_ROOT
+        highestNdk=$(ls $ANDROID_SDK_ROOT/ndk | tail -n1)
+        echo "Highest Android NDK: $highestNdk"
+        echo "ANDROID_NDK_VERSION=$highestNdk" >> $GITHUB_ENV
+    # See https://github.com/godot-rust/godot-rust/pull/920
+    - name: "Found version ${{ env.ANDROID_NDK_VERSION }}. Workaround Rust bug..."
+      run: find -L $ANDROID_SDK_ROOT/ndk/$ANDROID_NDK_VERSION -name libunwind.a -execdir sh -c 'echo "INPUT(-lunwind)" > libgcc.a' \;
+    - name: Check ruslin-data-uniffi
+      working-directory: ./ruslin-data-uniffi
+      run: |
+        find $ANDROID_SDK_ROOT/ndk/$ANDROID_NDK_VERSION -name "*clang"
+        ANDROID_NDK_TOOLCHAIN_BIN=$ANDROID_SDK_ROOT/ndk/$ANDROID_NDK_VERSION/toolchains/llvm/prebuilt/linux-x86_64/bin
+        export AR=$ANDROID_NDK_TOOLCHAIN_BIN/llvm-ar
+
+        echo "Building aarch64-linux-android"
+        export CC=$ANDROID_NDK_TOOLCHAIN_BIN/aarch64-linux-android28-clang
+        export CXX=$ANDROID_NDK_TOOLCHAIN_BIN/aarch64-linux-android28-clang++
+        export CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER=$ANDROID_NDK_TOOLCHAIN_BIN/aarch64-linux-android28-clang
+        cargo fmt --check
+        cargo clippy --no-deps
+        cargo build --target aarch64-linux-android --verbose
+    - name: Gradle build
+      uses: gradle/gradle-build-action@v2
+      with:
+        arguments: build
