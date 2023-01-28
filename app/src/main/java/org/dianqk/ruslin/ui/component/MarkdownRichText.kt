@@ -29,6 +29,7 @@ import com.google.accompanist.web.WebView
 import com.google.accompanist.web.rememberWebViewStateWithHTMLData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import org.dianqk.ruslin.BuildConfig
 import org.dianqk.ruslin.data.NotesRepository
 import org.dianqk.ruslin.ui.component.LocalContentWebViewClient.Companion.FILES_SCHEME
 import org.dianqk.ruslin.ui.component.LocalContentWebViewClient.Companion.NOTES_SCHEME
@@ -106,7 +107,7 @@ fun MarkdownRichText(
                                     localResource.file.copyTo(sharedFile, true)
                                     val shareUri = FileProvider.getUriForFile(
                                         context,
-                                        "org.dianqk.ruslin.fileprovider",
+                                        "${BuildConfig.APPLICATION_ID}.fileprovider",
                                         sharedFile
                                     )
                                     addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
