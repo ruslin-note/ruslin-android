@@ -23,15 +23,14 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
         cache: gradle
+    - name: Set up Rust
+      uses: dtolnay/rust-toolchain@stable
+      with:
+        targets: 'aarch64-linux-android,armv7-linux-androideabi,x86_64-linux-android,i686-linux-android'
     - name: Run uniffi-bindgen
       working-directory: ./ruslin-data-uniffi
       run: cargo run --target $(rustc -vV | awk '/^host/ { print $2 }') --features=uniffi/cli --bin uniffi-bindgen generate src/ruslin.udl --language kotlin --out-dir "${GITHUB_WORKSPACE}"/uniffi/src/main/java
     # See https://github.com/Bromeon/godot-rust/blob/master/.github/workflows/full-ci.yml
-    - name: Set up NDK
-      run: |
-        rustup target add aarch64-linux-android armv7-linux-androideabi x86_64-linux-android i686-linux-android
-        sudo apt-get update
-        sudo apt-get install llvm-dev libclang-dev clang g++-multilib gcc-multilib libc6-dev libc6-dev-arm64-cross
     - name: "Find highest Android NDK version"
       run: |
         echo $ANDROID_SDK_ROOT
