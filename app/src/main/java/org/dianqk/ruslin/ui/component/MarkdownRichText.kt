@@ -12,7 +12,6 @@ import android.webkit.WebView
 import android.widget.Toast
 import androidx.annotation.WorkerThread
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -72,15 +71,9 @@ class MarkdownRichTextViewModel @Inject constructor(
 fun MarkdownRichText(
     modifier: Modifier = Modifier,
     viewModel: MarkdownRichTextViewModel = hiltViewModel(),
-    htmlBodyText: String?,
+    htmlBodyText: String,
     navigateToNote: (String) -> Unit,
 ) {
-    if (htmlBodyText == null) {
-        Box(modifier = modifier.background(MaterialTheme.colorScheme.background)) {
-
-        }
-        return
-    }
     val webViewState = rememberWebViewStateWithHTMLData(
         data = htmlBodyText,
     )
@@ -152,22 +145,20 @@ fun MarkdownRichText(
 
     val background = MaterialTheme.colorScheme.background
 
-    Box(modifier = modifier.background(background)) {
-        WebView(
-            state = webViewState,
-            modifier = Modifier
-                .fillMaxSize()
-                .background(background),
-            captureBackPresses = false,
-            onCreated = { webView ->
-                webView.setBackgroundColor(background.toArgb())
-                val webViewSettings = webView.settings
-                webViewSettings.allowFileAccess = false
-                webViewSettings.allowContentAccess = false
-            },
-            client = client
-        )
-    }
+    WebView(
+        state = webViewState,
+        modifier = modifier
+            .fillMaxSize()
+            .background(background),
+        captureBackPresses = false,
+        onCreated = { webView ->
+            webView.setBackgroundColor(background.toArgb())
+            val webViewSettings = webView.settings
+            webViewSettings.allowFileAccess = false
+            webViewSettings.allowContentAccess = false
+        },
+        client = client
+    )
 }
 
 private class LocalContentWebViewClient(

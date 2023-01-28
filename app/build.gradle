@@ -137,7 +137,7 @@ dependencies {
     implementation "androidx.compose.material:material:$material_version"
     implementation "androidx.compose.material3:material3:$material3_version"
     implementation "com.google.accompanist:accompanist-navigation-animation:$accompanist_version"
-    implementation "com.google.accompanist:accompanist-webview:$accompanist_version"
+    implementation "com.google.accompanist:accompanist-webview:0.29.1-SNAPSHOT"
 
     implementation 'com.google.android.material:material:1.8.0'
 
