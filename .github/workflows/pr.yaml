@@ -43,7 +43,6 @@ jobs:
     - name: Check ruslin-data-uniffi
       working-directory: ./ruslin-data-uniffi
       run: |
-        find $ANDROID_SDK_ROOT/ndk/$ANDROID_NDK_VERSION -name "*clang"
         ANDROID_NDK_TOOLCHAIN_BIN=$ANDROID_SDK_ROOT/ndk/$ANDROID_NDK_VERSION/toolchains/llvm/prebuilt/linux-x86_64/bin
         export AR=$ANDROID_NDK_TOOLCHAIN_BIN/llvm-ar
 
