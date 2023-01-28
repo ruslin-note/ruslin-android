@@ -114,7 +114,7 @@ where
                     escape_html(&mut self.writer, &name)?;
                     self.write("\">")?;
                     let number = *self.numbers.entry(name).or_insert(len);
-                    write!(&mut self.writer, "{}", number)?;
+                    write!(&mut self.writer, "{number}")?;
                     self.write("</a></sup>")?;
                 }
                 TaskListMarker(true) => {
@@ -145,7 +145,7 @@ where
                 } else {
                     self.write("\n<")?;
                 }
-                write!(&mut self.writer, "{}", level)?;
+                write!(&mut self.writer, "{level}")?;
                 if let Some(id) = id {
                     self.write(" id=\"")?;
                     escape_html(&mut self.writer, id)?;
@@ -230,7 +230,7 @@ where
                 } else {
                     self.write("\n<ol start=\"")?;
                 }
-                write!(&mut self.writer, "{}", start)?;
+                write!(&mut self.writer, "{start}")?;
                 self.write("\">\n")
             }
             Tag::List(None) => {
@@ -272,7 +272,7 @@ where
                             _ => "ruslin-files",
                         })
                         .unwrap_or("ruslin-corrupt-files");
-                    escape_href(&mut self.writer, &format!("{}:///{}", scheme, id))?;
+                    escape_href(&mut self.writer, &format!("{scheme}:///{id}"))?;
                 } else {
                     escape_href(&mut self.writer, &dest)?;
                 }
@@ -307,7 +307,7 @@ where
                 self.write("\"><sup class=\"footnote-definition-label\">")?;
                 let len = self.numbers.len() + 1;
                 let number = *self.numbers.entry(name).or_insert(len);
-                write!(&mut self.writer, "{}", number)?;
+                write!(&mut self.writer, "{number}")?;
                 self.write("</sup>")
             }
         }
@@ -320,7 +320,7 @@ where
             }
             Tag::Heading(level, _id, _classes) => {
                 self.write("</")?;
-                write!(&mut self.writer, "{}", level)?;
+                write!(&mut self.writer, "{level}")?;
                 self.write(">\n")?;
             }
             Tag::Table(_) => {
@@ -401,7 +401,7 @@ where
                 FootnoteReference(name) => {
                     let len = self.numbers.len() + 1;
                     let number = *self.numbers.entry(name).or_insert(len);
-                    write!(&mut self.writer, "[{}]", number)?;
+                    write!(&mut self.writer, "[{number}]")?;
                 }
                 TaskListMarker(true) => self.write("[x]")?,
                 TaskListMarker(false) => self.write("[ ]")?,
