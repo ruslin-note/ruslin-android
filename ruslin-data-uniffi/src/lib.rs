@@ -16,7 +16,7 @@ mod ffi;
 mod html;
 use ffi::{FFIAbbrNote, FFIFolder, FFINote, FFIResource, FFISearchNote, FFIStatus, FFISyncInfo};
 
-uniffi_macros::include_scaffolding!("ruslin");
+uniffi::include_scaffolding!("ruslin");
 
 struct AndroidAppender(AndroidLogger);
 

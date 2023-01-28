@@ -12,5 +12,5 @@ fn main() {
         let rtlib_path = String::from_utf8(output.stdout).unwrap();
         println!("cargo:rustc-link-arg={}", rtlib_path.trim()); // https://github.com/termux/termux-packages/issues/8029#issuecomment-1369150244
     }
-    uniffi_build::generate_scaffolding("./src/ruslin.udl").expect("generate_scaffolding error");
+    uniffi::generate_scaffolding("./src/ruslin.udl").expect("generate_scaffolding error");
 }

@@ -15,8 +15,8 @@
 		},
 		{
 			"type": "shell",
-			"command": "uniffi-bindgen",
-			"args": ["generate", "src/ruslin.udl", "--language", "kotlin", "--out-dir", "../uniffi/src/main/java"],
+			"command": "cargo",
+			"args": ["run", "--target", "x86_64-unknown-linux-gnu", "--features=uniffi/cli", "--bin", "uniffi-bindgen", "generate", "src/ruslin.udl", "--language", "kotlin", "--out-dir", "../uniffi/src/main/java"],
 			"group": {
 				"kind": "build",
 				"isDefault": false
