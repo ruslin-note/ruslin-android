@@ -27,7 +27,7 @@ data class NoteDetailUiState(
     val title: String = "",
     val body: String = "",
     val isLoading: Boolean = false,
-    val previewHtml: String? = null,
+    val previewHtml: String = "<!DOCTYPE html><html><body></body><html>"
 )
 
 const val TAG = "NoteDetailViewModel"
@@ -222,7 +222,7 @@ class NoteDetailViewModel @Inject constructor(
     }
 
     fun updatePreviewHtml() {
-        if (!edited && _uiState.value.previewHtml != null) {
+        if (!edited) {
             return
         }
         setPreviewHtml(body = _uiState.value.body)
