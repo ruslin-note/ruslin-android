@@ -7,14 +7,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.DeleteForever
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -24,6 +22,7 @@ import kotlinx.coroutines.launch
 import org.dianqk.ruslin.R
 import org.dianqk.ruslin.ui.component.ContentEmptyState
 import org.dianqk.ruslin.ui.component.ContentLoadingState
+import org.dianqk.ruslin.ui.component.SuspendConfirmAlertDialog
 
 @OptIn(
     ExperimentalMaterial3Api::class,
@@ -221,59 +220,22 @@ fun NotesPage(
     )
 
     if (showRemoveMultipleItemsDialog) {
-        val deletingAnimation by rememberInfiniteTransition().animateFloat(
-            initialValue = 1f,
-            targetValue = 0f,
-            animationSpec = infiniteRepeatable(
-                animation = tween(300, easing = LinearEasing)
-            )
-        )
-        var isDeleting by remember { mutableStateOf(false) }
-
-        AlertDialog(
-            onDismissRequest = {
-                if (!isDeleting) {
-                    showRemoveMultipleItemsDialog = false
-                }
-            },
-            confirmButton = {
-                TextButton(enabled = !isDeleting, onClick = {
-                    isDeleting = true
-                    scope.launch {
-                        viewModel.deleteNotes(selectedItemIds)
-                            .onFailure { e ->
-                                Log.d(TAG, "$e")
-                            }
-                        isDeleting = false
-                        firstSelectedItemId = null
-                        showRemoveMultipleItemsDialog = false
-                    }
-                }) {
-                    Text(text = stringResource(id = R.string.confirm))
-                }
-            },
-            dismissButton = {
-                TextButton(enabled = !isDeleting, onClick = {
-                    showRemoveMultipleItemsDialog = false
-                }) {
-                    Text(text = stringResource(id = R.string.cancel))
-                }
+        SuspendConfirmAlertDialog(
+            onDismissRequest = { showRemoveMultipleItemsDialog = false },
+            inProgressIcon = {
+                Icon(
+                    modifier = it,
+                    imageVector = Icons.Default.DeleteSweep,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.tertiary
+                )
             },
             icon = {
-                if (isDeleting) {
-                    Icon(
-                        modifier = Modifier.alpha(deletingAnimation),
-                        imageVector = Icons.Default.DeleteSweep,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.tertiary
-                    )
-                } else {
-                    Icon(
-                        imageVector = Icons.Default.Warning,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.error
-                    )
-                }
+                Icon(
+                    imageVector = Icons.Default.Warning,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.error
+                )
             },
             title = {
                 Text(
@@ -281,7 +243,16 @@ fun NotesPage(
                         id = R.string.ask_delete_selected_notes
                     )
                 )
-            })
+            },
+            onConfirm = {
+                viewModel.deleteNotes(selectedItemIds)
+                    .onFailure { e ->
+                        Log.d(TAG, "$e")
+                    }
+            }) {
+            firstSelectedItemId = null
+            showRemoveMultipleItemsDialog = false
+        }
     }
 
     LaunchedEffect(Unit) {
