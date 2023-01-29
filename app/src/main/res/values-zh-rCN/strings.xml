@@ -64,4 +64,13 @@
     <string name="edit">编辑</string>
     <string name="preview">预览</string>
     <string name="ask_delete_selected_notes">删除选择的笔记？</string>
+    <string name="readme_desc">查看 GitHub 项目地址与应用说明</string>
+    <string name="release">版本发布</string>
+    <string name="release_desc">查看最新版本与更新日记</string>
+    <string name="version">当前版本</string>
+    <string name="github_issue">GitHub 议题</string>
+    <string name="github_issue_desc">提交错误报告或改进建议</string>
+    <string name="info_copied">信息已复制到剪贴板</string>
+    <string name="credits">致谢</string>
+    <string name="credits_desc">资源与开源软件</string>
 </resources>

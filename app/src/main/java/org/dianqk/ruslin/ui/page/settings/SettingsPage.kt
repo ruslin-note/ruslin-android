@@ -22,6 +22,7 @@ import org.dianqk.ruslin.ui.ext.showComingSoon
 fun SettingsPage(
     navigateToAccountDetail: () -> Unit,
     navigateToTools: () -> Unit,
+    navigateToAbout: () -> Unit,
     onPopBack: () -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -91,7 +92,7 @@ fun SettingsPage(
                     title = stringResource(id = R.string.about),
                     description = stringResource(id = R.string.about_setting_desc),
                     icon = Icons.Filled.TipsAndUpdates,
-                    onClick = { context.showComingSoon() }
+                    onClick = { navigateToAbout() }
                 )
             }
         }
