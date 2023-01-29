@@ -58,12 +58,14 @@ android {
 
     buildTypes {
         debug {
+            buildConfigField "String", "COMMIT_HASH", "\"$gitCommitHash\""
             applicationIdSuffix ".debug"
             if (keystorePropertiesFile.exists()) {
                 signingConfig signingConfigs.release
             }
         }
         release {
+            buildConfigField "String", "COMMIT_HASH", "\"$gitCommitHash\""
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'

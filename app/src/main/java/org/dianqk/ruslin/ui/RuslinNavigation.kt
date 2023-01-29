@@ -5,7 +5,9 @@ import androidx.navigation.NavHostController
 import org.dianqk.ruslin.ui.RuslinDestinationsArgs.FOLDER_ID_ARG
 import org.dianqk.ruslin.ui.RuslinDestinationsArgs.IS_PREVIEW_ARG
 import org.dianqk.ruslin.ui.RuslinDestinationsArgs.NOTE_ID_ARG
+import org.dianqk.ruslin.ui.RuslinPages.ABOUT_PAGE
 import org.dianqk.ruslin.ui.RuslinPages.ACCOUNT_DETAIL_PAGE
+import org.dianqk.ruslin.ui.RuslinPages.CREDITS_PAGE
 import org.dianqk.ruslin.ui.RuslinPages.DATABASE_STATUS_PAGE
 import org.dianqk.ruslin.ui.RuslinPages.LOGIN_PAGE
 import org.dianqk.ruslin.ui.RuslinPages.LOG_PAGE
@@ -25,6 +27,8 @@ object RuslinPages {
     const val LOG_PAGE = "log"
     const val DATABASE_STATUS_PAGE = "database_status"
     const val SEARCH_PAGE = "search"
+    const val ABOUT_PAGE = "about"
+    const val CREDITS_PAGE = "credits"
 }
 
 object RuslinDestinationsArgs {
@@ -44,6 +48,8 @@ object RuslinDestinations {
     const val LOG_ROUTE = LOG_PAGE
     const val DATABASE_STATUS_ROUTE = DATABASE_STATUS_PAGE
     const val SEARCH_ROUTE = SEARCH_PAGE
+    const val ABOUT_ROUTE = ABOUT_PAGE
+    const val CREDITS_ROUTE = CREDITS_PAGE
 }
 
 class RuslinNavigationActions(private val navController: NavHostController) {
@@ -106,6 +112,18 @@ class RuslinNavigationActions(private val navController: NavHostController) {
 
     fun navigateToSearch() {
         navController.navigate(RuslinDestinations.SEARCH_ROUTE) {
+            launchSingleTop = true
+        }
+    }
+
+    fun navigateToAbout() {
+        navController.navigate(RuslinDestinations.ABOUT_ROUTE) {
+            launchSingleTop = true
+        }
+    }
+
+    fun navigateToCredits() {
+        navController.navigate(RuslinDestinations.CREDITS_ROUTE) {
             launchSingleTop = true
         }
     }

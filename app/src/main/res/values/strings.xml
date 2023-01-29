@@ -65,4 +65,14 @@
     <string name="edit">Edit</string>
     <string name="preview">Preview</string>
     <string name="ask_delete_selected_notes">Delete selected notes?</string>
+    <string name="readme" translatable="false">README</string>
+    <string name="readme_desc">Check the GitHub repository and the README</string>
+    <string name="release_desc">Look for changelogs and new versions</string>
+    <string name="release">Latest release</string>
+    <string name="credits">Credits</string>
+    <string name="credits_desc">Credits and libre software</string>
+    <string name="version">Version</string>
+    <string name="github_issue">GitHub issue</string>
+    <string name="github_issue_desc">Submit an issue for bug report or feature request</string>
+    <string name="info_copied">Info copied to clipboard</string>
 </resources>
