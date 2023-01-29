@@ -35,7 +35,8 @@ data class NotesUiState(
     val isLoading: Boolean = false,
     val conflictNoteExists: Boolean = false,
     val showConflictNotes: Boolean = false,
-    val isSyncing: Boolean = false
+    val isSyncing: Boolean = false,
+    val syncErrorMessage: String? = null,
 )
 
 const val TAG = "NotesViewModel"
@@ -54,15 +55,22 @@ class NotesViewModel @Inject constructor(
         checkConflictNoteExists()
         viewModelScope.launch {
             notesRepository.syncFinished.collect { syncResult ->
-                syncResult.onSuccess { syncInfo ->
-                    if (syncInfo.conflictNoteCount > 0
-                        || syncInfo.otherConflictCount > 0
-                        || syncInfo.pullCount > 0
-                        || syncInfo.deleteCount > 0
-                    ) {
-                        reloadAllAfterSync()
+                syncResult
+                    .onSuccess { syncInfo ->
+                        if (syncInfo.conflictNoteCount > 0
+                            || syncInfo.otherConflictCount > 0
+                            || syncInfo.pullCount > 0
+                            || syncInfo.deleteCount > 0
+                        ) {
+                            reloadAllAfterSync()
+                        }
                     }
-                }
+                    .onFailure { e ->
+                        Log.d(TAG, "sync failed: $e")
+                        _uiState.update {
+                            it.copy(syncErrorMessage = e.localizedMessage ?: e.toString())
+                        }
+                    }
             }
         }
         viewModelScope.launch {
@@ -102,8 +110,17 @@ class NotesViewModel @Inject constructor(
     fun syncConfigExists(): Boolean = notesRepository.syncConfigExists()
 
     fun sync() {
+        _uiState.update {
+            it.copy(syncErrorMessage = null)
+        }
         viewModelScope.launch {
             notesRepository.doSync(isOnStart = false, fromScratch = false)
+        }
+    }
+
+    fun dismissSyncErrorMessage() {
+        _uiState.update {
+            it.copy(syncErrorMessage = null)
         }
     }
 
@@ -117,7 +134,8 @@ class NotesViewModel @Inject constructor(
         val showConflictNotes = uiState.value.showConflictNotes
         _uiState.update {
             it.copy(
-                isLoading = true
+                isLoading = true,
+                syncErrorMessage = null,
             )
         }
         viewModelScope.launch {

@@ -3,12 +3,14 @@ package org.dianqk.ruslin.ui.page.notes
 import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.*
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.DeleteForever
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -16,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
@@ -179,6 +182,38 @@ fun NotesPage(
                     }
                 }
             ) { innerPadding ->
+                uiState.syncErrorMessage?.let { errorMessage ->
+                    Box(
+                        modifier = Modifier
+                            .padding(innerPadding)
+                            .background(MaterialTheme.colorScheme.onError)
+                            .zIndex(1f)
+                    ) {
+                        Row(modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp)) {
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    text = stringResource(id = R.string.sync_failed),
+                                    style = MaterialTheme.typography.labelLarge,
+                                    color = MaterialTheme.colorScheme.error
+                                )
+                                SelectionContainer {
+                                    Text(
+                                        text = errorMessage,
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = MaterialTheme.colorScheme.error
+                                    )
+                                }
+                            }
+                            IconButton(onClick = viewModel::dismissSyncErrorMessage) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Close,
+                                    tint = MaterialTheme.colorScheme.error,
+                                    contentDescription = null
+                                )
+                            }
+                        }
+                    }
+                }
                 if (notes == null) {
                     ContentLoadingState {
                         Text(text = stringResource(id = R.string.notes_loading))
