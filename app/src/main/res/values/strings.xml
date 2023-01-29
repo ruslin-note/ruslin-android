@@ -75,4 +75,5 @@
     <string name="github_issue">GitHub issue</string>
     <string name="github_issue_desc">Submit an issue for bug report or feature request</string>
     <string name="info_copied">Info copied to clipboard</string>
+    <string name="sync_failed">Sync failed</string>
 </resources>

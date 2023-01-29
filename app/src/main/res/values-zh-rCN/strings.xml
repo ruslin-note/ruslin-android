@@ -73,4 +73,5 @@
     <string name="info_copied">信息已复制到剪贴板</string>
     <string name="credits">致谢</string>
     <string name="credits_desc">资源与开源软件</string>
+    <string name="sync_failed">同步失败</string>
 </resources>
