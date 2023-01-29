@@ -1,0 +1,9 @@
+🚧 Currently in Pre-alpha, not ready for use in production environments. Please back up. 🚧
+- Reduced application size
+- Fix crash on x86 and x86-64
+- Support for highlighting search results
+- Support for deleting, modifying folders, and displaying nested folders
+- Significant improvements to Markdown editor performance
+- Slightly improved editor style
+
+Full Changelog: https://github.com/ruslin-note/ruslin-android/compare/v0.0.1-pre-alpha.1...v0.0.1-pre-alpha.2
