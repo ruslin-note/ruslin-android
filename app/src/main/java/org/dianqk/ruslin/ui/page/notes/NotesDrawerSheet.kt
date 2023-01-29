@@ -18,7 +18,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -28,11 +27,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.coroutines.launch
 import org.dianqk.ruslin.R
 import org.dianqk.ruslin.ui.component.CombinedClickableSurface
 import org.dianqk.ruslin.ui.component.OutlinedButtonWithIcon
 import org.dianqk.ruslin.ui.component.SubTitle
+import org.dianqk.ruslin.ui.component.SuspendConfirmAlertDialog
 import org.dianqk.ruslin.ui.theme.Shape32
 import uniffi.ruslin.FfiFolder
 
@@ -59,7 +58,6 @@ fun NotesDrawerSheet(
     var openDeleteFolderAlertDialog: Folder? by remember {
         mutableStateOf(null)
     }
-    val scope = rememberCoroutineScope()
 
     openEditFolderDialog?.let { editFolder ->
         FolderDialog(
@@ -80,54 +78,22 @@ fun NotesDrawerSheet(
     }
 
     openDeleteFolderAlertDialog?.let { deleteFolder ->
-        var isDeleting by remember { mutableStateOf(false) }
-        val deletingAnimation by rememberInfiniteTransition().animateFloat(
-            initialValue = 1f,
-            targetValue = 0f,
-            animationSpec = infiniteRepeatable(
-                animation = tween(300, easing = LinearEasing)
-            )
-        )
-        AlertDialog(
-            onDismissRequest = {
-                if (!isDeleting) {
-                    openDeleteFolderAlertDialog = null
-                }
-            },
-            confirmButton = {
-                TextButton(enabled = !isDeleting, onClick = {
-                    isDeleting = true
-                    scope.launch {
-                        onDeleteFolder(deleteFolder.ffiFolder)
-                        isDeleting = false
-                        openDeleteFolderAlertDialog = null
-                    }
-                }) {
-                    Text(text = stringResource(id = R.string.confirm))
-                }
-            },
-            dismissButton = {
-                TextButton(enabled = !isDeleting, onClick = {
-                    openDeleteFolderAlertDialog = null
-                }) {
-                    Text(text = stringResource(id = R.string.cancel))
-                }
+        SuspendConfirmAlertDialog(
+            onDismissRequest = { openDeleteFolderAlertDialog = null },
+            inProgressIcon = {
+                Icon(
+                    modifier = it,
+                    imageVector = Icons.Default.DeleteSweep,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.tertiary
+                )
             },
             icon = {
-                if (isDeleting) {
-                    Icon(
-                        modifier = Modifier.alpha(deletingAnimation),
-                        imageVector = Icons.Default.DeleteSweep,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.tertiary
-                    )
-                } else {
-                    Icon(
-                        imageVector = Icons.Default.Warning,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.error
-                    )
-                }
+                Icon(
+                    imageVector = Icons.Default.Warning,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.error
+                )
             },
             title = {
                 Text(
@@ -139,7 +105,12 @@ fun NotesDrawerSheet(
             },
             text = {
                 Text(text = stringResource(id = R.string.ask_delete_folder_description))
-            })
+            },
+            onConfirm = {
+                onDeleteFolder(deleteFolder.ffiFolder)
+            }) {
+            openDeleteFolderAlertDialog = null
+        }
     }
 
     if (openCreateFolderDialog) {
