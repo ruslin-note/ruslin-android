@@ -12,6 +12,7 @@ import android.webkit.WebView
 import android.widget.Toast
 import androidx.annotation.WorkerThread
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -143,16 +144,14 @@ fun MarkdownRichText(
             })
     }
 
-    val background = MaterialTheme.colorScheme.background
-
     WebView(
         state = webViewState,
         modifier = modifier
+            .clickable(false) {}
             .fillMaxSize()
-            .background(background),
+            .background(MaterialTheme.colorScheme.background),
         captureBackPresses = false,
         onCreated = { webView ->
-            webView.setBackgroundColor(background.toArgb())
             val webViewSettings = webView.settings
             webViewSettings.allowFileAccess = false
             webViewSettings.allowContentAccess = false
