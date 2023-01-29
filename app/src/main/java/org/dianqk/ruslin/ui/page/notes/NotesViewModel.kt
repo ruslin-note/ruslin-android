@@ -14,6 +14,7 @@ import kotlinx.coroutines.withContext
 import org.dianqk.ruslin.data.NotesRepository
 import uniffi.ruslin.FfiAbbrNote
 import uniffi.ruslin.FfiFolder
+import uniffi.ruslin.FfiSyncInfo
 import javax.inject.Inject
 
 data class Folder(
@@ -36,7 +37,7 @@ data class NotesUiState(
     val conflictNoteExists: Boolean = false,
     val showConflictNotes: Boolean = false,
     val isSyncing: Boolean = false,
-    val syncErrorMessage: String? = null,
+    val syncResult: Result<FfiSyncInfo>? = null,
 )
 
 const val TAG = "NotesViewModel"
@@ -55,6 +56,9 @@ class NotesViewModel @Inject constructor(
         checkConflictNoteExists()
         viewModelScope.launch {
             notesRepository.syncFinished.collect { syncResult ->
+                _uiState.update {
+                    it.copy(syncResult = syncResult)
+                }
                 syncResult
                     .onSuccess { syncInfo ->
                         if (syncInfo.conflictNoteCount > 0
@@ -67,16 +71,17 @@ class NotesViewModel @Inject constructor(
                     }
                     .onFailure { e ->
                         Log.d(TAG, "sync failed: $e")
-                        _uiState.update {
-                            it.copy(syncErrorMessage = e.localizedMessage ?: e.toString())
-                        }
                     }
             }
         }
         viewModelScope.launch {
             notesRepository.isSyncing.collect { isSyncing ->
                 _uiState.update {
-                    it.copy(isSyncing = isSyncing)
+                    if (isSyncing) {
+                        it.copy(isSyncing = true, syncResult = null)
+                    } else {
+                        it.copy(isSyncing = false)
+                    }
                 }
             }
         }
@@ -110,9 +115,6 @@ class NotesViewModel @Inject constructor(
     fun syncConfigExists(): Boolean = notesRepository.syncConfigExists()
 
     fun sync() {
-        _uiState.update {
-            it.copy(syncErrorMessage = null)
-        }
         viewModelScope.launch {
             notesRepository.doSync(isOnStart = false, fromScratch = false)
         }
@@ -120,7 +122,7 @@ class NotesViewModel @Inject constructor(
 
     fun dismissSyncErrorMessage() {
         _uiState.update {
-            it.copy(syncErrorMessage = null)
+            it.copy(syncResult = null)
         }
     }
 
@@ -135,7 +137,6 @@ class NotesViewModel @Inject constructor(
         _uiState.update {
             it.copy(
                 isLoading = true,
-                syncErrorMessage = null,
             )
         }
         viewModelScope.launch {
