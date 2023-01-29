@@ -274,7 +274,6 @@ fun NotesPage(
                         tint = MaterialTheme.colorScheme.error
                     )
                 }
-
             },
             title = {
                 Text(
