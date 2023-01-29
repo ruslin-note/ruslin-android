@@ -117,6 +117,11 @@ class RuslinNotesRepository @Inject constructor(
                 .onSuccess { _notesChangedManually.emit(Unit) }
         }
 
+    override suspend fun deleteNotes(ids: List<String>): Result<Unit> = withContext(ioDispatcher) {
+        kotlin.runCatching { data.deleteNotes(ids) }
+            .onSuccess { _notesChangedManually.emit(Unit) }
+    }
+
     override suspend fun conflictNoteExists(): Result<Boolean> = withContext(ioDispatcher) {
         kotlin.runCatching { data.conflictNoteExists() }
     }

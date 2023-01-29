@@ -23,6 +23,7 @@ data class Folder(
     val isExpanded: StateFlow<Boolean> = _isExpanded.asStateFlow()
 ) {
     fun setExpanded(isExpanded: Boolean) {
+
         _isExpanded.update { isExpanded }
     }
 }
@@ -32,7 +33,6 @@ data class NotesUiState(
     val folders: List<Folder> = emptyList(),
     val selectedFolder: FfiFolder? = null,
     val isLoading: Boolean = false,
-    val selectedNote: FfiAbbrNote? = null,
     val conflictNoteExists: Boolean = false,
     val showConflictNotes: Boolean = false,
     val isSyncing: Boolean = false
@@ -99,18 +99,6 @@ class NotesViewModel @Inject constructor(
         loadAbbrNotes()
     }
 
-    fun selectNote(note: FfiAbbrNote) {
-        _uiState.update {
-            it.copy(selectedNote = note)
-        }
-    }
-
-    fun unselectNote() {
-        _uiState.update {
-            it.copy(selectedNote = null)
-        }
-    }
-
     fun syncConfigExists(): Boolean = notesRepository.syncConfigExists()
 
     fun sync() {
@@ -119,13 +107,13 @@ class NotesViewModel @Inject constructor(
         }
     }
 
-    fun reloadAllAfterSync() {
+    private fun reloadAllAfterSync() {
         loadAbbrNotes()
         loadFolders()
         checkConflictNoteExists()
     }
 
-    fun loadAbbrNotes() {
+    private fun loadAbbrNotes() {
         val showConflictNotes = uiState.value.showConflictNotes
         _uiState.update {
             it.copy(
@@ -151,22 +139,6 @@ class NotesViewModel @Inject constructor(
                         it.copy(isLoading = false)
                     }
                     Log.e(TAG, "load abbr notes failed: $e")
-                }
-        }
-    }
-
-    fun deleteNote(noteId: String) {
-        viewModelScope.launch {
-            notesRepository.deleteNote(noteId)
-                .onSuccess {
-                    _uiState.update {
-                        it.copy(
-                            items = it.items?.filter { note -> note.id != noteId }
-                        )
-                    }
-                }
-                .onFailure { e ->
-                    Log.e(TAG, "delete note failed: $e")
                 }
         }
     }
@@ -246,4 +218,6 @@ class NotesViewModel @Inject constructor(
                 }
         }
     }
+
+    suspend fun deleteNotes(ids: List<String>) = notesRepository.deleteNotes(ids)
 }

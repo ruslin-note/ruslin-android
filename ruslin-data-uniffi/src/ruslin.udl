@@ -182,6 +182,8 @@ interface RuslinAndroidData {
     [Throws=DatabaseError]
     void delete_note(string id);
     [Throws=DatabaseError]
+    void delete_notes(sequence<string> ids);
+    [Throws=DatabaseError]
     boolean conflict_note_exists();
     [Throws=DatabaseError]
     sequence<FFIAbbrNote> load_abbr_conflict_notes();

@@ -41,6 +41,8 @@ interface NotesRepository {
 
     suspend fun deleteNote(id: String): Result<Unit>
 
+    suspend fun deleteNotes(ids: List<String>): Result<Unit>
+
     suspend fun conflictNoteExists(): Result<Boolean>
 
     suspend fun loadAbbrConflictNotes(): Result<List<FfiAbbrNote>>

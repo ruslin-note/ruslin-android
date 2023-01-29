@@ -1,21 +1,20 @@
 package org.dianqk.ruslin.ui.page.notes
 
+import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Sync
-import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material.icons.outlined.FileOpen
-import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.DeleteForever
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -23,14 +22,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import org.dianqk.ruslin.R
-import org.dianqk.ruslin.ui.component.BottomDrawer
+import org.dianqk.ruslin.ui.component.ContentEmptyState
 import org.dianqk.ruslin.ui.component.ContentLoadingState
-import org.dianqk.ruslin.ui.component.FilledTonalButtonWithIcon
-import org.dianqk.ruslin.ui.component.OutlinedButtonWithIcon
 
 @OptIn(
     ExperimentalMaterial3Api::class,
-    ExperimentalMaterialApi::class
 )
 @Composable
 fun NotesPage(
@@ -44,7 +40,6 @@ fun NotesPage(
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val showActionBottomDrawerState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val notes = uiState.items
 
     val openCreateFolderDialog = remember { mutableStateOf(false) }
@@ -64,8 +59,20 @@ fun NotesPage(
             ?: stringResource(id = R.string.all_notes)
     }
 
+    var showRemoveMultipleItemsDialog by remember { mutableStateOf(false) }
+    var firstSelectedItemId: String? by remember { mutableStateOf(null) }
+    val isSelectEnabled = firstSelectedItemId != null
+    val selectedItemIds = remember(uiState.items, firstSelectedItemId) {
+        firstSelectedItemId?.let { mutableStateListOf(it) } ?: mutableStateListOf()
+    }
+
+    BackHandler(isSelectEnabled) {
+        firstSelectedItemId = null
+    }
+
     ModalNavigationDrawer(
         drawerState = drawerState,
+        gesturesEnabled = !isSelectEnabled,
         drawerContent = {
             NotesDrawerSheet(
                 folders = uiState.folders,
@@ -102,46 +109,64 @@ fun NotesPage(
                             )
                         },
                         navigationIcon = {
-                            IconButton(onClick = { scope.launch { drawerState.open() } }) {
-                                Icon(Icons.Default.Menu, stringResource(id = R.string.desc_menu))
+                            if (isSelectEnabled) {
+                                IconButton(onClick = { firstSelectedItemId = null }) {
+                                    Icon(Icons.Default.Close, stringResource(id = R.string.cancel))
+                                }
+                            } else {
+                                IconButton(onClick = { scope.launch { drawerState.open() } }) {
+                                    Icon(
+                                        Icons.Default.Menu,
+                                        stringResource(id = R.string.desc_menu)
+                                    )
+                                }
                             }
                         },
                         actions = {
-                            IconButton(onClick = { navigateToSearch() }) {
-                                Icon(
-                                    Icons.Default.Search,
-                                    stringResource(id = R.string.desc_search)
-                                )
-                            }
-                            IconButton(
-                                enabled = !uiState.isSyncing,
-                                onClick = {
-                                    if (viewModel.syncConfigExists()) {
-                                        viewModel.sync()
-                                    } else {
-                                        navigateToLogin()
-                                    }
-                                }
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Sync,
-                                    contentDescription = stringResource(id = R.string.desc_sync),
-                                    modifier = Modifier.rotate(
-                                        if (uiState.isSyncing) syncAngle else 360f
+                            if (isSelectEnabled) {
+                                IconButton(
+                                    onClick = {
+                                        showRemoveMultipleItemsDialog = true
+                                    },
+                                    enabled = selectedItemIds.isNotEmpty()
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Outlined.DeleteForever,
+                                        contentDescription = stringResource(id = R.string.delete),
+                                        tint = MaterialTheme.colorScheme.error
                                     )
-                                )
+                                }
+                            } else {
+                                IconButton(onClick = { navigateToSearch() }) {
+                                    Icon(
+                                        Icons.Default.Search,
+                                        stringResource(id = R.string.desc_search)
+                                    )
+                                }
+                                IconButton(
+                                    enabled = !uiState.isSyncing,
+                                    onClick = {
+                                        if (viewModel.syncConfigExists()) {
+                                            viewModel.sync()
+                                        } else {
+                                            navigateToLogin()
+                                        }
+                                    }
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Sync,
+                                        contentDescription = stringResource(id = R.string.desc_sync),
+                                        modifier = Modifier.rotate(
+                                            if (uiState.isSyncing) syncAngle else 360f
+                                        )
+                                    )
+                                }
                             }
-//                            IconButton(onClick = { /*TODO*/ }) {
-//                                Icon(
-//                                    Icons.Default.MoreVert,
-//                                    stringResource(id = R.string.desc_more)
-//                                )
-//                            }
                         }
                     )
                 },
                 floatingActionButton = {
-                    if (!uiState.showConflictNotes) {
+                    if (!uiState.showConflictNotes && !isSelectEnabled) {
                         ExtendedFloatingActionButton(
                             text = { Text(stringResource(id = R.string.new_note)) },
                             icon = {
@@ -155,72 +180,109 @@ fun NotesPage(
                     }
                 }
             ) { innerPadding ->
-                if (notes != null) {
-                    NoteList(
-                        modifier = Modifier.padding(innerPadding),
-                        notes = notes,
-                        navigateToNote = {
-                            navigateToNote(it)
-                        },
-                        showActionBottomDrawer = { note ->
-                            scope.launch {
-                                viewModel.selectNote(note)
-                                showActionBottomDrawerState.show()
-                            }
-                        }
-                    )
-                } else {
+                if (notes == null) {
                     ContentLoadingState {
                         Text(text = stringResource(id = R.string.notes_loading))
+                    }
+                } else if (notes.isEmpty()) {
+                    ContentEmptyState {
+                        Text(text = stringResource(id = R.string.create_a_note))
+                    }
+                } else {
+                    LazyColumn(
+                        modifier = Modifier
+                            .padding(innerPadding)
+                            .fillMaxSize()
+                    ) {
+                        items(notes, key = { it.id }) { note ->
+                            NoteAbbrCard(
+                                note = note,
+                                isSelectEnabled = { isSelectEnabled },
+                                isSelected = { selectedItemIds.contains(note.id) },
+                                onSelect = {
+                                    if (selectedItemIds.contains(note.id)) selectedItemIds.remove(
+                                        note.id
+                                    )
+                                    else selectedItemIds.add(note.id)
+                                },
+                                onClick = { navigateToNote(note.id) },
+                                onLongClick = {
+                                    firstSelectedItemId = note.id
+                                })
+                            Divider(
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f)
+                            )
+                        }
                     }
                 }
             }
         }
     )
 
-    uiState.selectedNote?.let { note ->
-        BottomDrawer(
-            drawerState = showActionBottomDrawerState,
-            sheetContent = {
-                Column(modifier = Modifier.fillMaxWidth()) {
-                    SelectionContainer {
-                        Text(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 6.dp),
-                            text = note.title,
-                            style = MaterialTheme.typography.titleLarge
-                        )
-                    }
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 24.dp),
-                        horizontalArrangement = Arrangement.End
-                    ) {
-                        OutlinedButtonWithIcon(
-                            modifier = Modifier.padding(horizontal = 12.dp),
-                            onClick = {
-                                scope.launch { showActionBottomDrawerState.hide() }
-                                viewModel.deleteNote(note.id)
-                                viewModel.unselectNote()
-                            },
-                            icon = Icons.Outlined.Delete,
-                            text = stringResource(id = R.string.delete)
-                        )
-                        FilledTonalButtonWithIcon(
-                            onClick = {
-                                scope.launch { showActionBottomDrawerState.hide() }
-                                navigateToNote(note.id)
-                                viewModel.unselectNote()
-                            },
-                            icon = Icons.Outlined.FileOpen,
-                            text = stringResource(id = R.string.open)
-                        )
-                    }
-                }
-            }
+    if (showRemoveMultipleItemsDialog) {
+        val deletingAnimation by rememberInfiniteTransition().animateFloat(
+            initialValue = 1f,
+            targetValue = 0f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(300, easing = LinearEasing)
+            )
         )
+        var isDeleting by remember { mutableStateOf(false) }
+
+        AlertDialog(
+            onDismissRequest = {
+                if (!isDeleting) {
+                    showRemoveMultipleItemsDialog = false
+                }
+            },
+            confirmButton = {
+                TextButton(enabled = !isDeleting, onClick = {
+                    isDeleting = true
+                    scope.launch {
+                        viewModel.deleteNotes(selectedItemIds)
+                            .onFailure { e ->
+                                Log.d(TAG, "$e")
+                            }
+                        isDeleting = false
+                        firstSelectedItemId = null
+                        showRemoveMultipleItemsDialog = false
+                    }
+                }) {
+                    Text(text = stringResource(id = R.string.confirm))
+                }
+            },
+            dismissButton = {
+                TextButton(enabled = !isDeleting, onClick = {
+                    showRemoveMultipleItemsDialog = false
+                }) {
+                    Text(text = stringResource(id = R.string.cancel))
+                }
+            },
+            icon = {
+                if (isDeleting) {
+                    Icon(
+                        modifier = Modifier.alpha(deletingAnimation),
+                        imageVector = Icons.Default.DeleteSweep,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.tertiary
+                    )
+                } else {
+                    Icon(
+                        imageVector = Icons.Default.Warning,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.error
+                    )
+                }
+
+            },
+            title = {
+                Text(
+                    text = stringResource(
+                        id = R.string.ask_delete_selected_notes
+                    )
+                )
+            })
     }
 
     LaunchedEffect(Unit) {

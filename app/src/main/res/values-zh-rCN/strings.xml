@@ -63,4 +63,5 @@
     <string name="resynchronize_from_scratch">从头开始重新同步</string>
     <string name="edit">编辑</string>
     <string name="preview">预览</string>
+    <string name="ask_delete_selected_notes">删除选择的笔记？</string>
 </resources>
