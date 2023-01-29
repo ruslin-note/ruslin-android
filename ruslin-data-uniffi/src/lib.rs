@@ -188,6 +188,11 @@ impl RuslinAndroidData {
         self.data.db.delete_note(&id, UpdateSource::LocalEdit)
     }
 
+    pub fn delete_notes(&self, ids: Vec<String>) -> Result<(), DatabaseError> {
+        let ids: Vec<_> = ids.iter().map(|s| s.as_str()).collect();
+        self.data.db.delete_notes(&ids)
+    }
+
     pub fn conflict_note_exists(&self) -> Result<bool, DatabaseError> {
         self.data.db.conflict_note_exists()
     }

@@ -64,4 +64,5 @@
     <string name="resynchronize_from_scratch">Resynchronize from scratch</string>
     <string name="edit">Edit</string>
     <string name="preview">Preview</string>
+    <string name="ask_delete_selected_notes">Delete selected notes?</string>
 </resources>
