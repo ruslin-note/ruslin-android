@@ -182,7 +182,7 @@ fun NotesPage(
                     }
                 }
             ) { innerPadding ->
-                uiState.syncErrorMessage?.let { errorMessage ->
+                uiState.syncResult?.onFailure { e ->
                     Box(
                         modifier = Modifier
                             .padding(innerPadding)
@@ -198,7 +198,7 @@ fun NotesPage(
                                 )
                                 SelectionContainer {
                                     Text(
-                                        text = errorMessage,
+                                        text = e.localizedMessage ?: e.toString(),
                                         style = MaterialTheme.typography.labelSmall,
                                         color = MaterialTheme.colorScheme.error
                                     )
