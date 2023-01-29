@@ -1,12 +1,14 @@
 package org.dianqk.ruslin.ui.page.notes
 
 import androidx.compose.animation.*
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CreateNewFolder
+import androidx.compose.material.icons.filled.DeleteSweep
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.*
@@ -16,6 +18,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -25,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
 import org.dianqk.ruslin.R
 import org.dianqk.ruslin.ui.component.CombinedClickableSurface
 import org.dianqk.ruslin.ui.component.OutlinedButtonWithIcon
@@ -44,7 +48,7 @@ fun NotesDrawerSheet(
     openCreateFolderDialog: Boolean,
     onCreateFolder: (String) -> Unit,
     onRenameFolder: (FfiFolder) -> Unit,
-    onDeleteFolder: (FfiFolder) -> Unit,
+    onDeleteFolder: suspend (FfiFolder) -> Unit,
     onChangeOpenCreateFolderDialogVisible: (Boolean) -> Unit,
     onShowSettingsPage: () -> Unit
 ) {
@@ -55,6 +59,7 @@ fun NotesDrawerSheet(
     var openDeleteFolderAlertDialog: Folder? by remember {
         mutableStateOf(null)
     }
+    val scope = rememberCoroutineScope()
 
     openEditFolderDialog?.let { editFolder ->
         FolderDialog(
@@ -75,27 +80,54 @@ fun NotesDrawerSheet(
     }
 
     openDeleteFolderAlertDialog?.let { deleteFolder ->
+        var isDeleting by remember { mutableStateOf(false) }
+        val deletingAnimation by rememberInfiniteTransition().animateFloat(
+            initialValue = 1f,
+            targetValue = 0f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(300, easing = LinearEasing)
+            )
+        )
         AlertDialog(
             onDismissRequest = {
-                openDeleteFolderAlertDialog = null
+                if (!isDeleting) {
+                    openDeleteFolderAlertDialog = null
+                }
             },
             confirmButton = {
-                TextButton(onClick = {
-                    onDeleteFolder(deleteFolder.ffiFolder)
-                    openDeleteFolderAlertDialog = null
+                TextButton(enabled = !isDeleting, onClick = {
+                    isDeleting = true
+                    scope.launch {
+                        onDeleteFolder(deleteFolder.ffiFolder)
+                        isDeleting = false
+                        openDeleteFolderAlertDialog = null
+                    }
                 }) {
                     Text(text = stringResource(id = R.string.confirm))
                 }
             },
             dismissButton = {
-                TextButton(onClick = {
+                TextButton(enabled = !isDeleting, onClick = {
                     openDeleteFolderAlertDialog = null
                 }) {
                     Text(text = stringResource(id = R.string.cancel))
                 }
             },
             icon = {
-                Icon(imageVector = Icons.Default.Warning, contentDescription = null)
+                if (isDeleting) {
+                    Icon(
+                        modifier = Modifier.alpha(deletingAnimation),
+                        imageVector = Icons.Default.DeleteSweep,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.tertiary
+                    )
+                } else {
+                    Icon(
+                        imageVector = Icons.Default.Warning,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.error
+                    )
+                }
             },
             title = {
                 Text(

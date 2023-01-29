@@ -150,11 +150,9 @@ class NotesViewModel @Inject constructor(
         }
     }
 
-    fun deleteFolder(folder: FfiFolder) {
-        viewModelScope.launch {
-            notesRepository.deleteFolder(folder.id)
-            loadFoldersFromRepo()
-        }
+    suspend fun deleteFolder(folder: FfiFolder) {
+        notesRepository.deleteFolder(folder.id)
+        loadFoldersFromRepo()
     }
 
     fun createFolder(title: String) {
