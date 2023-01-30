@@ -176,4 +176,7 @@ class RuslinNotesRepository @Inject constructor(
             data.parseMarkdownToPreviewHtml(text = text)
         }
 
+    override suspend fun prepareJieba(): Result<Unit> = withContext(ioDispatcher) {
+        kotlin.runCatching { data.prepareJieba() }
+    }
 }

@@ -61,4 +61,6 @@ interface NotesRepository {
 
     suspend fun parseMarkdownToPreviewHtml(text: String): String
 
+    suspend fun prepareJieba(): Result<Unit>
+
 }
