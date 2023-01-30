@@ -88,16 +88,16 @@ impl RuslinAndroidData {
             .build()
             .unwrap_or_else(|_| panic!("unwrap error in {}:{}", file!(), line!()));
         let data = RuslinData::new(Path::new(&data_dir), Path::new(&resource_dir))?;
-        let db = data.db.clone();
-        rt.spawn(async move {
-            // prepare jieba
-            db.search_notes("", None).ok();
-        });
         Ok(Self {
             data,
             rt,
             _log_handle: log_handle,
         })
+    }
+
+    pub fn prepare_jieba(&self) -> Result<(), DatabaseError> {
+        self.data.db.search_notes("", None)?;
+        Ok(())
     }
 
     // pub fn simple_log(&self, message: String) {

@@ -35,6 +35,12 @@ class SearchViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(SearchUiState())
     val uiState: StateFlow<SearchUiState> = _uiState.asStateFlow()
 
+    init {
+        viewModelScope.launch {
+            notesRepository.prepareJieba()
+        }
+    }
+
     fun changeSearchTerm(text: String) {
         _uiState.update {
             it.copy(searchTerm = text, notFound = false)

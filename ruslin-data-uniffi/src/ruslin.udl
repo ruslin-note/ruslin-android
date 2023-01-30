@@ -197,4 +197,6 @@ interface RuslinAndroidData {
     [Throws=DatabaseError]
     FFIResource load_resource(string id);
     string parse_markdown_to_preview_html(string text);
+    [Throws=DatabaseError]
+    void prepare_jieba();
 };
