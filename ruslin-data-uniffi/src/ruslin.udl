@@ -71,8 +71,8 @@ dictionary FFIAbbrNote {
     string id;
     string? parent_id;
     string title;
-    i64 created_time;
-    i64 updated_time;
+    i64 user_created_time;
+    i64 user_updated_time;
 };
 
 dictionary FFIStatus {

@@ -62,7 +62,7 @@ fun NoteAbbrCard(
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = Date(note.updatedTime).formatAsYmdHms(LocalContext.current),
+                    text = Date(note.userUpdatedTime).formatAsYmdHms(LocalContext.current),
                     style = MaterialTheme.typography.bodySmall
                 )
             }

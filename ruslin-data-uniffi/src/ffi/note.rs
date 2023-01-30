@@ -6,8 +6,8 @@ pub struct FFIAbbrNote {
     pub id: String,
     pub parent_id: Option<String>,
     pub title: String,
-    pub created_time: i64,
-    pub updated_time: i64,
+    pub user_created_time: i64,
+    pub user_updated_time: i64,
 }
 
 impl From<FFIAbbrNote> for AbbrNote {
@@ -16,8 +16,8 @@ impl From<FFIAbbrNote> for AbbrNote {
             id: note.id,
             parent_id: note.parent_id,
             title: note.title,
-            created_time: DateTimeTimestamp::from_timestamp_millis(note.created_time),
-            updated_time: DateTimeTimestamp::from_timestamp_millis(note.updated_time),
+            user_created_time: DateTimeTimestamp::from_timestamp_millis(note.user_created_time),
+            user_updated_time: DateTimeTimestamp::from_timestamp_millis(note.user_updated_time),
         }
     }
 }
@@ -28,8 +28,8 @@ impl From<AbbrNote> for FFIAbbrNote {
             id: note.id,
             parent_id: note.parent_id,
             title: note.title,
-            created_time: note.created_time.timestamp_millis(),
-            updated_time: note.updated_time.timestamp_millis(),
+            user_created_time: note.user_created_time.timestamp_millis(),
+            user_updated_time: note.user_updated_time.timestamp_millis(),
         }
     }
 }
