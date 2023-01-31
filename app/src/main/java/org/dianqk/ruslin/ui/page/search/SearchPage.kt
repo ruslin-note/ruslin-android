@@ -1,8 +1,5 @@
 package org.dianqk.ruslin.ui.page.search
 
-import android.graphics.Typeface
-import android.text.Spanned
-import android.text.style.StyleSpan
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -30,11 +27,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.core.text.getSpans
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.dianqk.ruslin.R
 import org.dianqk.ruslin.ui.component.BackButton
+import uniffi.ruslin.FfiSearchNote
 
 @OptIn(
     ExperimentalMaterial3Api::class,
@@ -123,7 +120,7 @@ fun SearchPage(
 }
 
 @Composable
-fun SearchNote(note: SearchedHighlightNote, navigateToNote: (noteId: String) -> Unit) {
+fun SearchNote(note: FfiSearchNote, navigateToNote: (noteId: String) -> Unit) {
     val highlightSpanStyle = SpanStyle(
         color = MaterialTheme.colorScheme.onTertiary,
         fontWeight = FontWeight.Bold,
@@ -138,14 +135,20 @@ fun SearchNote(note: SearchedHighlightNote, navigateToNote: (noteId: String) -> 
             .padding(horizontal = 16.dp, vertical = 10.dp)
     ) {
         Text(
-            text = note.title.toHighlightAnnotatedString(highlightSpanStyle),
+            text = note.title.toHighlightAnnotatedString(
+                highlightSpanStyle,
+                note.titleHighlightRanges
+            ),
             style = MaterialTheme.typography.titleMedium,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis
         )
         Spacer(modifier = Modifier.height(5.dp))
         Text(
-            text = note.body.toHighlightAnnotatedString(highlightSpanStyle),
+            text = note.body.toHighlightAnnotatedString(
+                highlightSpanStyle,
+                note.bodyHighlightRanges
+            ),
             style = MaterialTheme.typography.bodyMedium,
         )
     }
@@ -155,16 +158,17 @@ fun SearchNote(note: SearchedHighlightNote, navigateToNote: (noteId: String) -> 
     )
 }
 
-private fun Spanned.toHighlightAnnotatedString(highlightSpanStyle: SpanStyle): AnnotatedString {
+private fun String.toHighlightAnnotatedString(
+    highlightSpanStyle: SpanStyle,
+    ranges: List<Int>
+): AnnotatedString {
     return buildAnnotatedString {
-        append(this@toHighlightAnnotatedString.toString())
-        val styleSpans = getSpans<StyleSpan>()
-        styleSpans.forEach { styleSpan ->
-            val start = getSpanStart(styleSpan)
-            val end = getSpanEnd(styleSpan)
-            when (styleSpan.style) {
-                Typeface.BOLD -> addStyle(highlightSpanStyle, start, end)
-            }
+        append(this@toHighlightAnnotatedString)
+        val iter = ranges.iterator()
+        while (iter.hasNext()) {
+            val start = iter.next();
+            val end = iter.next();
+            addStyle(highlightSpanStyle, start, end)
         }
     }
 }
