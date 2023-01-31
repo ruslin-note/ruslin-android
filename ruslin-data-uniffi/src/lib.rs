@@ -211,10 +211,59 @@ impl RuslinAndroidData {
     }
 
     pub fn search(&self, search_term: String) -> Result<Vec<FFISearchNote>, DatabaseError> {
-        self.data.db.search_notes(
+        let notes = self.data.db.search_notes(
             &search_term,
             Some(SearchBodyOption::Snippet { max_tokens: 16 }),
-        )
+        )?;
+        fn get_utf16_len(s: &str) -> usize {
+            s.chars().fold(0, |acc, x| acc + x.len_utf16())
+        }
+        fn parse(s: &str) -> (String, Vec<i32>) {
+            let mut s = s;
+            let mut normal = String::new();
+            let mut ranges: Vec<i32> = Vec::new();
+            let mut index: usize = 0;
+            let b_end_utf16_len = 4; // </b>
+                                     // FIXME: search "test" on "<b>test" -> "<b><b>test</b>"
+            loop {
+                if let Some((left, right)) = s.split_once("<b>") {
+                    normal.push_str(left);
+                    index += get_utf16_len(left);
+                    if let Some((rleft, rright)) = right.split_once("</b>") {
+                        let len = get_utf16_len(rleft);
+                        ranges.extend_from_slice(&[index as i32, (index + len) as i32]);
+                        normal.push_str(rleft);
+                        index += len;
+                        s = rright;
+                    } else {
+                        normal.push_str("<b>");
+                        index += b_end_utf16_len;
+                        normal.push_str(right);
+                        index += get_utf16_len(right);
+                        s = right;
+                    }
+                } else {
+                    normal.push_str(s);
+                    break;
+                }
+            }
+            (normal, ranges)
+        }
+        let notes: Vec<FFISearchNote> = notes
+            .into_iter()
+            .map(|note| {
+                let (title, title_highlight_ranges) = parse(&note.title);
+                let (body, body_highlight_ranges) = parse(&note.body);
+                FFISearchNote {
+                    id: note.id,
+                    title,
+                    body,
+                    title_highlight_ranges,
+                    body_highlight_ranges,
+                }
+            })
+            .collect();
+        Ok(notes)
     }
 
     pub fn create_resource(

@@ -87,6 +87,8 @@ dictionary FFISearchNote {
     string id;
     string title;
     string body;
+    sequence<i32> title_highlight_ranges;
+    sequence<i32> body_highlight_ranges;
 };
 
 dictionary FFISyncInfo {
