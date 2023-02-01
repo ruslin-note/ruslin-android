@@ -47,6 +47,7 @@ fun SearchPage(
     val focusRequest = remember { FocusRequester() }
     val lazyListState = rememberLazyListState()
     val keyboardController = LocalSoftwareKeyboardController.current
+
     Scaffold(
         modifier = Modifier,
         topBar = {
@@ -74,6 +75,7 @@ fun SearchPage(
                 keyboardActions = KeyboardActions(
                     onSearch = {
                         viewModel.search()
+                        focusRequest.freeFocus()
                     }
                 )
             )
@@ -114,8 +116,11 @@ fun SearchPage(
         keyboardController?.hide()
     }
 
-    LaunchedEffect(Unit) {
-        focusRequest.requestFocus()
+    if (uiState.showKeyboardOnFirstLoad) {
+        LaunchedEffect(Unit) {
+            focusRequest.requestFocus()
+            viewModel.hasShownKeyboardOnFirstLoad()
+        }
     }
 }
 

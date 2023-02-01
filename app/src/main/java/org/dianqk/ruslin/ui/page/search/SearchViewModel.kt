@@ -18,7 +18,8 @@ data class SearchUiState(
     val searchingTerm: String = "",
     val isSearching: Boolean = false,
     val searchedNotes: List<FfiSearchNote> = emptyList(),
-    val notFound: Boolean = false
+    val notFound: Boolean = false,
+    val showKeyboardOnFirstLoad: Boolean = true,
 )
 
 @HiltViewModel
@@ -37,6 +38,12 @@ class SearchViewModel @Inject constructor(
     fun changeSearchTerm(text: String) {
         _uiState.update {
             it.copy(searchTerm = text, notFound = false)
+        }
+    }
+
+    fun hasShownKeyboardOnFirstLoad() {
+        _uiState.update {
+            it.copy(showKeyboardOnFirstLoad = false)
         }
     }
 
