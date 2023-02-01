@@ -48,7 +48,8 @@ fun CreditsPage(onPopBack: () -> Unit) {
         Credit("Rust", APACHE_V2, "https://github.com/rust-lang/rust"),
         Credit("uniffi-rs", MOZILLA_V2, "https://github.com/mozilla/uniffi-rs"),
         Credit("pulldown-cmark", MIT, "https://github.com/raphlinus/pulldown-cmark"),
-        Credit("jieba-rs", MIT, "https://github.com/messense/jieba-rs")
+        Credit("jieba-rs", MIT, "https://github.com/messense/jieba-rs"),
+        Credit("github-markdown-css", MIT, "https://github.com/sindresorhus/github-markdown-css"),
     ).sortedBy { it.title }
 
     Scaffold(
