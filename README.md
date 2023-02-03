@@ -9,7 +9,7 @@
 [![License](https://img.shields.io/github/license/ruslin-note/ruslin-android)](https://github.com/ruslin-note/ruslin-android/blob/main/LICENSE)
 [![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/ruslin-note/ruslin-android?include_prereleases&label=preview&logo=github)](https://github.com/ruslin-note/ruslin-android/releases)
 [![Downloads](https://img.shields.io/github/downloads/ruslin-note/ruslin-android/total)](https://github.com/ruslin-note/ruslin-android/releases)
-![Mastodon Follow](https://img.shields.io/mastodon/follow/109781051461798350?domain=https%3A%2F%2Ffosstodon.org&style=social)
+[![Mastodon Follow](https://img.shields.io/mastodon/follow/109781051461798350?domain=https%3A%2F%2Ffosstodon.org&style=social)](https://fosstodon.org/@ruslin)
 
 <div align="center">
     <img src="./fastlane/metadata/android/zh-CN/images/notes.png" width="19.2%" alt="notes" />
