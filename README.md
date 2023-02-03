@@ -26,9 +26,7 @@
 
 Supported features:
 
-- ✅ Create, modify and delete notes
-- ✅ Create, modify and delete folders
-- ✅ A simple Markdown editor
+- ✅ Support Markdown edit and preview
 - ✅ Full-text search using jieba-rs (Chinese and English supported)
 - ✅ Sync notes using a self-hosted Joplin server
 - ✅ Manual and automatic synchronization
@@ -39,7 +37,6 @@ Supported features:
 [<img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
     alt="Get it on Google Play"
     height="80" />](https://play.google.com/store/apps/details?id=org.dianqk.ruslin)
-
 [<img src=".github/get-it-on-github.png"
     alt="Get it on GitHub"
     height="80">](https://github.com/DianQK/ruslin-android/releases)

@@ -15,9 +15,7 @@
 
 已支持的功能：
 
-- ✅ 创建、修改和删除笔记
-- ✅ 创建、修改和删除文件夹
-- ✅ 简单的 Markdown 编辑器
+- ✅ 支持 Markdown 编辑和预览
 - ✅ 使用 jieba-rs 完成的全文搜索（支持中文和英文）
 - ✅ 使用自部署的 Joplin 服务器同步笔记
 - ✅ 手动和自动同步
@@ -25,7 +23,12 @@
 
 ## 下载
 
-https://github.com/DianQK/ruslin-android/releases
+[<img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
+    alt="Get it on Google Play"
+    height="80" />](https://play.google.com/store/apps/details?id=org.dianqk.ruslin)
+[<img src=".github/get-it-on-github.png"
+    alt="Get it on GitHub"
+    height="80">](https://github.com/DianQK/ruslin-android/releases)
 
 ## 感谢
 
