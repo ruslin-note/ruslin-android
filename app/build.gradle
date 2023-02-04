@@ -13,7 +13,7 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
-def fDroid = hasProperty('FDROID')
+ext.abiCodes = ['arm64-v8a': 0, 'armeabi-v7a': 1, x86: 2, x86_64: 3]
 
 android {
     namespace 'org.dianqk.ruslin'
@@ -36,7 +36,7 @@ android {
 
     signingConfigs {
         release {
-            if (keystorePropertiesFile.exists() && !fDroid) {
+            if (keystorePropertiesFile.exists()) {
                 keyAlias keystoreProperties['keyAlias']
                 keyPassword keystoreProperties['keyPassword']
                 storeFile file(keystoreProperties['storeFile'])
@@ -51,7 +51,7 @@ android {
             enable true
             reset()
             include "x86", "x86_64", "armeabi-v7a", "arm64-v8a"
-            universalApk = !fDroid
+            universalApk = false
         }
     }
 
@@ -76,12 +76,12 @@ android {
         }
     }
 
-    if (!fDroid) {
-        applicationVariants.all { variant ->
-            variant.outputs.each { output ->
-                def abi = output.getFilter(output.ABI) ?: "universal"
-                output.outputFileName = "Ruslin-${defaultConfig.versionName}-${abi}-${gitCommitHash}-${variant.buildType.name}.apk"
-            }
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def abi = output.getFilter(output.ABI)
+            def baseAbiVersionCode = project.ext.abiCodes.get(abi)
+            output.versionCodeOverride = variant.versionCode * 100 + baseAbiVersionCode
+            output.outputFileName = "Ruslin-${defaultConfig.versionName}-${abi}-${gitCommitHash}-${variant.buildType.name}.apk"
         }
     }
 
