@@ -50,7 +50,13 @@ android {
         abi {
             enable true
             reset()
-            include "x86", "x86_64", "armeabi-v7a", "arm64-v8a"
+            if (project.hasProperty("ABI_FILTERS")) {
+                project.property("ABI_FILTERS").split(';').each {
+                    include it as String
+                }
+            } else {
+                include "x86", "x86_64", "armeabi-v7a", "arm64-v8a"
+            }
             universalApk = false
         }
     }
