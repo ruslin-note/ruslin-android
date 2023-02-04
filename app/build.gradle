@@ -13,7 +13,7 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
-ext.abiCodes = ['arm64-v8a': 0, 'armeabi-v7a': 1, x86: 2, x86_64: 3]
+ext.abiCodes = [x86: 0, x86_64: 1, 'armeabi-v7a': 2, 'arm64-v8a': 3]
 
 android {
     namespace 'org.dianqk.ruslin'
