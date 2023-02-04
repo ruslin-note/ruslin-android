@@ -1,9 +1,0 @@
-🚧 目前处于 Pre-alpha 阶段，不建议在生产环境使用，请注意做好备份。 🚧
-- 缩减应用大小
-- 修复在 x86 和 x86-64 下的崩溃
-- 支持高亮搜索结果
-- 支持删除、修改文件夹，以及嵌套文件夹的展示
-- 大幅改进 Markdown 编辑器性能
-- 稍微改进编辑器样式
-
-详细变更： https://github.com/ruslin-note/ruslin-android/compare/v0.0.1-pre-alpha.1...v0.0.1-pre-alpha.2
