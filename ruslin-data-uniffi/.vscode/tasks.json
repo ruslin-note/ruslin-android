@@ -21,7 +21,7 @@
 				"kind": "build",
 				"isDefault": true
 			},
-			"dependsOn": ["rust: cargo build", "rust: uniffi generate"],
+			"dependsOn": ["rust: cargo build"],
 			"label": "rust: build & copy"
 		}
 	]
