@@ -28,7 +28,7 @@ x86_64)
     export CXX=$ANDROID_NDK_TOOLCHAIN_BIN/x86_64-linux-android28-clang++
     export CARGO_TARGET_X86_64_LINUX_ANDROID_LINKER=$ANDROID_NDK_TOOLCHAIN_BIN/x86_64-linux-android28-clang
     ;;
-i686)
+x86)
     RUST_TARGET="i686-linux-android"
     export CC=$ANDROID_NDK_TOOLCHAIN_BIN/i686-linux-android28-clang
     export CXX=$ANDROID_NDK_TOOLCHAIN_BIN/i686-linux-android28-clang++
