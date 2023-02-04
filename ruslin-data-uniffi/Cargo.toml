@@ -22,7 +22,7 @@ uniffi = { version = "0.23", features = ["build", "cli"] }
 camino = "1.0.8"
 
 [profile.release]
-lto = true
+lto = "thin"
 
 [patch.crates-io]
 diesel = { git = 'https://github.com/DianQK/diesel.git', tag = "v2.0.2-p" }
