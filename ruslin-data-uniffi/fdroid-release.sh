@@ -2,11 +2,9 @@
 
 set -e
 
-export ANDROID_NDK_VERSION=25.1.8937393
+find -L $ANDROID_NDK_ROOT -name libunwind.a -execdir sh -c 'echo "INPUT(-lunwind)" > libgcc.a' \;
 
-find -L $ANDROID_HOME/ndk/$ANDROID_NDK_VERSION -name libunwind.a -execdir sh -c 'echo "INPUT(-lunwind)" > libgcc.a' \;
-
-ANDROID_NDK_TOOLCHAIN_BIN=$ANDROID_HOME/ndk/$ANDROID_NDK_VERSION/toolchains/llvm/prebuilt/linux-x86_64/bin
+ANDROID_NDK_TOOLCHAIN_BIN=$ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64/bin
 export AR=$ANDROID_NDK_TOOLCHAIN_BIN/llvm-ar
 
 ANDROID_ABI=$1
