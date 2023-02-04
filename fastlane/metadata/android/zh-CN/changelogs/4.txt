@@ -1,0 +1,8 @@
+目前处于 Pre-alpha 阶段，不建议在生产环境使用，请注意做好备份。
+- 添加一个编辑器工具栏
+- 添加一个 Markdown 预览页
+- 支持查看图片和文件（你需要从头同步）
+- 添加同步失败的文字
+- 延迟 jieba 的加载时机到搜索页
+- 添加关于和感谢页
+完整变更日志： https://github.com/ruslin-note/ruslin-android/compare/v0.0.1-pre-alpha.2...v0.0.1-pre-alpha.3

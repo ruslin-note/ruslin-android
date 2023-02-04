@@ -1,0 +1,10 @@
+Currently in Pre-alpha, not ready for use in production environments. Please back up.
+## Features
+- Add an editor toolbar
+- Add a preview page (by web)
+- Support view images and files (You need synchronization from scratch)
+- Support multi-select delete
+- Add sync failed text
+- Delay loading jieba to the search page
+- Add about and credits page
+**Full Changelog**: https://github.com/ruslin-note/ruslin-android/compare/v0.0.1-pre-alpha.2...v0.0.1-pre-alpha.3
