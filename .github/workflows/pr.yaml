@@ -26,10 +26,7 @@ jobs:
     - name: Set up Rust
       uses: dtolnay/rust-toolchain@stable
       with:
-        targets: 'aarch64-linux-android'
-    - name: Run uniffi-bindgen
-      working-directory: ./ruslin-data-uniffi
-      run: cargo run --target $(rustc -vV | awk '/^host/ { print $2 }') --features=uniffi/cli --bin uniffi-bindgen generate src/ruslin.udl --language kotlin --out-dir "${GITHUB_WORKSPACE}"/uniffi/src/main/java
+        targets: 'aarch64-linux-android,armv7-linux-androideabi,x86_64-linux-android,i686-linux-android'
     # See https://github.com/Bromeon/godot-rust/blob/master/.github/workflows/full-ci.yml
     - name: "Find highest Android NDK version"
       run: |
