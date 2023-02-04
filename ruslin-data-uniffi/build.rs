@@ -1,3 +1,4 @@
+use camino::Utf8Path;
 use std::{env, path::Path, process::Command};
 
 fn main() {
@@ -12,5 +13,21 @@ fn main() {
         let rtlib_path = String::from_utf8(output.stdout).unwrap();
         println!("cargo:rustc-link-arg={}", rtlib_path.trim()); // https://github.com/termux/termux-packages/issues/8029#issuecomment-1369150244
     }
-    uniffi::generate_scaffolding("./src/ruslin.udl").expect("generate_scaffolding error");
+    let udl_file = "./src/ruslin.udl";
+    uniffi::generate_scaffolding(udl_file).expect("generate_scaffolding error");
+    generate_kotlin_bindings(udl_file);
+}
+
+pub fn generate_kotlin_bindings(udl_file: impl AsRef<Utf8Path>) {
+    let udl_file = udl_file.as_ref();
+    println!("cargo:rerun-if-changed={udl_file}");
+    uniffi::generate_bindings(
+        udl_file,
+        None,
+        vec!["kotlin"],
+        Some("../uniffi/src/main/java".as_ref()),
+        None,
+        true,
+    )
+    .unwrap();
 }
