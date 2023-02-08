@@ -23,6 +23,7 @@ camino = "1.0.8"
 
 [profile.release]
 lto = "thin"
+codegen-units = 1
 
 [patch.crates-io]
 diesel = { git = 'https://github.com/DianQK/diesel.git', tag = "v2.0.2-p" }
