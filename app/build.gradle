@@ -34,6 +34,10 @@ android {
         }
     }
 
+    aaptOptions {
+        cruncherEnabled = false
+    }
+
     signingConfigs {
         release {
             if (keystorePropertiesFile.exists()) {
