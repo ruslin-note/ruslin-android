@@ -22,7 +22,7 @@ uniffi = { version = "0.23", features = ["build", "cli"] }
 camino = "1.0.8"
 
 [profile.release]
-lto = "thin"
+lto = true
 codegen-units = 1
 
 [patch.crates-io]
