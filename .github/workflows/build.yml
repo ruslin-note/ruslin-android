@@ -63,9 +63,9 @@ jobs:
     - name: Setup Gradle
       uses: gradle/gradle-build-action@v2
     - name: Build signed APKs
-      run: ./gradlew assembleRelease --info
+      run: ./gradlew :app:assembleRelease --info
     - name: Build signed Android App Bundle
-      run: ./gradlew bundleRelease --info
+      run: ./gradlew :app:bundleRelease --info
     - name: Upload signed APKs & Android App Bundle
       uses: actions/upload-artifact@v3
       with:
