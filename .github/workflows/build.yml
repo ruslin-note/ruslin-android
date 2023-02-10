@@ -23,6 +23,8 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
         cache: gradle
+    - name: Setup Gradle
+      uses: gradle/gradle-build-action@v2
     - name: Set up Rust
       uses: dtolnay/rust-toolchain@stable
       with:
@@ -60,8 +62,10 @@ jobs:
         echo "keyPassword=${SIGNING_KEY_PASSWORD}" >> "${GITHUB_WORKSPACE}"/keystore.properties
         echo "keyAlias=${SIGNING_KEY_ALIAS}" >> "${GITHUB_WORKSPACE}"/keystore.properties
         echo "storeFile=${TMP_KEYSTORE_FILE_PATH}" >> "${GITHUB_WORKSPACE}"/keystore.properties
-    - name: Setup Gradle
-      uses: gradle/gradle-build-action@v2
+    - name: Unable to strip the following libraries ?
+      run: |
+        ./gradlew :app:stripReleaseDebugSymbols
+        ./gradlew :app:stripReleaseDebugSymbols
     - name: Build signed APKs
       run: ./gradlew :app:assembleRelease --info
     - name: Build signed Android App Bundle
