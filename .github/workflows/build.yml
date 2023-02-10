@@ -67,9 +67,9 @@ jobs:
         ./gradlew :app:stripReleaseDebugSymbols
         ./gradlew :app:stripReleaseDebugSymbols
     - name: Build signed APKs
-      run: ./gradlew :app:assembleRelease --info
+      run: ./gradlew :app:assembleRelease
     - name: Build signed Android App Bundle
-      run: ./gradlew :app:bundleRelease --info
+      run: ./gradlew :app:bundleRelease
     - name: Upload signed APKs & Android App Bundle
       uses: actions/upload-artifact@v3
       with:
