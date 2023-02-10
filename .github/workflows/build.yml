@@ -31,11 +31,14 @@ jobs:
     - name: "Find highest Android NDK version"
       run: |
         echo $ANDROID_SDK_ROOT
-        highestNdk=$(ls $ANDROID_SDK_ROOT/ndk | tail -n1)
-        echo "Highest Android NDK: $highestNdk"
-        echo "ANDROID_NDK_VERSION=$highestNdk" >> $GITHUB_ENV
+        HIGHEST_NDK_VERSION=$(ls $ANDROID_SDK_ROOT/ndk | tail -n1)
+        echo "Highest Android NDK: $HIGHEST_NDK_VERSION"
+        EXPECTED_NDK_VERSION=25.1.8937393
+        echo "Expected Android NDK: $EXPECTED_NDK_VERSION"
+        [[ "$EXPECTED_NDK_VERSION" == "$HIGHEST_NDK_VERSION" ]];
+        echo "ANDROID_NDK_VERSION=$HIGHEST_NDK_VERSION" >> $GITHUB_ENV
     # See https://github.com/godot-rust/godot-rust/pull/920
-    - name: "Found version ${{ env.ANDROID_NDK_VERSION }}. Workaround Rust bug..."
+    - name: "Used version ${{ env.ANDROID_NDK_VERSION }}. Workaround Rust bug..."
       run: find -L $ANDROID_SDK_ROOT/ndk/$ANDROID_NDK_VERSION -name libunwind.a -execdir sh -c 'echo "INPUT(-lunwind)" > libgcc.a' \;
     - name: Build ruslin-data-uniffi
       working-directory: ./ruslin-data-uniffi
