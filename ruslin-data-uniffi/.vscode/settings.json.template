@@ -1,15 +1,15 @@
 {
     "rust-analyzer.cargo.extraEnv": {
-        "AR": "REPLACE_ANDROID_HOME/ndk/25.1.8937393/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ar",
-        "CC": "REPLACE_ANDROID_HOME/ndk/25.1.8937393/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android28-clang",
-        "CXX": "ANDROIREPLACE_ANDROID_HOMED_HOME/ndk/25.1.8937393/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android28-clang++",
-        "CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER": "REPLACE_ANDROID_HOME/ndk/25.1.8937393/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android28-clang",
+        "AR": "REPLACE_ANDROID_HOME/ndk/25.2.9519653/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ar",
+        "CC": "REPLACE_ANDROID_HOME/ndk/25.2.9519653/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android28-clang",
+        "CXX": "ANDROIREPLACE_ANDROID_HOMED_HOME/ndk/25.2.9519653/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android28-clang++",
+        "CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER": "REPLACE_ANDROID_HOME/ndk/25.2.9519653/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android28-clang",
     },
     "rust-analyzer.cargo.target": "aarch64-linux-android",
     "terminal.integrated.env.linux": {
-        "AR": "${env:ANDROID_HOME}/ndk/25.1.8937393/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ar",
-        "CC": "${env:ANDROID_HOME}/ndk/25.1.8937393/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android28-clang",
-        "CXX": "${env:ANDROID_HOME}/ndk/25.1.8937393/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android28-clang++",
-        "CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER": "${env:ANDROID_HOME}/ndk/25.1.8937393/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android28-clang",
+        "AR": "${env:ANDROID_HOME}/ndk/25.2.9519653/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ar",
+        "CC": "${env:ANDROID_HOME}/ndk/25.2.9519653/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android28-clang",
+        "CXX": "${env:ANDROID_HOME}/ndk/25.2.9519653/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android28-clang++",
+        "CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER": "${env:ANDROID_HOME}/ndk/25.2.9519653/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android28-clang",
     }
 }
