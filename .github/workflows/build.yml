@@ -70,6 +70,10 @@ jobs:
       run: ./gradlew :app:assembleRelease
     - name: Build signed Android App Bundle
       run: ./gradlew :app:bundleRelease
+    - name: Print so files sha256
+      run: |
+        - echo '### sha256sum *.so\n' >> $GITHUB_STEP_SUMMARY
+        - find ./app/build/intermediates/stripped_native_libs/release/out/lib -type f -print0 | sort -z | xargs -0 sha256sum >> $GITHUB_STEP_SUMMARY
     - name: Upload signed APKs & Android App Bundle
       uses: actions/upload-artifact@v3
       with:
