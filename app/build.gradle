@@ -177,3 +177,20 @@ dependencies {
 kapt {
     correctErrorTypes true
 }
+
+tasks.whenTaskAdded {
+    task ->
+        if (task.name == 'assembleRelease') {
+            task.doLast {
+                fileTree("$buildDir/intermediates/stripped_native_libs/release/out/lib").visit { details ->
+                    def file = details.getFile()
+                    if (file.isFile()) {
+                        def path = file.path
+                        def sha256 = "sha256sum -b $path".execute().text.trim().split("\\s+")[0]
+                        def length = file.length()
+                        println "$path: $sha256 ($length bytes)"
+                    }
+                }
+            }
+        }
+}
