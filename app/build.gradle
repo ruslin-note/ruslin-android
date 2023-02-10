@@ -185,7 +185,7 @@ tasks.whenTaskAdded {
                         def path = file.path
                         def sha256 = "sha256sum -b $path".execute().text.trim().split("\\s+")[0]
                         def length = file.length()
-                        println "$path: $sha256 ($length bytes)"
+                        println "sha256sum $path: $sha256 ($length bytes)"
                     }
                 }
             }
