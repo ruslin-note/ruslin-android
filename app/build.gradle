@@ -35,9 +35,6 @@ android {
         }
     }
 
-    aaptOptions {
-        cruncherEnabled = false
-    }
 
     signingConfigs {
         release {
