@@ -91,14 +91,12 @@ jobs:
         echo "keyPassword=${SIGNING_KEY_PASSWORD}" >> "${GITHUB_WORKSPACE}"/keystore.properties
         echo "keyAlias=${SIGNING_KEY_ALIAS}" >> "${GITHUB_WORKSPACE}"/keystore.properties
         echo "storeFile=${TMP_KEYSTORE_FILE_PATH}" >> "${GITHUB_WORKSPACE}"/keystore.properties
+    - name: Setup Gradle
+      uses: gradle/gradle-build-action@v2
     - name: Build signed APKs
-      uses: gradle/gradle-build-action@v2
-      with:
-        arguments: assembleRelease
+      run: ./gradlew assembleRelease --info
     - name: Build signed Android App Bundle
-      uses: gradle/gradle-build-action@v2
-      with:
-        arguments: bundleRelease
+      run: ./gradlew bundleRelease --info
     - name: Upload signed APKs & Android App Bundle
       uses: actions/upload-artifact@v3
       with:
