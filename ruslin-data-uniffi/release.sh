@@ -2,6 +2,15 @@
 
 set -e
 
+GIT_COMMIT_HASH=$(git rev-parse --verify HEAD | tr -d '\n')
+
+export RUSTFLAGS="--cfg uuid_unstable"
+export RUSTFLAGS="$RUSTFLAGS --remap-path-prefix=$HOME/.cargo/=/.cargo/"
+export RUSTFLAGS="$RUSTFLAGS --remap-path-prefix=$PWD/=/ruslin-data-uniffi/$GIT_COMMIT_HASH/"
+echo "RUSTFLAGS $RUSTFLAGS"
+# https://github.com/briansmith/ring/issues/715 ?
+# export CFLAGS="-fdebug-prefix-map=$(pwd)=." 
+
 find -L $ANDROID_NDK_ROOT -name libunwind.a -execdir sh -c 'echo "INPUT(-lunwind)" > libgcc.a' \;
 
 ANDROID_NDK_TOOLCHAIN_BIN=$ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64/bin
@@ -41,6 +50,6 @@ esac
 
 echo "Rust target: $RUST_TARGET"
 
-cargo build --target $RUST_TARGET --verbose --release
+cargo build --target $RUST_TARGET --verbose --release --frozen --locked 
 mkdir -p ../uniffi/src/main/jniLibs/$ANDROID_ABI
 cp target/$RUST_TARGET/release/libuniffi_ruslin.so ../uniffi/src/main/jniLibs/$ANDROID_ABI
