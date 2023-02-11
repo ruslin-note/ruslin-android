@@ -49,7 +49,7 @@ x86)
 esac
 
 echo "Rust target: $RUST_TARGET"
-
+cargo fetch
 cargo build --target $RUST_TARGET --verbose --release --frozen --locked 
 mkdir -p ../uniffi/src/main/jniLibs/$ANDROID_ABI
 cp target/$RUST_TARGET/release/libuniffi_ruslin.so ../uniffi/src/main/jniLibs/$ANDROID_ABI
