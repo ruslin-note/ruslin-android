@@ -7,7 +7,15 @@ GIT_COMMIT_HASH=$(git rev-parse --verify HEAD | tr -d '\n')
 export RUSTFLAGS="--cfg uuid_unstable"
 export RUSTFLAGS="$RUSTFLAGS --remap-path-prefix=$HOME/.cargo/=/.cargo/"
 export RUSTFLAGS="$RUSTFLAGS --remap-path-prefix=$PWD/=/ruslin-data-uniffi/$GIT_COMMIT_HASH/"
-echo "RUSTFLAGS $RUSTFLAGS"
+
+# This workaround should be removed 
+# after the https://github.com/llvm/llvm-project/commit/95dcaef00379e893dabc61cf598fe51c9d03414e change is merged into the NDK
+OS_RELEASE_ID=$(grep -oP '(?<=^ID=).+' /etc/os-release | tr -d '"')
+if [ "$OS_RELEASE_ID" = "debian" ]; then
+    export RUSTFLAGS="$RUSTFLAGS -C link-args=-Wl,--hash-style=gnu"
+fi
+
+echo "RUSTFLAGS: $RUSTFLAGS"
 # https://github.com/briansmith/ring/issues/715 ?
 # export CFLAGS="-fdebug-prefix-map=$(pwd)=." 
 
