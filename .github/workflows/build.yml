@@ -84,7 +84,7 @@ jobs:
           app/build/outputs/mapping/release/*.zip
     - uses: ncipollo/release-action@v1
       name: Create nightly release and upload artifacts
-      if: github.ref == 'refs/heads/master'
+      if: github.ref == 'refs/heads/main'
       with:
         name: nightly
         commit: main
