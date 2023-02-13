@@ -90,7 +90,7 @@ android {
             def baseAbiVersionCode = project.ext.abiCodes.get(abi)
             def versionCode = variant.versionCode * 100 + baseAbiVersionCode
             output.versionCodeOverride = versionCode
-            output.outputFileName = "ruslin-${abi}-${defaultConfig.versionName}-${variant.buildType.name}.apk"
+            output.outputFileName = "ruslin-${abi}-${defaultConfig.versionName}-${gitCommitHash}-${variant.buildType.name}.apk"
         }
     }
 
