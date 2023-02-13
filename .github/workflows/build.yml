@@ -70,6 +70,8 @@ jobs:
       run: ./gradlew :app:assembleRelease
     - name: Build signed Android App Bundle
       run: ./gradlew :app:bundleRelease
+    - name: Prepare artifacts
+      run: bash ./scripts/prepare_artifacts.sh
     - name: Upload signed APKs & Android App Bundle
       uses: actions/upload-artifact@v3
       with:
@@ -78,4 +80,4 @@ jobs:
           app/build/outputs/apk/release/*.apk
           app/build/outputs/bundle/release/*.aab
           app/build/outputs/native-debug-symbols/release/*.zip
-          app/build/outputs/mapping/release/*.txt
+          app/build/outputs/mapping/release/*.zip
