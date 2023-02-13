@@ -7,6 +7,6 @@ const elements = outputMetadata.elements;
 
 for (let element of elements) {
     let sourceApk = `${releaseDir}/${element.outputFile}`;
-    let destinationApk = `${releaseDir}/fdroid-app-${element.versionCode}.apk`;
+    let destinationApk = `${releaseDir}/x-fdroid-app-${element.versionCode}.apk`;
     fs.copyFileSync(sourceApk, destinationApk);
 }
