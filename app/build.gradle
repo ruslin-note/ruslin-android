@@ -88,8 +88,9 @@ android {
         variant.outputs.each { output ->
             def abi = output.getFilter(output.ABI)
             def baseAbiVersionCode = project.ext.abiCodes.get(abi)
-            output.versionCodeOverride = variant.versionCode * 100 + baseAbiVersionCode
-            output.outputFileName = "Ruslin-${defaultConfig.versionName}-${abi}-${gitCommitHash}-${variant.buildType.name}.apk"
+            def versionCode = variant.versionCode * 100 + baseAbiVersionCode
+            output.versionCodeOverride = versionCode
+            output.outputFileName = "Ruslin-${defaultConfig.versionName}-${abi}-${variant.buildType.name}.apk"
         }
     }
 
