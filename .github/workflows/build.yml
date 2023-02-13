@@ -109,3 +109,9 @@ jobs:
         allowUpdates: true
         removeArtifacts: true
         replacesArtifacts: true
+        prerelease:
+          contains('
+            refs/tags/*alpha*
+            refs/tags/*beta*
+            refs/tags/*rc*
+          ', github.ref)
