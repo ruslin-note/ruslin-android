@@ -34,12 +34,18 @@ Supported features:
 
 ## Download
 
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/packages/org.dianqk.ruslin/)
 [<img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
     alt="Get it on Google Play"
     height="80" />](https://play.google.com/store/apps/details?id=org.dianqk.ruslin)
 [<img src=".github/get-it-on-github.png"
     alt="Get it on GitHub"
     height="80">](https://github.com/DianQK/ruslin-android/releases)
+ or [nightly](https://github.com/ruslin-note/ruslin-android/releases/tag/nightly).
+
+> Ruslin is a reproducible build of app, you don't need to worry about F-Droid and other store signature issues, see: [Towards a reproducible F-Droid](https://f-droid.org/en/2023/01/15/towards-a-reproducible-fdroid.html).
 
 ## Credits
 

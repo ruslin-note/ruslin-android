@@ -23,12 +23,18 @@
 
 ## 下载
 
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/packages/org.dianqk.ruslin/)
 [<img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
     alt="Get it on Google Play"
     height="80" />](https://play.google.com/store/apps/details?id=org.dianqk.ruslin)
 [<img src=".github/get-it-on-github.png"
     alt="Get it on GitHub"
     height="80">](https://github.com/DianQK/ruslin-android/releases)
+ 或者[每日构建版](https://github.com/ruslin-note/ruslin-android/releases/tag/nightly).
+
+> Ruslin 是一个可重复构建的应用，你不需要担心 F-Droid 和其他应用商店签名问题，参见：[向可重现的 F-Droid 前进](https://f-droid.org/zh_Hans/2023/01/15/towards-a-reproducible-fdroid.html)。
 
 ## 感谢
 
