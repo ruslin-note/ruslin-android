@@ -18,6 +18,7 @@ import org.dianqk.ruslin.ui.page.notes.NotesPage
 import org.dianqk.ruslin.ui.page.search.SearchPage
 import org.dianqk.ruslin.ui.page.settings.AboutPage
 import org.dianqk.ruslin.ui.page.settings.CreditsPage
+import org.dianqk.ruslin.ui.page.settings.LanguagesPage
 import org.dianqk.ruslin.ui.page.settings.SettingsPage
 import org.dianqk.ruslin.ui.page.settings.accounts.AccountDetailPage
 import org.dianqk.ruslin.ui.page.settings.tools.ToolsPage
@@ -94,6 +95,9 @@ fun RuslinNavGraph(
                 navigateToAbout = {
                     navigationActions.navigateToAbout()
                 },
+                navigateToLanguages = {
+                    navigationActions.navigateToLanguages()
+                },
                 onPopBack = {
                     navController.popBackStack()
                 }
@@ -143,6 +147,11 @@ fun RuslinNavGraph(
         }
         animatedComposable(RuslinDestinations.CREDITS_ROUTE) {
             CreditsPage {
+                navController.popBackStack()
+            }
+        }
+        animatedComposable(RuslinDestinations.LANGUAGES_ROUTE) {
+            LanguagesPage {
                 navController.popBackStack()
             }
         }

@@ -16,7 +16,13 @@ import androidx.compose.ui.unit.dp
 import org.dianqk.ruslin.ui.theme.applyOpacity
 
 @Composable
-fun SettingItem(title: String, description: String, icon: ImageVector, onClick: () -> Unit) {
+fun SettingItem(
+    title: String,
+    description: String? = null,
+    icon: ImageVector? = null,
+    onClick: () -> Unit,
+    content: @Composable (() -> Unit)? = null
+) {
     Surface(
         modifier = Modifier.clickable { onClick() }
     ) {
@@ -26,14 +32,16 @@ fun SettingItem(title: String, description: String, icon: ImageVector, onClick: 
                 .padding(16.dp, 20.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                modifier = Modifier
-                    .padding(start = 8.dp, end = 16.dp)
-                    .size(24.dp),
-                tint = MaterialTheme.colorScheme.secondary
-            )
+            icon?.let {
+                Icon(
+                    imageVector = it,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(start = 8.dp, end = 16.dp)
+                        .size(24.dp),
+                    tint = MaterialTheme.colorScheme.secondary
+                )
+            }
             Column(
                 modifier = Modifier
                     .weight(1f)
@@ -45,12 +53,17 @@ fun SettingItem(title: String, description: String, icon: ImageVector, onClick: 
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onSurface
                 )
-                Text(
-                    text = description,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 1,
-                    style = MaterialTheme.typography.bodyMedium
-                )
+                description?.let {
+                    Text(
+                        text = it,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            }
+            if (content != null) {
+                content()
             }
         }
     }

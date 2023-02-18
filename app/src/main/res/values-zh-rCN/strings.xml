@@ -74,4 +74,5 @@
     <string name="credits">致谢</string>
     <string name="credits_desc">资源与开源软件</string>
     <string name="sync_failed">同步失败</string>
+    <string name="use_device_languages">跟随系统设置</string>
 </resources>

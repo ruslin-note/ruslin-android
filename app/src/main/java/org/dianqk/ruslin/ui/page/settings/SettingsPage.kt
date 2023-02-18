@@ -23,6 +23,7 @@ fun SettingsPage(
     navigateToAccountDetail: () -> Unit,
     navigateToTools: () -> Unit,
     navigateToAbout: () -> Unit,
+    navigateToLanguages: () -> Unit,
     onPopBack: () -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -76,7 +77,7 @@ fun SettingsPage(
                     title = stringResource(id = R.string.languages),
                     description = stringResource(id = R.string.languages_setting_desc),
                     icon = Icons.Filled.Language,
-                    onClick = { context.showComingSoon() }
+                    onClick = navigateToLanguages,
                 )
             }
             item {

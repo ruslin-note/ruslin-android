@@ -1,19 +1,30 @@
 package org.dianqk.ruslin.data
 
 import android.content.Context
+import android.util.Log
+import androidx.compose.runtime.*
+import androidx.compose.ui.platform.LocalContext
 import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.booleanPreferencesKey
-import androidx.datastore.preferences.core.longPreferencesKey
+import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.work.PeriodicWorkRequest
 import androidx.work.PeriodicWorkRequestBuilder
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.runBlocking
 import org.dianqk.ruslin.R
+import org.dianqk.ruslin.data.preference.LanguagesPreference
+import java.io.IOException
 import java.util.concurrent.TimeUnit
 
+// https://github.com/Ashinch/ReadYou/blob/435a6ea57704f45871565cb8980e1e45b69ff884/app/src/main/java/me/ash/reader/ui/ext/DataStoreExt.kt
+
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+
+val Context.languages: Int
+    get() = this.dataStore.get(DataStoreKeys.Languages) ?: 0
 
 sealed class DataStoreKeys<T> {
 
@@ -38,6 +49,11 @@ sealed class DataStoreKeys<T> {
         override val key: Preferences.Key<Boolean>
             get() = booleanPreferencesKey("sync.syncOnlyWhenCharging")
     }
+
+    object Languages : DataStoreKeys<Int>() {
+        override val key: Preferences.Key<Int>
+            get() = intPreferencesKey("languages")
+    }
 }
 
 fun DataStore<Preferences>.syncStrategy(): Flow<SyncStrategy> = this.data.map {
@@ -49,6 +65,23 @@ fun DataStore<Preferences>.syncStrategy(): Flow<SyncStrategy> = this.data.map {
         syncOnlyWhenCharging = it[DataStoreKeys.SyncOnlyWhenCharging.key]
             ?: default.syncOnlyWhenCharging
     )
+}
+
+@Suppress("UNCHECKED_CAST")
+fun <T> DataStore<Preferences>.get(dataStoreKeys: DataStoreKeys<T>): T? {
+    return runBlocking {
+        this@get.data.catch { exception ->
+            if (exception is IOException) {
+                Log.e("RLog", "Get data store error $exception")
+                exception.printStackTrace()
+                emit(emptyPreferences())
+            } else {
+                throw exception
+            }
+        }.map {
+            it[dataStoreKeys.key]
+        }.first() as T
+    }
 }
 
 data class SyncStrategy(
@@ -108,3 +141,33 @@ sealed class SyncIntervalPreference(
         )
     }
 }
+
+data class Settings(
+    val languages: LanguagesPreference = LanguagesPreference.default,
+)
+
+private fun Preferences.toSettings(): Settings {
+    return Settings(
+        languages = LanguagesPreference.fromPreferences(this)
+    )
+}
+
+@Composable
+fun SettingsProvider(
+    content: @Composable () -> Unit,
+) {
+    val context = LocalContext.current
+    val settings = remember {
+        context.dataStore.data.map {
+            it.toSettings()
+        }
+    }.collectAsState(initial = Settings()).value
+
+    CompositionLocalProvider(
+        LocalLanguages provides settings.languages
+    ) {
+        content()
+    }
+}
+
+val LocalLanguages = compositionLocalOf<LanguagesPreference> { LanguagesPreference.default }
