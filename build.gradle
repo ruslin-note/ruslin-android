@@ -9,7 +9,7 @@ buildscript {
         compile_sdk_version = 33
         min_sdk_version = 28
         target_sdk_version = 33
-        build_tools_version = '33.0.1'
+        build_tools_version = '30.0.3'
         ndk_version = '25.2.9519653'
     }
 }
