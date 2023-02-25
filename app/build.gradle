@@ -25,8 +25,8 @@ android {
         applicationId "org.dianqk.ruslin"
         minSdk project.min_sdk_version
         targetSdk project.target_sdk_version
-        versionCode 5
-        versionName "0.0.1-alpha.1"
+        versionCode 6
+        versionName "0.0.1-alpha.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
