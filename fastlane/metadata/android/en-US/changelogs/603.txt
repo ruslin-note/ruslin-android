@@ -1,0 +1,3 @@
+Currently in Pre-alpha, not ready for use in production environments. Please back up.
+- Support in-app translation
+**Full Changelog**: https://github.com/ruslin-note/ruslin-android/compare/v0.0.1-alpha.1...v0.0.1-alpha.2

@@ -1,0 +1,3 @@
+目前处于 Pre-alpha 阶段，不建议在生产环境使用，请注意做好备份。
+- 支持应用内切换语言
+完整变更日志： https://github.com/ruslin-note/ruslin-android/compare/v0.0.1-alpha.1...v0.0.1-alpha.2

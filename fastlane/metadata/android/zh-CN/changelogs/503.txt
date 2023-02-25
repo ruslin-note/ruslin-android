@@ -5,4 +5,4 @@
 - 添加同步失败的文字
 - 延迟 jieba 的加载时机到搜索页
 - 添加关于和感谢页
-完整变更日志： https://github.com/ruslin-note/ruslin-android/compare/v0.0.1-pre-alpha.2...v0.0.1-pre-alpha.3
+完整变更日志： https://github.com/ruslin-note/ruslin-android/compare/v0.0.1-pre-alpha.2...v0.0.1-alpha.1
