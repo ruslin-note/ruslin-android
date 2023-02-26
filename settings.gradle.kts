@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 pluginManagement {
     repositories {
         gradlePluginPortal()
@@ -13,7 +15,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "Ruslin"
-include ':app'
-include ':mdrender'
-include ':mdrenderbenchmark'
-include ':uniffi'
+include(":app", ":mdrender", ":mdrenderbenchmark", ":uniffi")
