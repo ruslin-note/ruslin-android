@@ -108,9 +108,13 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = JavaVersion.VERSION_11.toString()
         freeCompilerArgs = freeCompilerArgs + "-opt-in=kotlin.RequiresOptIn"
         freeCompilerArgs = freeCompilerArgs + "-Xjvm-default=all"
+    }
+
+    kotlin {
+        jvmToolchain(11)
     }
 
     buildFeatures {
