@@ -2,18 +2,9 @@
 @Suppress("DSL_SCOPE_VIOLATION")
 
 buildscript {
-    extra.apply {
-        set("compose_version", "1.4.0-beta01")
-        set("accompanist_version", "0.29.1-alpha")
-        set("material3_version", "1.1.0-alpha06")
-        set("material_version", "1.4.0-beta01")
-        set("lifecycle_runtime_version", "2.6.0-beta01")
-
-        set("compile_sdk_version", 33)
-        set("min_sdk_version", 28)
-        set("target_sdk_version", 33)
-        set("build_tools_version", "30.0.3")
-        set("ndk_version", "25.2.9519653")
+    repositories {
+        mavenCentral()
+        google()
     }
 }
 
