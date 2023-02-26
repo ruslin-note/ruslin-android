@@ -3,6 +3,16 @@ androidGradlePlugin = "7.4.1"
 hilt = "2.44.2"
 kotlin = "1.8.10"
 androidxBenchmark = "1.1.1"
+androidxCore = "1.9.0"
+
+compileSdkVersion = "33"
+minSdkVersion = "28"
+targetSdkVersion = "33"
+buildToolsVersion = "30.0.3"
+ndkVersion = "25.2.9519653"
+
+[libraries]
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
