@@ -16,10 +16,10 @@ ndkVersion = "25.2.9519653"
 # library
 appcompat = "1.6.1"
 material = "1.8.0"
-compose = "1.4.0-beta01"
+compose = "1.4.0-beta02"
 accompanist = "0.29.1-alpha"
-material3 = "1.1.0-alpha06"
-lifecycleRuntime = "2.6.0-beta01"
+material3 = "1.1.0-alpha07"
+lifecycleRuntime = "2.6.0-rc01"
 
 # test
 junit = "4.13.2"
