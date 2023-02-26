@@ -1,18 +1,40 @@
 [versions]
+# plugin
 androidGradlePlugin = "7.4.1"
 hilt = "2.44.2"
 kotlin = "1.8.10"
 androidxBenchmark = "1.1.1"
 androidxCore = "1.9.0"
 
+# sdk
 compileSdkVersion = "33"
 minSdkVersion = "28"
 targetSdkVersion = "33"
 buildToolsVersion = "30.0.3"
 ndkVersion = "25.2.9519653"
 
+# library
+appcompat = "1.6.1"
+material = "1.8.0"
+compose = "1.4.0-beta01"
+accompanist = "0.29.1-alpha"
+material3 = "1.1.0-alpha06"
+lifecycleRuntime = "2.6.0-beta01"
+
+# test
+junit = "4.13.2"
+testExtJunit = "1.1.5"
+testeSpresso = "3.5.1"
+
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+android-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+compose-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "compose" }
+compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "testExtJunit" }
+androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "testeSpresso" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
