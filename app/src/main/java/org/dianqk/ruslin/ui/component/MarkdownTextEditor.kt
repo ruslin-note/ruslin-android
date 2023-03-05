@@ -9,7 +9,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextDirection
 import org.dianqk.mdrender.MarkdownTheme
 import org.dianqk.mdrender.MarkdownVisualTransformation
 import org.dianqk.ruslin.R
@@ -142,6 +144,7 @@ fun MarkdownTextEditor(
             unfocusedIndicatorColor = Color.Transparent,
             containerColor = Color.Transparent
         ),
+        textStyle = TextStyle(color = Color.Black, textDirection = TextDirection.Content),
         visualTransformation = visualTransformation
     )
 
