@@ -7,8 +7,6 @@ set -e
 export ANDROID_HOME=$HOME/Android/Sdk
 export ANDROID_NDK_VERSION=25.2.9519653
 
-find -L $ANDROID_HOME/ndk/$ANDROID_NDK_VERSION -name libunwind.a -execdir sh -c 'echo "INPUT(-lunwind)" > libgcc.a' \;
-
 export ANDROID_NDK_TOOLCHAIN_BIN=$ANDROID_HOME/ndk/$ANDROID_NDK_VERSION/toolchains/llvm/prebuilt/linux-x86_64/bin
 
 export AR=$ANDROID_NDK_TOOLCHAIN_BIN/llvm-ar

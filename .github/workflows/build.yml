@@ -39,10 +39,7 @@ jobs:
         EXPECTED_NDK_VERSION=25.2.9519653
         echo "Expected Android NDK: $EXPECTED_NDK_VERSION"
         [[ "$EXPECTED_NDK_VERSION" == "$HIGHEST_NDK_VERSION" ]];
-        echo "ANDROID_NDK_VERSION=$HIGHEST_NDK_VERSION" >> $GITHUB_ENV
-    # See https://github.com/godot-rust/godot-rust/pull/920
-    - name: "Used version ${{ env.ANDROID_NDK_VERSION }}. Workaround Rust bug..."
-      run: find -L $ANDROID_SDK_ROOT/ndk/$ANDROID_NDK_VERSION -name libunwind.a -execdir sh -c 'echo "INPUT(-lunwind)" > libgcc.a' \;
+        echo "ANDROID_NDK_VERSION=$EXPECTED_NDK_VERSION" >> $GITHUB_ENV
     - name: Build ruslin-data-uniffi
       working-directory: ./ruslin-data-uniffi
       run: |

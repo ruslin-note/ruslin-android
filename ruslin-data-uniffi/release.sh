@@ -19,8 +19,6 @@ echo "RUSTFLAGS: $RUSTFLAGS"
 # https://github.com/briansmith/ring/issues/715 ?
 # export CFLAGS="-fdebug-prefix-map=$(pwd)=." 
 
-find -L $ANDROID_NDK_ROOT -name libunwind.a -execdir sh -c 'echo "INPUT(-lunwind)" > libgcc.a' \;
-
 ANDROID_NDK_TOOLCHAIN_BIN=$ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64/bin
 export AR=$ANDROID_NDK_TOOLCHAIN_BIN/llvm-ar
 
