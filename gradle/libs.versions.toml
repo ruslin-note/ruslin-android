@@ -1,6 +1,6 @@
 [versions]
 # plugin
-androidGradlePlugin = "7.4.1"
+androidGradlePlugin = "7.4.2"
 hilt = "2.44.2"
 kotlin = "1.8.10"
 androidxBenchmark = "1.1.1"
