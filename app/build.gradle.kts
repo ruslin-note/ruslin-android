@@ -158,8 +158,8 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.runtime.compose)
-    implementation("androidx.activity:activity-compose:1.6.1")
-    implementation("androidx.work:work-runtime-ktx:2.8.0")
+    implementation("androidx.activity:activity-compose:1.7.0")
+    implementation("androidx.work:work-runtime-ktx:2.8.1")
 
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.tooling.preview)
@@ -175,7 +175,7 @@ dependencies {
     implementation("com.google.android.material:material:1.8.0")
 
     implementation("com.google.dagger:hilt-android:2.45")
-    implementation("androidx.webkit:webkit:1.6.0")
+    implementation("androidx.webkit:webkit:1.6.1")
     kapt("com.google.dagger:hilt-compiler:2.45")
     kapt("androidx.hilt:hilt-compiler:1.0.0")
     // https://github.com/google/dagger/issues/2601#issuecomment-1174506373
