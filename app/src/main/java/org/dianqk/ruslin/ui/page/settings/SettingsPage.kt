@@ -15,7 +15,6 @@ import androidx.compose.ui.unit.dp
 import org.dianqk.ruslin.R
 import org.dianqk.ruslin.ui.component.BackButton
 import org.dianqk.ruslin.ui.component.SettingItem
-import org.dianqk.ruslin.ui.ext.showComingSoon
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -24,6 +23,7 @@ fun SettingsPage(
     navigateToTools: () -> Unit,
     navigateToAbout: () -> Unit,
     navigateToLanguages: () -> Unit,
+    navigateToAppearance: () -> Unit,
     onPopBack: () -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -69,7 +69,7 @@ fun SettingsPage(
                     title = stringResource(id = R.string.color_and_style),
                     description = stringResource(id = R.string.color_and_style_setting_desc),
                     icon = Icons.Filled.Palette,
-                    onClick = { context.showComingSoon() }
+                    onClick = navigateToAppearance
                 )
             }
             item {

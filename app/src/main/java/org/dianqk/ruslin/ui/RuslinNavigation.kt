@@ -7,6 +7,7 @@ import org.dianqk.ruslin.ui.RuslinDestinationsArgs.IS_PREVIEW_ARG
 import org.dianqk.ruslin.ui.RuslinDestinationsArgs.NOTE_ID_ARG
 import org.dianqk.ruslin.ui.RuslinPages.ABOUT_PAGE
 import org.dianqk.ruslin.ui.RuslinPages.ACCOUNT_DETAIL_PAGE
+import org.dianqk.ruslin.ui.RuslinPages.APPEARANCE_PAGE
 import org.dianqk.ruslin.ui.RuslinPages.CREDITS_PAGE
 import org.dianqk.ruslin.ui.RuslinPages.DATABASE_STATUS_PAGE
 import org.dianqk.ruslin.ui.RuslinPages.LANGUAGES_PAGE
@@ -31,6 +32,7 @@ object RuslinPages {
     const val ABOUT_PAGE = "about"
     const val CREDITS_PAGE = "credits"
     const val LANGUAGES_PAGE = "languages"
+    const val APPEARANCE_PAGE = "appearance"
 }
 
 object RuslinDestinationsArgs {
@@ -53,6 +55,7 @@ object RuslinDestinations {
     const val ABOUT_ROUTE = ABOUT_PAGE
     const val CREDITS_ROUTE = CREDITS_PAGE
     const val LANGUAGES_ROUTE = LANGUAGES_PAGE
+    const val APPEARANCE_ROUTE = APPEARANCE_PAGE
 }
 
 class RuslinNavigationActions(private val navController: NavHostController) {
@@ -133,6 +136,12 @@ class RuslinNavigationActions(private val navController: NavHostController) {
 
     fun navigateToLanguages() {
         navController.navigate(RuslinDestinations.LANGUAGES_ROUTE) {
+            launchSingleTop = true
+        }
+    }
+
+    fun navigateToAppearance() {
+        navController.navigate(RuslinDestinations.APPEARANCE_ROUTE) {
             launchSingleTop = true
         }
     }

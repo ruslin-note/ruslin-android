@@ -16,10 +16,7 @@ import org.dianqk.ruslin.ui.page.login.LoginPage
 import org.dianqk.ruslin.ui.page.note_detail.NoteDetailPage
 import org.dianqk.ruslin.ui.page.notes.NotesPage
 import org.dianqk.ruslin.ui.page.search.SearchPage
-import org.dianqk.ruslin.ui.page.settings.AboutPage
-import org.dianqk.ruslin.ui.page.settings.CreditsPage
-import org.dianqk.ruslin.ui.page.settings.LanguagesPage
-import org.dianqk.ruslin.ui.page.settings.SettingsPage
+import org.dianqk.ruslin.ui.page.settings.*
 import org.dianqk.ruslin.ui.page.settings.accounts.AccountDetailPage
 import org.dianqk.ruslin.ui.page.settings.tools.ToolsPage
 import org.dianqk.ruslin.ui.page.settings.tools.database.DatabaseStatusPage
@@ -98,6 +95,9 @@ fun RuslinNavGraph(
                 navigateToLanguages = {
                     navigationActions.navigateToLanguages()
                 },
+                navigateToAppearance = {
+                    navigationActions.navigateToAppearance()
+                },
                 onPopBack = {
                     navController.popBackStack()
                 }
@@ -152,6 +152,11 @@ fun RuslinNavGraph(
         }
         animatedComposable(RuslinDestinations.LANGUAGES_ROUTE) {
             LanguagesPage {
+                navController.popBackStack()
+            }
+        }
+        animatedComposable(RuslinDestinations.APPEARANCE_ROUTE) {
+            AppearancePage {
                 navController.popBackStack()
             }
         }

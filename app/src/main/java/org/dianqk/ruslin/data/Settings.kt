@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
 import org.dianqk.ruslin.R
 import org.dianqk.ruslin.data.preference.LanguagesPreference
+import org.dianqk.ruslin.data.preference.ThemeIndexPreference
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
@@ -53,6 +54,11 @@ sealed class DataStoreKeys<T> {
     object Languages : DataStoreKeys<Int>() {
         override val key: Preferences.Key<Int>
             get() = intPreferencesKey("languages")
+    }
+
+    object ThemeIndex : DataStoreKeys<Int>() {
+        override val key: Preferences.Key<Int>
+            get() = intPreferencesKey("themeIndex")
     }
 }
 
@@ -144,11 +150,14 @@ sealed class SyncIntervalPreference(
 
 data class Settings(
     val languages: LanguagesPreference = LanguagesPreference.default,
+
+    val themeIndex: Int = ThemeIndexPreference.default,
 )
 
 private fun Preferences.toSettings(): Settings {
     return Settings(
-        languages = LanguagesPreference.fromPreferences(this)
+        languages = LanguagesPreference.fromPreferences(this),
+        themeIndex = ThemeIndexPreference.fromPreferences(this),
     )
 }
 
@@ -164,10 +173,13 @@ fun SettingsProvider(
     }.collectAsState(initial = Settings()).value
 
     CompositionLocalProvider(
-        LocalLanguages provides settings.languages
+        LocalLanguages provides settings.languages,
+        LocalThemeIndex provides settings.themeIndex,
     ) {
         content()
     }
 }
 
 val LocalLanguages = compositionLocalOf<LanguagesPreference> { LanguagesPreference.default }
+// Theme
+val LocalThemeIndex = compositionLocalOf { ThemeIndexPreference.default }
