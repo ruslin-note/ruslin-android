@@ -368,8 +368,8 @@ checksum = "3c877555693c14d2f84191cfd3ad8582790fc52b5e2274b40b59cf5f5cea25c7"
 
 [[package]]
 name = "diesel"
-version = "2.0.2"
-source = "git+https://github.com/DianQK/diesel.git?tag=v2.0.2-p#15f8e7eabc4830fe4f5f08c5c88ec3afbcab7436"
+version = "2.0.3"
+source = "git+https://github.com/DianQK/diesel.git?tag=v2.0.3-p1#8ed3d4b1ded14edd4dc7e422a97876f448e61c73"
 dependencies = [
  "bigdecimal",
  "chrono",
@@ -388,8 +388,8 @@ dependencies = [
 
 [[package]]
 name = "diesel_derives"
-version = "2.0.1"
-source = "git+https://github.com/DianQK/diesel.git?tag=v2.0.2-p#15f8e7eabc4830fe4f5f08c5c88ec3afbcab7436"
+version = "2.0.2"
+source = "git+https://github.com/DianQK/diesel.git?tag=v2.0.3-p1#8ed3d4b1ded14edd4dc7e422a97876f448e61c73"
 dependencies = [
  "proc-macro-error",
  "proc-macro2",
@@ -1274,7 +1274,6 @@ dependencies = [
  "log",
  "log4rs",
  "pulldown-cmark",
- "quote",
  "ruslin-data",
  "tokio",
  "uniffi",
