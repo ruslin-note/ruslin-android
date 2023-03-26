@@ -54,6 +54,9 @@ class RuslinNotesRepository @Inject constructor(
 
     override fun doSync(isOnStart: Boolean, fromScratch: Boolean) {
         applicationScope.launch {
+            if (getSyncConfig().getOrNull() == null) {
+                return@launch
+            }
             workManager.cancelAllWork()
             val syncStrategy = appContext.dataStore.syncStrategy().first()
             if (isOnStart) {
