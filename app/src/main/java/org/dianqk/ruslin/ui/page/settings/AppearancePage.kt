@@ -25,6 +25,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,7 +33,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
+import org.dianqk.mdrender.MarkdownTheme
+import org.dianqk.mdrender.MarkdownVisualTransformation
 import org.dianqk.ruslin.R
 import org.dianqk.ruslin.data.LocalThemeIndex
 import org.dianqk.ruslin.data.preference.ThemeIndexPreference
@@ -52,6 +56,23 @@ fun AppearancePage(
     val fraction =
         CubicBezierEasing(1f, 0f, 0.8f, 0.4f).transform(scrollBehavior.state.overlappedFraction)
     val wallpaperTonalPalettes = extractTonalPalettesFromUserWallpaper()
+    val previewText = """
+        # Heading level 1
+        ## Heading level 2
+        ### Heading level 3
+        **bold** *italic* `inline code`
+        - Unordered Item
+        - Unordered Item
+        ```
+        fn main() {
+            println!("Hello World!");
+        }
+        ```
+    """.trimIndent()
+    val colorScheme = MaterialTheme.colorScheme
+    val visualTransformation =
+        remember(themeIndex) { MarkdownVisualTransformation(MarkdownTheme.from(colorScheme = colorScheme)) }
+    val previewMarkdownText = visualTransformation.filter(AnnotatedString(previewText))
 
     Scaffold(
         modifier = Modifier
@@ -76,6 +97,17 @@ fun AppearancePage(
                     modifier = Modifier.padding(24.dp),
                     text = stringResource(id = R.string.color_and_style),
                     style = MaterialTheme.typography.headlineLarge
+                )
+            }
+            item {
+                Text(
+                    modifier = Modifier.padding(
+                        start = 24.dp,
+                        top = 0.dp,
+                        end = 24.dp,
+                        bottom = 6.dp
+                    ),
+                    text = previewMarkdownText.text
                 )
             }
             item {
