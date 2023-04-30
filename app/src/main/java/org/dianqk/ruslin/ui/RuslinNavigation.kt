@@ -9,6 +9,7 @@ import org.dianqk.ruslin.ui.RuslinPages.ABOUT_PAGE
 import org.dianqk.ruslin.ui.RuslinPages.ACCOUNT_DETAIL_PAGE
 import org.dianqk.ruslin.ui.RuslinPages.APPEARANCE_PAGE
 import org.dianqk.ruslin.ui.RuslinPages.CREDITS_PAGE
+import org.dianqk.ruslin.ui.RuslinPages.DARK_THEME_PAGE
 import org.dianqk.ruslin.ui.RuslinPages.DATABASE_STATUS_PAGE
 import org.dianqk.ruslin.ui.RuslinPages.LANGUAGES_PAGE
 import org.dianqk.ruslin.ui.RuslinPages.LOGIN_PAGE
@@ -33,6 +34,7 @@ object RuslinPages {
     const val CREDITS_PAGE = "credits"
     const val LANGUAGES_PAGE = "languages"
     const val APPEARANCE_PAGE = "appearance"
+    const val DARK_THEME_PAGE = "dark_theme"
 }
 
 object RuslinDestinationsArgs {
@@ -56,6 +58,7 @@ object RuslinDestinations {
     const val CREDITS_ROUTE = CREDITS_PAGE
     const val LANGUAGES_ROUTE = LANGUAGES_PAGE
     const val APPEARANCE_ROUTE = APPEARANCE_PAGE
+    const val DARK_THEME_ROUTE = DARK_THEME_PAGE
 }
 
 class RuslinNavigationActions(private val navController: NavHostController) {
@@ -142,6 +145,12 @@ class RuslinNavigationActions(private val navController: NavHostController) {
 
     fun navigateToAppearance() {
         navController.navigate(RuslinDestinations.APPEARANCE_ROUTE) {
+            launchSingleTop = true
+        }
+    }
+
+    fun navigateToDarkTheme() {
+        navController.navigate(RuslinDestinations.DARK_THEME_ROUTE) {
             launchSingleTop = true
         }
     }

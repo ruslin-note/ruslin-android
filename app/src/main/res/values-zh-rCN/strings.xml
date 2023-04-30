@@ -75,4 +75,10 @@
     <string name="credits_desc">资源与开源软件</string>
     <string name="sync_failed">同步失败</string>
     <string name="use_device_languages">跟随系统设置</string>
+    <string name="dark_theme">深色主题</string>
+    <string name="high_contrast">高对比度深色主题</string>
+    <string name="use_device_theme">跟随系统设置</string>
+    <string name="on">开启</string>
+    <string name="off">关闭</string>
+    <string name="other">其他</string>
 </resources>

@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.Color
+import org.dianqk.ruslin.data.LocalHighContrastDarkTheme
 
 @Composable
 fun dynamicLightColorScheme(): ColorScheme {
@@ -40,8 +41,9 @@ fun dynamicLightColorScheme(): ColorScheme {
 }
 
 @Composable
-fun dynamicDarkColorScheme(isPrueBlackTheme: Boolean): ColorScheme {
+fun dynamicDarkColorScheme(): ColorScheme {
     val palettes = LocalTonalPalettes.current
+    val highContrastDarkTheme = LocalHighContrastDarkTheme.current
 
     return darkColorScheme(
         primary = palettes primary 80,
@@ -57,9 +59,9 @@ fun dynamicDarkColorScheme(isPrueBlackTheme: Boolean): ColorScheme {
         onTertiary = palettes tertiary 20,
         tertiaryContainer = palettes tertiary 30,
         onTertiaryContainer = palettes tertiary 90,
-        background = palettes neutral 10,
+        background = palettes neutral if (highContrastDarkTheme.value) 0 else 10,
         onBackground = palettes neutral 90,
-        surface = palettes neutral if (isPrueBlackTheme) 0 else 10,
+        surface = palettes neutral if (highContrastDarkTheme.value) 0 else 10,
         onSurface = palettes neutral 90,
         surfaceVariant = palettes neutralVariant 30,
         onSurfaceVariant = palettes neutralVariant 80,

@@ -15,6 +15,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
 import org.dianqk.ruslin.R
+import org.dianqk.ruslin.data.preference.DarkThemePreference
+import org.dianqk.ruslin.data.preference.HighContrastDarkThemePreference
 import org.dianqk.ruslin.data.preference.LanguagesPreference
 import org.dianqk.ruslin.data.preference.ThemeIndexPreference
 import java.io.IOException
@@ -59,6 +61,16 @@ sealed class DataStoreKeys<T> {
     object ThemeIndex : DataStoreKeys<Int>() {
         override val key: Preferences.Key<Int>
             get() = intPreferencesKey("themeIndex")
+    }
+
+    object DarkTheme : DataStoreKeys<Int>() {
+        override val key: Preferences.Key<Int>
+            get() = intPreferencesKey("darkTheme")
+    }
+
+    object HighContrastDarkTheme : DataStoreKeys<Boolean>() {
+        override val key: Preferences.Key<Boolean>
+            get() = booleanPreferencesKey("highContrastDarkTheme")
     }
 }
 
@@ -152,12 +164,16 @@ data class Settings(
     val languages: LanguagesPreference = LanguagesPreference.default,
 
     val themeIndex: Int = ThemeIndexPreference.default,
+    val darkTheme: DarkThemePreference = DarkThemePreference.default,
+    val highContrastDarkTheme: HighContrastDarkThemePreference = HighContrastDarkThemePreference.default,
 )
 
 private fun Preferences.toSettings(): Settings {
     return Settings(
         languages = LanguagesPreference.fromPreferences(this),
         themeIndex = ThemeIndexPreference.fromPreferences(this),
+        darkTheme = DarkThemePreference.fromPreferences(this),
+        highContrastDarkTheme = HighContrastDarkThemePreference.fromPreferences(this),
     )
 }
 
@@ -175,6 +191,8 @@ fun SettingsProvider(
     CompositionLocalProvider(
         LocalLanguages provides settings.languages,
         LocalThemeIndex provides settings.themeIndex,
+        LocalDarkTheme provides settings.darkTheme,
+        LocalHighContrastDarkTheme provides settings.highContrastDarkTheme,
     ) {
         content()
     }
@@ -184,3 +202,5 @@ val LocalLanguages = compositionLocalOf<LanguagesPreference> { LanguagesPreferen
 
 // Theme
 val LocalThemeIndex = compositionLocalOf { ThemeIndexPreference.default }
+val LocalDarkTheme = compositionLocalOf<DarkThemePreference> { DarkThemePreference.default }
+val LocalHighContrastDarkTheme = compositionLocalOf<HighContrastDarkThemePreference> { HighContrastDarkThemePreference.default }

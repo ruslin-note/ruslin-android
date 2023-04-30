@@ -79,4 +79,10 @@
     <string name="github_issue_desc">Submit an issue for bug report or feature request</string>
     <string name="info_copied">Info copied to clipboard</string>
     <string name="sync_failed">Sync failed</string>
+    <string name="dark_theme">Dark Theme</string>
+    <string name="high_contrast">High contrast dark theme</string>
+    <string name="use_device_theme">Use device theme</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
+    <string name="other">Other</string>
 </resources>

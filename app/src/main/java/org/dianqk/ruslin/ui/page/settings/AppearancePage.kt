@@ -38,19 +38,26 @@ import androidx.compose.ui.unit.dp
 import org.dianqk.mdrender.MarkdownTheme
 import org.dianqk.mdrender.MarkdownVisualTransformation
 import org.dianqk.ruslin.R
+import org.dianqk.ruslin.data.LocalDarkTheme
 import org.dianqk.ruslin.data.LocalThemeIndex
 import org.dianqk.ruslin.data.preference.ThemeIndexPreference
+import org.dianqk.ruslin.data.preference.not
 import org.dianqk.ruslin.ui.component.BackButton
+import org.dianqk.ruslin.ui.component.PreferenceSwitchWithDivider
 import org.dianqk.ruslin.ui.theme.palette.TonalPalettes
 import org.dianqk.ruslin.ui.theme.palette.dynamic.extractTonalPalettesFromUserWallpaper
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppearancePage(
+    navigateToDarkTheme: () -> Unit,
     onPopBack: () -> Unit
 ) {
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     val themeIndex = LocalThemeIndex.current
+    val darkTheme = LocalDarkTheme.current
+    val darkThemeNot = !darkTheme
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val fraction =
@@ -115,6 +122,17 @@ fun AppearancePage(
                     context = context,
                     themeIndex = themeIndex,
                     palettes = wallpaperTonalPalettes,
+                )
+            }
+            item {
+                PreferenceSwitchWithDivider(
+                    title = stringResource(id = R.string.dark_theme),
+                    description = darkTheme.toDesc(context),
+                    isChecked = darkTheme.isDarkTheme(),
+                    onClick = navigateToDarkTheme,
+                    onChecked = {
+                        darkThemeNot.put(context = context, scope = scope)
+                    }
                 )
             }
         }

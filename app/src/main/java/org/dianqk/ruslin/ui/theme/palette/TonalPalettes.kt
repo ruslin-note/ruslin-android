@@ -245,7 +245,6 @@ data class TonalPalettes(
     }
 }
 
-@RequiresApi(23)
 object ColorResourceHelper {
 
     @DoNotInline

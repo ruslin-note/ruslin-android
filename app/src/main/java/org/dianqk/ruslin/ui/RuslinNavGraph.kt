@@ -156,7 +156,14 @@ fun RuslinNavGraph(
             }
         }
         animatedComposable(RuslinDestinations.APPEARANCE_ROUTE) {
-            AppearancePage {
+            AppearancePage(navigateToDarkTheme = {
+                navigationActions.navigateToDarkTheme()
+            }) {
+                navController.popBackStack()
+            }
+        }
+        animatedComposable(RuslinDestinations.DARK_THEME_ROUTE) {
+            DarkThemePage {
                 navController.popBackStack()
             }
         }
