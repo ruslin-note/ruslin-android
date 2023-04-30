@@ -230,7 +230,7 @@ fun EditorToolbar(
                         expanded = false
                     }
                 ) {
-                    Row() {
+                    Row {
                         HeadingDropdownMenuItem(6, R.drawable.format_h6) {
                             onInsertMarkdownTag(it)
                             expanded = false

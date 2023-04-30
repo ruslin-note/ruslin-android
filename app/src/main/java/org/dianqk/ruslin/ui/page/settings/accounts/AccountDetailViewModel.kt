@@ -7,10 +7,19 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.dianqk.ruslin.data.*
+import org.dianqk.ruslin.data.DataStoreKeys
+import org.dianqk.ruslin.data.NotesRepository
+import org.dianqk.ruslin.data.SyncStrategy
+import org.dianqk.ruslin.data.dataStore
+import org.dianqk.ruslin.data.syncStrategy
 import uniffi.ruslin.SyncConfig
 import javax.inject.Inject
 

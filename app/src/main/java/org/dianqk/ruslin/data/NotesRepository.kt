@@ -1,7 +1,14 @@
 package org.dianqk.ruslin.data
 
 import kotlinx.coroutines.flow.SharedFlow
-import uniffi.ruslin.*
+import uniffi.ruslin.FfiAbbrNote
+import uniffi.ruslin.FfiFolder
+import uniffi.ruslin.FfiNote
+import uniffi.ruslin.FfiResource
+import uniffi.ruslin.FfiSearchNote
+import uniffi.ruslin.FfiStatus
+import uniffi.ruslin.FfiSyncInfo
+import uniffi.ruslin.SyncConfig
 import java.io.File
 
 interface NotesRepository {

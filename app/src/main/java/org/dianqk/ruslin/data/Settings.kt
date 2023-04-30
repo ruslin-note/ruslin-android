@@ -130,7 +130,7 @@ sealed class SyncIntervalPreference(
     companion object {
 
         fun toSyncInterval(syncInterval: Long): SyncIntervalPreference {
-            return values.find { it.value == syncInterval } ?: SyncIntervalPreference.default
+            return values.find { it.value == syncInterval } ?: default
         }
 
         val default = Every30Minutes
@@ -181,5 +181,6 @@ fun SettingsProvider(
 }
 
 val LocalLanguages = compositionLocalOf<LanguagesPreference> { LanguagesPreference.default }
+
 // Theme
 val LocalThemeIndex = compositionLocalOf { ThemeIndexPreference.default }

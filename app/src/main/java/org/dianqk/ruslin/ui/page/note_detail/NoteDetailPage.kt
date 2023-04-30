@@ -12,7 +12,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -141,7 +140,7 @@ private fun NoteEditor(
                 )
             },
             textStyle = MaterialTheme.typography.titleLarge.copy(textDirection = TextDirection.Content),
-            )
+        )
         Divider()
         MarkdownTextEditor(
             modifier = Modifier.weight(1f),

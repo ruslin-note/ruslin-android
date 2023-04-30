@@ -15,7 +15,12 @@ import org.dianqk.ruslin.ui.theme.palette.colorspace.zcam.Izazbz.Companion.toIza
 import org.dianqk.ruslin.ui.theme.palette.util.square
 import org.dianqk.ruslin.ui.theme.palette.util.toDegrees
 import org.dianqk.ruslin.ui.theme.palette.util.toRadians
-import kotlin.math.*
+import kotlin.math.atan2
+import kotlin.math.cos
+import kotlin.math.exp
+import kotlin.math.pow
+import kotlin.math.sin
+import kotlin.math.sqrt
 
 data class Zcam(
     val hz: Double = Double.NaN,

@@ -3,8 +3,17 @@ package org.dianqk.ruslin.ui.component
 import android.net.Uri
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -154,30 +163,37 @@ fun MarkdownTextEditor(
                 textFieldValue = textFieldValueState,
                 markdownVisualTransformation = visualTransformation
             )
+
             is MarkdownInsertTagType.Bold -> tagType.insert(
                 textFieldValue = textFieldValueState,
                 markdownVisualTransformation = visualTransformation
             )
+
             is MarkdownInsertTagType.Italic -> tagType.insert(
                 textFieldValue = textFieldValueState,
                 markdownVisualTransformation = visualTransformation
             )
+
             is MarkdownInsertTagType.ListBulleted -> tagType.insert(
                 textFieldValue = textFieldValueState,
                 markdownVisualTransformation = visualTransformation
             )
+
             is MarkdownInsertTagType.ListNumbered -> tagType.insert(
                 textFieldValue = textFieldValueState,
                 markdownVisualTransformation = visualTransformation
             )
+
             is MarkdownInsertTagType.Quote -> tagType.insert(
                 textFieldValue = textFieldValueState,
                 markdownVisualTransformation = visualTransformation
             )
+
             is MarkdownInsertTagType.Strikethrough -> tagType.insert(
                 textFieldValue = textFieldValueState,
                 markdownVisualTransformation = visualTransformation
             )
+
             is MarkdownInsertTagType.Image -> tagType.insert(
                 textFieldValue = textFieldValueState,
                 markdownVisualTransformation = visualTransformation

@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 import org.dianqk.ruslin.R
 import org.dianqk.ruslin.data.DataStoreKeys
 import org.dianqk.ruslin.data.dataStore
-import java.util.*
+import java.util.Locale
 
 // See https://github.com/Ashinch/ReadYou/blob/435a6ea57704f45871565cb8980e1e45b69ff884/app/src/main/java/me/ash/reader/data/model/preference/LanguagesPreference.kt#L17.
 
