@@ -19,15 +19,12 @@ import androidx.compose.ui.unit.dp
 import org.dianqk.ruslin.R
 import org.dianqk.ruslin.data.LocalDarkTheme
 import org.dianqk.ruslin.data.LocalHighContrastDarkTheme
-import org.dianqk.ruslin.data.LocalLanguages
 import org.dianqk.ruslin.data.preference.DarkThemePreference
-import org.dianqk.ruslin.data.preference.LanguagesPreference
 import org.dianqk.ruslin.data.preference.not
 import org.dianqk.ruslin.ui.component.BackButton
 import org.dianqk.ruslin.ui.component.PreferenceSubtitle
 import org.dianqk.ruslin.ui.component.PreferenceSwitch
 import org.dianqk.ruslin.ui.component.SettingItem
-import org.dianqk.ruslin.ui.component.SubTitle
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

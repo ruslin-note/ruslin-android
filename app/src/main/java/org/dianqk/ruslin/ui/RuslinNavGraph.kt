@@ -1,8 +1,11 @@
 package org.dianqk.ruslin.ui
 
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.background
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
@@ -33,7 +36,8 @@ fun RuslinNavGraph(
 ) {
     AnimatedNavHost(
         navController = navController,
-        startDestination = startDestination
+        startDestination = startDestination,
+        modifier = Modifier.background(MaterialTheme.colorScheme.background),
     ) {
         animatedComposable(RuslinDestinations.NOTES_ROUTE) {
             NotesPage(

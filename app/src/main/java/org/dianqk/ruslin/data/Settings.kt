@@ -203,4 +203,5 @@ val LocalLanguages = compositionLocalOf<LanguagesPreference> { LanguagesPreferen
 // Theme
 val LocalThemeIndex = compositionLocalOf { ThemeIndexPreference.default }
 val LocalDarkTheme = compositionLocalOf<DarkThemePreference> { DarkThemePreference.default }
-val LocalHighContrastDarkTheme = compositionLocalOf<HighContrastDarkThemePreference> { HighContrastDarkThemePreference.default }
+val LocalHighContrastDarkTheme =
+    compositionLocalOf<HighContrastDarkThemePreference> { HighContrastDarkThemePreference.default }
