@@ -44,6 +44,7 @@ class MarkdownVisualTransformation(private val theme: MarkdownTheme = MarkdownDe
 
     fun render(tree: ParsedTagRanges, text: AnnotatedString): AnnotatedString {
         val builder = AnnotatedString.Builder(text)
+        builder.addStyle(theme.contentStyle, 0, builder.length)
         for (tagRange in tree.markdownTagRanges) {
             when (tagRange) {
                 is MarkdownTagRange.Heading -> tagRange.render(builder, theme)
@@ -111,6 +112,7 @@ var DefaultTypography = Typography()
 val MarkdownDefaultTheme = MarkdownTheme()
 
 data class MarkdownTheme(
+    val contentStyle: SpanStyle = SpanStyle(),
     val titleLarge: SpanStyle = SpanStyle(
         fontFamily = DefaultTypography.titleLarge.fontFamily,
         fontWeight = DefaultTypography.titleLarge.fontWeight,
@@ -139,13 +141,11 @@ data class MarkdownTheme(
     ),
     val emphTag: SpanStyle = SpanStyle(),
     val strikethrough: SpanStyle = SpanStyle(
-        color = Color.Black.copy(alpha = 0.5f),
         textDecoration = TextDecoration.LineThrough
     ),
     val strikethroughTag: SpanStyle = SpanStyle(),
     val inlineCode: SpanStyle = SpanStyle(
         fontFamily = FontFamily.Monospace,
-        background = Color.LightGray.copy(alpha = 0.5f),
     ),
     val inlineCodeTag: SpanStyle = SpanStyle(),
     val listTag: SpanStyle = SpanStyle(
@@ -162,19 +162,21 @@ data class MarkdownTheme(
 ) {
 
     companion object {
-        fun from(colorScheme: ColorScheme): MarkdownTheme = MarkdownDefaultTheme.copy(
-            titleTag = MarkdownDefaultTheme.titleTag.copy(color = colorScheme.tertiary),
-            boldTag = MarkdownDefaultTheme.boldTag.copy(color = colorScheme.tertiary),
-            emphTag = MarkdownDefaultTheme.emphTag.copy(color = colorScheme.tertiary),
-//            strikethroughTag = MarkdownDefaultTheme.strikethroughTag.copy(color = colorScheme.onTertiary.copy(alpha = 0.1f)),
-            inlineCodeTag = MarkdownDefaultTheme.inlineCodeTag.copy(color = colorScheme.tertiary),
+        fun from(colorScheme: ColorScheme, contentColor: Color): MarkdownTheme = MarkdownDefaultTheme.copy(
+            contentStyle = SpanStyle(color = contentColor),
+            titleTag = MarkdownDefaultTheme.titleTag.copy(color = colorScheme.primary),
+            boldTag = MarkdownDefaultTheme.boldTag.copy(color = colorScheme.primary),
+            emphTag = MarkdownDefaultTheme.emphTag.copy(color = colorScheme.primary),
+            strikethrough = MarkdownDefaultTheme.strikethrough.copy(color = Color.Gray),
+            strikethroughTag = MarkdownDefaultTheme.strikethroughTag.copy(color = Color.Gray),
+            inlineCodeTag = MarkdownDefaultTheme.inlineCodeTag.copy(color = colorScheme.primary),
             inlineCode = MarkdownDefaultTheme.inlineCode.copy(color = colorScheme.primary),
-            listTag = MarkdownDefaultTheme.listTag.copy(color = colorScheme.tertiary),
-            linkTag = MarkdownDefaultTheme.linkTag.copy(color = colorScheme.tertiary),
-            imageTag = MarkdownDefaultTheme.imageTag.copy(color = colorScheme.tertiary),
-            ruleTag = MarkdownDefaultTheme.ruleTag.copy(color = colorScheme.tertiary),
-            blockQuoteTag = MarkdownDefaultTheme.blockQuoteTag.copy(color = colorScheme.tertiary),
-            taskListMarkerTag = MarkdownDefaultTheme.taskListMarkerTag.copy(color = colorScheme.tertiary),
+            listTag = MarkdownDefaultTheme.listTag.copy(color = colorScheme.primary),
+            linkTag = MarkdownDefaultTheme.linkTag.copy(color = colorScheme.primary),
+            imageTag = MarkdownDefaultTheme.imageTag.copy(color = colorScheme.primary),
+            ruleTag = MarkdownDefaultTheme.ruleTag.copy(color = colorScheme.primary),
+            blockQuoteTag = MarkdownDefaultTheme.blockQuoteTag.copy(color = colorScheme.primary),
+            taskListMarkerTag = MarkdownDefaultTheme.taskListMarkerTag.copy(color = colorScheme.primary),
             codeBlock = MarkdownDefaultTheme.codeBlock.copy(color = colorScheme.primary)
         )
     }

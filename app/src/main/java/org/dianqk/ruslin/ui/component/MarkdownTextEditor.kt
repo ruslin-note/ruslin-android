@@ -36,7 +36,14 @@ fun MarkdownTextEditor(
 ) {
     val colorScheme = MaterialTheme.colorScheme
     val visualTransformation =
-        remember(colorScheme) { MarkdownVisualTransformation(MarkdownTheme.from(colorScheme = colorScheme)) }
+        remember(colorScheme) {
+            MarkdownVisualTransformation(
+                MarkdownTheme.from(
+                    colorScheme = colorScheme,
+                    contentColor = colorScheme.onBackground
+                )
+            )
+        }
 
     // See BasicTextField
 

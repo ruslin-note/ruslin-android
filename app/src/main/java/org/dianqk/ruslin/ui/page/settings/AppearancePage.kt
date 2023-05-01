@@ -78,7 +78,14 @@ fun AppearancePage(
     """.trimIndent()
     val colorScheme = MaterialTheme.colorScheme
     val visualTransformation =
-        remember(themeIndex) { MarkdownVisualTransformation(MarkdownTheme.from(colorScheme = colorScheme)) }
+        remember(colorScheme.onBackground) {
+            MarkdownVisualTransformation(
+                MarkdownTheme.from(
+                    colorScheme = colorScheme,
+                    contentColor = colorScheme.onBackground
+                )
+            )
+        }
     val previewMarkdownText = visualTransformation.filter(AnnotatedString(previewText))
 
     Scaffold(
