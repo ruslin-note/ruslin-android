@@ -171,6 +171,7 @@ dependencies {
     implementation(libs.compose.material3)
     implementation(libs.accompanist.navigation.animation)
     implementation(libs.accompanist.webview)
+    implementation(libs.accompanist.systemuicontroller)
 
     implementation("com.google.android.material:material:1.8.0")
 

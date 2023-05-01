@@ -4,6 +4,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import org.dianqk.ruslin.data.LocalDarkTheme
 import org.dianqk.ruslin.data.LocalThemeIndex
 import org.dianqk.ruslin.ui.theme.palette.LocalTonalPalettes
@@ -24,6 +25,7 @@ fun RuslinTheme(
 ) {
     val darkTheme = LocalDarkTheme.current
     val themeIndex = LocalThemeIndex.current
+    val useDarkTheme = darkTheme.isDarkTheme()
 
     val tonalPalettes = wallpaperPalettes[
             if (themeIndex >= wallpaperPalettes.size) {
@@ -32,6 +34,12 @@ fun RuslinTheme(
                 themeIndex
             }
     ]
+
+    rememberSystemUiController().run {
+        setStatusBarColor(Color.Transparent, !useDarkTheme)
+        setSystemBarsColor(Color.Transparent, !useDarkTheme)
+        setNavigationBarColor(Color.Transparent, !useDarkTheme)
+    }
 
     ProvideZcamViewingConditions {
         CompositionLocalProvider(
