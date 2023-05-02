@@ -25,7 +25,7 @@ fun String.runCommand(workingDir: File = file("./")): String {
 }
 
 val gitCommitHash = "git rev-parse --verify --short HEAD".runCommand()
-val keystorePropertiesFile = rootProject.file("keystore.properties")
+val keystorePropertiesFile: File = rootProject.file("keystore.properties")
 val keystoreProperties = Properties()
 if (keystorePropertiesFile.exists()) {
     println("Loading keystore properties from ${keystorePropertiesFile.absolutePath}")
@@ -126,7 +126,7 @@ android {
         kotlinCompilerExtensionVersion = "1.4.3"
     }
 
-    packagingOptions {
+    packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
