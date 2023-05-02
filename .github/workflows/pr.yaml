@@ -51,7 +51,7 @@ jobs:
         cargo clippy --no-deps
         cargo build --target aarch64-linux-android --verbose
     - name: Setup Gradle
-      uses: gradle/gradle-build-action@v2
+      uses: gradle/gradle-build-action@v2.4.2
     - name: Execute Gradle build debug
       run: ./gradlew buildDebug
     - name: Execute Gradle lint report debug
