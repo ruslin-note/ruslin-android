@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.FileProvider
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -143,17 +144,20 @@ fun MarkdownRichText(
             })
     }
 
+    val backgroundColor = MaterialTheme.colorScheme.background
+
     WebView(
         state = webViewState,
         modifier = modifier
             .clickable(false) {}
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background),
+            .background(backgroundColor),
         captureBackPresses = false,
         onCreated = { webView ->
             val webViewSettings = webView.settings
             webViewSettings.allowFileAccess = false
             webViewSettings.allowContentAccess = false
+            webView.setBackgroundColor(backgroundColor.toArgb())
         },
         client = client
     )
