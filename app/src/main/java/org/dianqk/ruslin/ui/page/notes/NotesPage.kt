@@ -215,9 +215,9 @@ fun NotesPage(
                     }
                 }
                 if (notes == null) {
-                    ContentLoadingState {
-                        Text(text = stringResource(id = R.string.notes_loading))
-                    }
+//                    ContentLoadingState {
+//                        Text(text = stringResource(id = R.string.notes_loading))
+//                    }
                 } else if (notes.isEmpty()) {
                     ContentEmptyState {
                         Text(text = stringResource(id = R.string.create_a_note))
