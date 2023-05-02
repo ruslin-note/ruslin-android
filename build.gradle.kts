@@ -1,6 +1,3 @@
-// TODO: https://github.com/gradle/gradle/issues/22797 Remove this annotations once we've switched to Gradle 8.1.
-@Suppress("DSL_SCOPE_VIOLATION")
-
 buildscript {
     repositories {
         mavenCentral()
