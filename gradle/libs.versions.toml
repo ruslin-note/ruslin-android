@@ -1,10 +1,10 @@
 [versions]
 # plugin
 androidGradlePlugin = "8.0.1"
-hilt = "2.44.2"
+hilt = "2.46"
 kotlin = "1.8.10"
 androidxBenchmark = "1.1.1"
-androidxCore = "1.9.0"
+androidxCore = "1.10.0"
 
 # sdk
 compileSdkVersion = "33"
@@ -51,6 +51,8 @@ accompanist-systemuicontroller = { group = "com.google.accompanist", name = "acc
 compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "compose" }
 compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "compose" }
 compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest", version.ref = "compose" }
+hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }

@@ -175,9 +175,10 @@ dependencies {
 
     implementation("com.google.android.material:material:1.8.0")
 
-    implementation("com.google.dagger:hilt-android:2.45")
     implementation("androidx.webkit:webkit:1.6.1")
-    kapt("com.google.dagger:hilt-compiler:2.45")
+
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
     kapt("androidx.hilt:hilt-compiler:1.0.0")
     // https://github.com/google/dagger/issues/2601#issuecomment-1174506373
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
