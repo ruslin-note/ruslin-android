@@ -186,7 +186,7 @@ fun SettingsProvider(
         context.dataStore.data.map {
             it.toSettings()
         }
-    }.collectAsState(initial = Settings()).value
+    }.collectAsState(initial = runBlocking { context.dataStore.data.first().toSettings() }).value
 
     CompositionLocalProvider(
         LocalLanguages provides settings.languages,

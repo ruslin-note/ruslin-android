@@ -1,24 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Ruslin" parent="Theme.Material3.DayNight">
+    <style name="Theme.Ruslin" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:windowLightNavigationBar">?attr/isLightTheme</item>
     </style>
 
-    <style name="Theme.Ruslin.Light" parent="Theme.Material3.Light">
+    <style name="Theme.Ruslin.Light" parent="Theme.Material3.Light.NoActionBar">
         <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
+        <item name="android:windowLightStatusBar">true</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="android:windowLightNavigationBar">?attr/isLightTheme</item>
+        <item name="android:windowLightNavigationBar">true</item>
     </style>
 
-    <style name="Theme.Ruslin.Dark" parent="Theme.Material3.Dark">
+    <style name="Theme.Ruslin.Dark" parent="Theme.Material3.Dark.NoActionBar">
         <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
+        <item name="android:windowLightStatusBar">false</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="android:windowLightNavigationBar">?attr/isLightTheme</item>
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+
+    <style name="Theme.Ruslin.Launcher" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/ic_launcher_background</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+<!--        <item name="postSplashScreenTheme">@style/Theme.Ruslin</item>-->
     </style>
 </resources>

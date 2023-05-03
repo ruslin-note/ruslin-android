@@ -45,13 +45,15 @@ sealed class DarkThemePreference(val value: Int) {
         val default = UseDeviceTheme
         val values = listOf(UseDeviceTheme, ON, OFF)
 
+        fun fromInt(i: Int?) = when (i) {
+            0 -> UseDeviceTheme
+            1 -> ON
+            2 -> OFF
+            else -> default
+        }
+
         fun fromPreferences(preferences: Preferences) =
-            when (preferences[DataStoreKeys.DarkTheme.key]) {
-                0 -> UseDeviceTheme
-                1 -> ON
-                2 -> OFF
-                else -> default
-            }
+            fromInt(preferences[DataStoreKeys.DarkTheme.key])
     }
 }
 
