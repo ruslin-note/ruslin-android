@@ -2,7 +2,7 @@
 # plugin
 androidGradlePlugin = "8.0.1"
 hilt = "2.46"
-kotlin = "1.8.10"
+kotlin = "1.8.21"
 androidxBenchmark = "1.1.1"
 androidxCore = "1.10.0"
 
