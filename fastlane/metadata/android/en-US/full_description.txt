@@ -1,10 +1,9 @@
-construction Currently in Pre-alpha, not ready for use in production environments. Please be careful to back up. construction
+It is currently in the beta stage, so take care to make backups.
 
 Supported features:
 
-✅ Create, modify and delete notes
-✅ Create, modify and delete folders
-✅ A simple Markdown editor
+✅ Create, modify and delete folders and notes
+✅ Markdown editor with toolbar
 ✅ Full-text search using jieba-rs (Chinese and English supported)
 ✅ Sync notes using a self-hosted Joplin server
 ✅ Manual and automatic synchronization
