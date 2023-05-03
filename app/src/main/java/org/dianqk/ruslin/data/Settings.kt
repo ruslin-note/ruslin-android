@@ -18,6 +18,7 @@ import org.dianqk.ruslin.R
 import org.dianqk.ruslin.data.preference.DarkThemePreference
 import org.dianqk.ruslin.data.preference.HighContrastDarkThemePreference
 import org.dianqk.ruslin.data.preference.LanguagesPreference
+import org.dianqk.ruslin.data.preference.TextDirectionPreference
 import org.dianqk.ruslin.data.preference.ThemeIndexPreference
 import java.io.IOException
 import java.util.concurrent.TimeUnit
@@ -71,6 +72,11 @@ sealed class DataStoreKeys<T> {
     object HighContrastDarkTheme : DataStoreKeys<Boolean>() {
         override val key: Preferences.Key<Boolean>
             get() = booleanPreferencesKey("highContrastDarkTheme")
+    }
+
+    object TextDirection : DataStoreKeys<Int>() {
+        override val key: Preferences.Key<Int>
+            get() = intPreferencesKey("contentTextDirection")
     }
 }
 
@@ -162,6 +168,7 @@ sealed class SyncIntervalPreference(
 
 data class Settings(
     val languages: LanguagesPreference = LanguagesPreference.default,
+    val contentTextDirection: TextDirectionPreference = TextDirectionPreference.default,
 
     val themeIndex: Int = ThemeIndexPreference.default,
     val darkTheme: DarkThemePreference = DarkThemePreference.default,
@@ -171,6 +178,7 @@ data class Settings(
 private fun Preferences.toSettings(): Settings {
     return Settings(
         languages = LanguagesPreference.fromPreferences(this),
+        contentTextDirection = TextDirectionPreference.fromPreferences(this),
         themeIndex = ThemeIndexPreference.fromPreferences(this),
         darkTheme = DarkThemePreference.fromPreferences(this),
         highContrastDarkTheme = HighContrastDarkThemePreference.fromPreferences(this),
@@ -190,6 +198,7 @@ fun SettingsProvider(
 
     CompositionLocalProvider(
         LocalLanguages provides settings.languages,
+        LocalContentTextDirection provides settings.contentTextDirection,
         LocalThemeIndex provides settings.themeIndex,
         LocalDarkTheme provides settings.darkTheme,
         LocalHighContrastDarkTheme provides settings.highContrastDarkTheme,
@@ -199,6 +208,8 @@ fun SettingsProvider(
 }
 
 val LocalLanguages = compositionLocalOf<LanguagesPreference> { LanguagesPreference.default }
+val LocalContentTextDirection =
+    compositionLocalOf<TextDirectionPreference> { TextDirectionPreference.default }
 
 // Theme
 val LocalThemeIndex = compositionLocalOf { ThemeIndexPreference.default }

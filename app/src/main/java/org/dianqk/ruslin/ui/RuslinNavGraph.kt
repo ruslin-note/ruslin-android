@@ -155,7 +155,9 @@ fun RuslinNavGraph(
             }
         }
         animatedComposable(RuslinDestinations.LANGUAGES_ROUTE) {
-            LanguagesPage {
+            LanguagesPage(navigateToTextDirection = {
+                navigationActions.navigateToTextDirection()
+            }) {
                 navController.popBackStack()
             }
         }
@@ -168,6 +170,11 @@ fun RuslinNavGraph(
         }
         animatedComposable(RuslinDestinations.DARK_THEME_ROUTE) {
             DarkThemePage {
+                navController.popBackStack()
+            }
+        }
+        animatedComposable(RuslinDestinations.TEXT_DIRECTION_ROUTE) {
+            TextDirectionPage {
                 navController.popBackStack()
             }
         }

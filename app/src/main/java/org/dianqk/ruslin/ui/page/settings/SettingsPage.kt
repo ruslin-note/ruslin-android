@@ -9,7 +9,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import org.dianqk.ruslin.R
@@ -29,7 +28,6 @@ fun SettingsPage(
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val fraction =
         CubicBezierEasing(1f, 0f, 0.8f, 0.4f).transform(scrollBehavior.state.overlappedFraction)
-    val context = LocalContext.current
 
     Scaffold(
         modifier = Modifier

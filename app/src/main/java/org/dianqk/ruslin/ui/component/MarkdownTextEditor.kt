@@ -30,6 +30,7 @@ import org.dianqk.ruslin.ui.page.note_detail.SavedResource
 @Composable
 fun MarkdownTextEditor(
     modifier: Modifier = Modifier,
+    textDirection: TextDirection,
     onSaveResource: (Uri) -> SavedResource?,
     value: String,
     onValueChange: (String) -> Unit
@@ -160,7 +161,7 @@ fun MarkdownTextEditor(
             unfocusedIndicatorColor = Color.Transparent,
             containerColor = Color.Transparent
         ),
-        textStyle = TextStyle(color = Color.Black, textDirection = TextDirection.Content),
+        textStyle = TextStyle(color = Color.Black, textDirection = textDirection),
         visualTransformation = visualTransformation
     )
 

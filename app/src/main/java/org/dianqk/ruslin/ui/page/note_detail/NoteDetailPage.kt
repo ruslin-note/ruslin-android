@@ -21,6 +21,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.dianqk.ruslin.R
+import org.dianqk.ruslin.data.LocalContentTextDirection
 import org.dianqk.ruslin.ui.component.BackButton
 import org.dianqk.ruslin.ui.component.MarkdownRichText
 import org.dianqk.ruslin.ui.component.MarkdownTextEditor
@@ -42,6 +43,7 @@ fun NoteDetailPage(
     val titles = listOf(stringResource(id = R.string.edit), stringResource(id = R.string.preview))
     var selectedTabIndex by remember { mutableStateOf(if (viewModel.isPreview) PREVIEW_TAB_INDEX else EDIT_TAB_INDEX) }
     val focusManager = LocalFocusManager.current
+    val contentTextDirection = LocalContentTextDirection.current.getTextDirection()
 
     Scaffold(
         topBar = {
@@ -84,6 +86,7 @@ fun NoteDetailPage(
                 .zIndex(if (selectedTabIndex == EDIT_TAB_INDEX) 1f else 0f),
             title = uiState.title,
             body = uiState.body,
+            textDirection = contentTextDirection,
             onTitleChanged = viewModel::updateTitle,
             onBodyChanged = viewModel::updateBody,
             onSaveResource = { uri: Uri ->
@@ -115,6 +118,7 @@ private fun NoteEditor(
     modifier: Modifier = Modifier,
     title: String,
     body: String,
+    textDirection: TextDirection,
     onTitleChanged: (String) -> Unit,
     onBodyChanged: (String) -> Unit,
     onSaveResource: (Uri) -> SavedResource?,
@@ -139,11 +143,12 @@ private fun NoteEditor(
                     style = MaterialTheme.typography.titleMedium
                 )
             },
-            textStyle = MaterialTheme.typography.titleLarge.copy(textDirection = TextDirection.Content),
+            textStyle = MaterialTheme.typography.titleLarge.copy(textDirection = textDirection),
         )
         Divider()
         MarkdownTextEditor(
             modifier = Modifier.weight(1f),
+            textDirection = textDirection,
             onSaveResource = onSaveResource,
             value = body,
             onValueChange = onBodyChanged,

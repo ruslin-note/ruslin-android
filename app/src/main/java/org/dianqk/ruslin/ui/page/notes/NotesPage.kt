@@ -23,8 +23,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import org.dianqk.ruslin.R
+import org.dianqk.ruslin.data.LocalContentTextDirection
 import org.dianqk.ruslin.ui.component.ContentEmptyState
-import org.dianqk.ruslin.ui.component.ContentLoadingState
 import org.dianqk.ruslin.ui.component.SuspendConfirmAlertDialog
 
 @OptIn(
@@ -67,6 +67,7 @@ fun NotesPage(
     val selectedItemIds = remember(uiState.items, firstSelectedItemId) {
         firstSelectedItemId?.let { mutableStateListOf(it) } ?: mutableStateListOf()
     }
+    val contentTextDirection = LocalContentTextDirection.current
 
     BackHandler(isSelectEnabled) {
         firstSelectedItemId = null
@@ -231,6 +232,7 @@ fun NotesPage(
                         items(notes, key = { it.id }) { note ->
                             NoteAbbrCard(
                                 note = note,
+                                titleTextDirection = contentTextDirection.getTextDirection(),
                                 isSelectEnabled = { isSelectEnabled },
                                 isSelected = { selectedItemIds.contains(note.id) },
                                 onSelect = {

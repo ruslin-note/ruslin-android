@@ -24,10 +24,12 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.dianqk.ruslin.R
+import org.dianqk.ruslin.data.LocalContentTextDirection
 import org.dianqk.ruslin.ui.component.CombinedClickableSurface
 import org.dianqk.ruslin.ui.component.OutlinedButtonWithIcon
 import org.dianqk.ruslin.ui.component.SubTitle
@@ -58,6 +60,7 @@ fun NotesDrawerSheet(
     var openDeleteFolderAlertDialog: Folder? by remember {
         mutableStateOf(null)
     }
+    val contentTextDirection = LocalContentTextDirection.current
 
     openEditFolderDialog?.let { editFolder ->
         FolderDialog(
@@ -150,6 +153,7 @@ fun NotesDrawerSheet(
             ExpandableNavigationDrawerFolderItem(
                 folder = folder,
                 level = 0,
+                titleTextDirection = contentTextDirection.getTextDirection(),
                 selectedFolderId = if (conflictNoteFolderSelected) null else selectedFolderId,
                 onClick = { clickedFolder ->
                     onSelectedFolderChanged(clickedFolder.ffiFolder)
@@ -215,6 +219,7 @@ fun NotesDrawerSheet(
 fun ExpandableNavigationDrawerFolderItem(
     folder: Folder,
     level: Int,
+    titleTextDirection: TextDirection,
     selectedFolderId: String?,
     onClick: (Folder) -> Unit,
     openEditFolderDialog: (Folder) -> Unit,
@@ -257,9 +262,11 @@ fun ExpandableNavigationDrawerFolderItem(
                     LocalContentColor provides labelColor,
                     content = {
                         Text(
+                            modifier = Modifier.fillMaxWidth(),
                             text = folder.ffiFolder.title,
                             maxLines = 2,
-                            overflow = TextOverflow.Ellipsis
+                            style = MaterialTheme.typography.bodyLarge.copy(textDirection = titleTextDirection),
+                            overflow = TextOverflow.Ellipsis,
                         )
                     })
             }
@@ -297,6 +304,7 @@ fun ExpandableNavigationDrawerFolderItem(
                 ExpandableNavigationDrawerFolderItem(
                     folder = subFolder,
                     level = level + 1,
+                    titleTextDirection = titleTextDirection,
                     selectedFolderId = selectedFolderId,
                     onClick = onClick,
                     openEditFolderDialog = openEditFolderDialog,

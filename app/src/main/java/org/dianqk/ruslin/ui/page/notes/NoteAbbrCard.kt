@@ -29,6 +29,7 @@ import java.util.Date
 fun NoteAbbrCard(
     modifier: Modifier = Modifier,
     note: FfiAbbrNote,
+    titleTextDirection: TextDirection,
     isSelectEnabled: () -> Boolean,
     isSelected: () -> Boolean,
     onSelect: () -> Unit,
@@ -63,7 +64,7 @@ fun NoteAbbrCard(
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     text = note.title,
-                    style = MaterialTheme.typography.titleMedium.copy(textDirection = TextDirection.Content),
+                    style = MaterialTheme.typography.titleMedium.copy(textDirection = titleTextDirection),
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )

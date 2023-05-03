@@ -85,4 +85,6 @@
     <string name="on">On</string>
     <string name="off">Off</string>
     <string name="other">Other</string>
+    <string name="content_text_direction">Content Text Direction</string>
+    <string name="content_text_direction_desc">Text direction of notes, titles, etc.</string>
 </resources>

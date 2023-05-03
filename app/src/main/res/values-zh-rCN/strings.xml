@@ -81,4 +81,6 @@
     <string name="on">开启</string>
     <string name="off">关闭</string>
     <string name="other">其他</string>
+    <string name="content_text_direction">内容文本方向</string>
+    <string name="content_text_direction_desc">笔记、标题等文本方向</string>
 </resources>

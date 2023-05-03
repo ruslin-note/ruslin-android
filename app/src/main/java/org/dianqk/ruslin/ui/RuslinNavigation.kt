@@ -18,6 +18,7 @@ import org.dianqk.ruslin.ui.RuslinPages.NOTES_PAGE
 import org.dianqk.ruslin.ui.RuslinPages.NOTE_DETAIL_PAGE
 import org.dianqk.ruslin.ui.RuslinPages.SEARCH_PAGE
 import org.dianqk.ruslin.ui.RuslinPages.SETTINGS_PAGE
+import org.dianqk.ruslin.ui.RuslinPages.TEXT_DIRECTION_PAGE
 import org.dianqk.ruslin.ui.RuslinPages.TOOLS_PAGE
 
 object RuslinPages {
@@ -35,6 +36,7 @@ object RuslinPages {
     const val LANGUAGES_PAGE = "languages"
     const val APPEARANCE_PAGE = "appearance"
     const val DARK_THEME_PAGE = "dark_theme"
+    const val TEXT_DIRECTION_PAGE = "text_direction"
 }
 
 object RuslinDestinationsArgs {
@@ -59,6 +61,7 @@ object RuslinDestinations {
     const val LANGUAGES_ROUTE = LANGUAGES_PAGE
     const val APPEARANCE_ROUTE = APPEARANCE_PAGE
     const val DARK_THEME_ROUTE = DARK_THEME_PAGE
+    const val TEXT_DIRECTION_ROUTE = TEXT_DIRECTION_PAGE
 }
 
 class RuslinNavigationActions(private val navController: NavHostController) {
@@ -151,6 +154,12 @@ class RuslinNavigationActions(private val navController: NavHostController) {
 
     fun navigateToDarkTheme() {
         navController.navigate(RuslinDestinations.DARK_THEME_ROUTE) {
+            launchSingleTop = true
+        }
+    }
+
+    fun navigateToTextDirection() {
+        navController.navigate(RuslinDestinations.TEXT_DIRECTION_ROUTE) {
             launchSingleTop = true
         }
     }
