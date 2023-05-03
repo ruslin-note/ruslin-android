@@ -25,9 +25,14 @@ class SyncWorker @AssistedInject constructor(
 ) : CoroutineWorker(appContext, workerParams) {
 
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
-        val fromScratch = inputData.getBoolean(FROM_SCRATCH, false)
-        val syncResult = notesRepository.synchronize(fromScratch = fromScratch)
-        return@withContext if (syncResult.isSuccess) Result.success() else Result.failure()
+        // If the sync configuration does not exist, skip the sync task directly
+        if (notesRepository.syncConfigExists()) {
+            val fromScratch = inputData.getBoolean(FROM_SCRATCH, false)
+            val syncResult = notesRepository.synchronize(fromScratch = fromScratch)
+            return@withContext if (syncResult.isSuccess) Result.success() else Result.failure()
+        } else {
+            return@withContext Result.success()
+        }
     }
 
     companion object {
