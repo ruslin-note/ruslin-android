@@ -63,7 +63,7 @@ fun SettingItem(
             Column(
                 modifier = Modifier
                     .weight(1f)
-                    .padding(start = 0.dp)
+                    .padding(start = if (icon == null) 6.dp else 0.dp)
             ) {
                 Text(
                     text = title,
