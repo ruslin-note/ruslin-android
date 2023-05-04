@@ -299,7 +299,7 @@ private fun MarkdownTagRange.Image.render(
     builder.addStyle(theme.imageTag, end - 1, end)
 
     // url
-    builder.addStyle(theme.imageTag, urlOffset, end - 1);
+    builder.addStyle(theme.imageTag, urlOffset, end - 1)
 }
 
 private fun MarkdownTagRange.Rule.render(

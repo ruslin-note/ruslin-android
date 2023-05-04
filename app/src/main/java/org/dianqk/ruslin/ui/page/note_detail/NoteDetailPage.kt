@@ -131,10 +131,12 @@ private fun NoteEditor(
         TextField(
             modifier = Modifier.fillMaxWidth(),
             value = title,
-            colors = TextFieldDefaults.textFieldColors(
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = Color.Transparent,
+                unfocusedContainerColor = Color.Transparent,
+                disabledContainerColor = Color.Transparent,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
-                containerColor = Color.Transparent
             ),
             onValueChange = onTitleChanged,
             placeholder = {

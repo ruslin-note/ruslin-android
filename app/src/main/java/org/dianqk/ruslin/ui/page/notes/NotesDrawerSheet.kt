@@ -345,8 +345,10 @@ fun FolderDialog(
         text = {
             TextField(
                 modifier = Modifier.focusRequester(focusRequest),
-                colors = TextFieldDefaults.textFieldColors(
-                    containerColor = Color.Transparent
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent,
+                    disabledContainerColor = Color.Transparent,
                 ),
                 value = folderTitle,
                 onValueChange = {

@@ -156,10 +156,12 @@ fun MarkdownTextEditor(
         placeholder = {
             Text(text = stringResource(id = R.string.content))
         },
-        colors = TextFieldDefaults.textFieldColors(
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = Color.Transparent,
+            unfocusedContainerColor = Color.Transparent,
+            disabledContainerColor = Color.Transparent,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
-            containerColor = Color.Transparent
         ),
         textStyle = TextStyle(color = Color.Black, textDirection = textDirection),
         visualTransformation = visualTransformation
