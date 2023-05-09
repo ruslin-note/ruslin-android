@@ -87,4 +87,7 @@
     <string name="other">Other</string>
     <string name="content_text_direction">Content Text Direction</string>
     <string name="content_text_direction_desc">Text direction of notes, titles, etc.</string>
+    <string name="rtl" translatable="false">RTL</string>
+    <string name="ltr" translatable="false">LTR</string>
+    <string name="auto">Auto</string>
 </resources>
