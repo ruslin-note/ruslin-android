@@ -43,7 +43,11 @@ fun NoteDetailPage(
     val titles = listOf(stringResource(id = R.string.edit), stringResource(id = R.string.preview))
     var selectedTabIndex by remember { mutableStateOf(if (viewModel.isPreview) PREVIEW_TAB_INDEX else EDIT_TAB_INDEX) }
     val focusManager = LocalFocusManager.current
-    val contentTextDirection = LocalContentTextDirection.current.getTextDirection()
+    val contentTextDirection = LocalContentTextDirection.current
+
+    LaunchedEffect(contentTextDirection) {
+        viewModel.updateTextDirectionPreference(contentTextDirection)
+    }
 
     Scaffold(
         topBar = {
@@ -86,7 +90,7 @@ fun NoteDetailPage(
                 .zIndex(if (selectedTabIndex == EDIT_TAB_INDEX) 1f else 0f),
             title = uiState.title,
             body = uiState.body,
-            textDirection = contentTextDirection,
+            textDirection = contentTextDirection.getTextDirection(),
             onTitleChanged = viewModel::updateTitle,
             onBodyChanged = viewModel::updateBody,
             onSaveResource = { uri: Uri ->

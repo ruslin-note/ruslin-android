@@ -29,6 +29,12 @@ sealed class TextDirectionPreference(val value: Int) {
         Auto -> context.getString(R.string.auto)
     }
 
+    fun toHtmlDirAttribute(): String = when (this) {
+        Ltr -> "ltr"
+        Rtl -> "rtl"
+        Auto -> "auto"
+    }
+
     fun getTextDirection(): TextDirection = when (this) {
         Ltr -> TextDirection.Ltr
         Rtl -> TextDirection.Rtl

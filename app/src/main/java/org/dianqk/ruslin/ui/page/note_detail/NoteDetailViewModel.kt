@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.dianqk.ruslin.data.NotesRepository
+import org.dianqk.ruslin.data.preference.TextDirectionPreference
 import org.dianqk.ruslin.ui.RuslinDestinationsArgs
 import uniffi.ruslin.FfiNote
 import java.io.FileOutputStream
@@ -28,6 +29,7 @@ data class NoteDetailUiState(
     val body: String = "",
     val isLoading: Boolean = false,
     val previewHtml: String = "<!DOCTYPE html><html><body></body><html>",
+    val textDirectionPreference: TextDirectionPreference = TextDirectionPreference.default,
 )
 
 const val TAG = "NoteDetailViewModel"
@@ -80,6 +82,12 @@ class NoteDetailViewModel @Inject constructor(
         viewModelScope.launch {
             notesRepository.replaceNote(note!!)
             edited = false
+        }
+    }
+
+    fun updateTextDirectionPreference(textDirectionPreference: TextDirectionPreference) {
+        _uiState.update {
+            it.copy(textDirectionPreference = textDirectionPreference)
         }
     }
 
@@ -163,7 +171,8 @@ class NoteDetailViewModel @Inject constructor(
         }
     }
 
-    fun setPreviewHtml(body: String) {
+    private fun setPreviewHtml(body: String) {
+        val htmlDirAttribute = uiState.value.textDirectionPreference.toHtmlDirAttribute()
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 // TODO: Adapted to m3 theme, already adapted to the background color
@@ -171,7 +180,7 @@ class NoteDetailViewModel @Inject constructor(
                     append(
                         """
                                 <!DOCTYPE html>
-                                <html>
+                                <html dir="$htmlDirAttribute">
                                     <head>
                                         <meta charset="UTF-8">
                                         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
