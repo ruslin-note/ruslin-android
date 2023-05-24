@@ -47,6 +47,47 @@ Supported features:
 
 > Ruslin is a reproducible build of app, you don't need to worry about F-Droid and other store signature issues, see: [Towards a reproducible F-Droid](https://f-droid.org/en/2023/01/15/towards-a-reproducible-fdroid.html).
 
+## Build
+
+The following instructions are based on a Linux development environment and an arm64 physical device for debugging.
+
+### Requirements
+
+- [Rust 1.69.0](https://www.rust-lang.org/tools/install)
+- [Android Studio](https://developer.android.com/studio)
+- [NDK 25.2.9519653](https://developer.android.com/ndk/downloads)
+
+### Build Instructions
+
+#### 1. You need to set the NDK environment variable.
+
+Example:
+
+```shell
+export ANDROID_HOME=$HOME/Android/Sdk
+export ANDROID_NDK_VERSION=25.2.9519653
+export ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/$ANDROID_NDK_VERSION
+```
+
+#### 2. Build the Rust library.
+
+> You can learn about how Kotlin interoperates with Rust from [uniffi-rs](https://github.com/mozilla/uniffi-rs).
+
+Run `build.sh` in the `ruslin-data-uniffi` directory.
+
+```shell
+cd ruslin-data-uniffi
+./build.sh
+```
+
+#### 3. Build the apk.
+
+```shell
+./gradlew :app:assembleDebug
+```
+
+> For more build details, refer to [Github Actions](.github/workflows).
+
 ## Credits
 
 - [Joplin](https://github.com/laurent22/joplin): [AGPL-3.0](https://github.com/laurent22/joplin/blob/dev/LICENSE)
