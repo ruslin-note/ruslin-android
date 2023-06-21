@@ -1,5 +1,6 @@
 use camino::Utf8Path;
 use std::{env, path::Path, process::Command};
+use uniffi::TargetLanguage;
 
 fn main() {
     let target = env::var("TARGET").unwrap();
@@ -24,7 +25,7 @@ pub fn generate_kotlin_bindings(udl_file: impl AsRef<Utf8Path>) {
     uniffi::generate_bindings(
         udl_file,
         None,
-        vec!["kotlin"],
+        vec![TargetLanguage::Kotlin],
         Some("../uniffi/src/main/java".as_ref()),
         None,
         true,
