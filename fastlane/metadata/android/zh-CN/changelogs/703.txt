@@ -1,4 +1,4 @@
-- 支持 Rtl 语言
+- 支持 RTL 语言
 - 支持主题切换
 - 改进暗色主题体验
 完整变更日志： https://github.com/ruslin-note/ruslin-android/releases/tag/v0.1.0-beta.1

@@ -1,0 +1,2 @@
+- Preview page adds RTL support
+**Full Changelog**: https://github.com/ruslin-note/ruslin-android/releases/tag/v0.1.1-beta.2
