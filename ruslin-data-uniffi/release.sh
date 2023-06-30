@@ -27,6 +27,8 @@ export AR=$ANDROID_NDK_TOOLCHAIN_BIN/llvm-ar
 
 ANDROID_ABI=$1
 
+export BINDGEN_EXTRA_CLANG_ARGS="--sysroot=$ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64/sysroot"
+
 case "$ANDROID_ABI" in
 arm64-v8a)
     RUST_TARGET="aarch64-linux-android"

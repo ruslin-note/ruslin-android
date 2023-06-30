@@ -10,11 +10,14 @@ use ruslin_data::{
     sync::{SyncConfig, SyncError},
     DatabaseError, Folder, Note, Resource, RuslinData, SearchBodyOption, UpdateSource,
 };
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use tokio::runtime::Runtime;
 mod ffi;
 mod html;
+mod plugin;
 use ffi::{FFIAbbrNote, FFIFolder, FFINote, FFIResource, FFISearchNote, FFIStatus, FFISyncInfo};
+use plugin::PluginError;
+use std::fs::File;
 
 uniffi::include_scaffolding!("ruslin");
 
@@ -289,6 +292,36 @@ impl RuslinAndroidData {
 
     pub fn parse_markdown_to_preview_html(&self, text: String) -> String {
         html::parse_markdown_to_preview_html(&self.data, text)
+    }
+}
+
+impl RuslinAndroidData {
+    pub fn plugin_list(&self) -> Vec<String> {
+        todo!()
+    }
+
+    pub fn download_plugin(&self, plugin_url: String) -> Result<(), PluginError> {
+        todo!()
+    }
+
+    pub fn delete_plugin(&self, name: String) -> Result<(), PluginError> {
+        todo!()
+    }
+
+    pub fn start_plugin(&self, name: String) -> Result<String, PluginError> {
+        todo!()
+    }
+
+    pub fn start_plugin_with_bytes(&self, bytes: Vec<u8>) -> Result<String, PluginError> {
+        use wapc::WapcHost;
+        use wasm3_provider::Wasm3EngineProvider;
+        let module_bytes = bytes;
+        let engine = Wasm3EngineProvider::new(&module_bytes);
+        let host = WapcHost::new(Box::new(engine), None).map_err(|_| PluginError::StartFailed)?;
+        let res = host
+            .call("ping", &[])
+            .map_err(|_| PluginError::StartFailed)?;
+        String::from_utf8(res).map_err(|_| PluginError::StartFailed)
     }
 }
 

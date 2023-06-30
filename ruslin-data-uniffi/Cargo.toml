@@ -16,6 +16,11 @@ android_logger = "0.13"
 tokio = { version = "1.28", features = ["full"] }
 log4rs = "1.2"
 pulldown-cmark = { version = "0.9.3", default-features = false }
+wapc = "1.1.0"
+wasm3-provider = "1.1.0"
+thiserror = "1.0.40"
+reqwest = { version = "0.11.14", default-features = false, features = ["json", "rustls-tls", "stream"] }
+# wasm3 = { git = "https://github.com/wasm3/wasm3-rs.git", features = ["build-bindgen"]}
 
 [build-dependencies]
 uniffi = { version = "0.24", features = ["build", "cli"] }

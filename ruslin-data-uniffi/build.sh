@@ -30,6 +30,9 @@ export CC=$ANDROID_NDK_TOOLCHAIN_BIN/aarch64-linux-android28-clang
 export CXX=$ANDROID_NDK_TOOLCHAIN_BIN/aarch64-linux-android28-clang++
 # export CARGO_TARGET_AARCH64_LINUX_ANDROID_AR=$ANDROID_NDK_TOOLCHAIN_BIN/llvm-ar
 export CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER=$ANDROID_NDK_TOOLCHAIN_BIN/aarch64-linux-android28-clang
+
+export BINDGEN_EXTRA_CLANG_ARGS="--sysroot=$ANDROID_HOME/ndk/$ANDROID_NDK_VERSION/toolchains/llvm/prebuilt/linux-x86_64/sysroot"
+
 cargo build --target aarch64-linux-android
 
 mkdir -p ../uniffi/src/main/jniLibs/arm64-v8a

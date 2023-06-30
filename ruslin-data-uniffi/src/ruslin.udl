@@ -152,6 +152,14 @@ enum DatabaseError {
     "Unknown",
 };
 
+[Error]
+enum PluginError {
+    "PluginDirNotExists",
+    "DownloadFailed",
+    "DeleteFailed",
+    "StartFailed",
+};
+
 [Enum]
 interface SyncConfig {
     JoplinServer(string host, string email, string password);
@@ -201,4 +209,14 @@ interface RuslinAndroidData {
     string parse_markdown_to_preview_html(string text);
     [Throws=DatabaseError]
     void prepare_jieba();
+
+    sequence<string> plugin_list();
+    [Throws=PluginError]
+    void download_plugin(string url);
+    [Throws=PluginError]
+    void delete_plugin(string name);
+    [Throws=PluginError]
+    string start_plugin(string name);
+    [Throws=PluginError]
+    string start_plugin_with_bytes(sequence<u8> path);
 };
