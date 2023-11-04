@@ -2,13 +2,8 @@
 
 set -e
 
-# https://github.com/godot-rust/gdnative/pull/920/files
-
-export ANDROID_HOME=$HOME/Android/Sdk
-export ANDROID_NDK_VERSION=25.2.9519653
-
-export ANDROID_NDK_TOOLCHAIN_BIN=$ANDROID_HOME/ndk/$ANDROID_NDK_VERSION/toolchains/llvm/prebuilt/linux-x86_64/bin
-
+export RUSTFLAGS="--cfg uuid_unstable"
+export ANDROID_NDK_TOOLCHAIN_BIN=$ANDROID_HOME/ndk/$NDK_VERSION/toolchains/llvm/prebuilt/linux-x86_64/bin
 export AR=$ANDROID_NDK_TOOLCHAIN_BIN/llvm-ar
 
 # export CC=$ANDROID_NDK_TOOLCHAIN_BIN/armv7a-linux-androideabi28-clang
