@@ -4,8 +4,7 @@ set -e
 
 GIT_COMMIT_HASH=$(git rev-parse --verify HEAD | tr -d '\n')
 
-# After upgrading to 1.71.0, switch to `sparse`.
-export CARGO_REGISTRIES_CRATES_IO_PROTOCOL=git
+export CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse
 
 export RUSTFLAGS="--cfg uuid_unstable"
 export RUSTFLAGS="$RUSTFLAGS --remap-path-prefix=$HOME/.cargo/=/.cargo/"
