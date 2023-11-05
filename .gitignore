@@ -1,3 +1,4 @@
+/.envrc
 /keystore.properties
 /uniffi/src/main/java/uniffi/ruslin/ruslin.kt
 /uniffi/src/main/jniLibs

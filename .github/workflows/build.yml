@@ -36,7 +36,7 @@ jobs:
         echo $ANDROID_SDK_ROOT
         HIGHEST_NDK_VERSION=$(ls $ANDROID_SDK_ROOT/ndk | tail -n1)
         echo "Highest Android NDK: $HIGHEST_NDK_VERSION"
-        EXPECTED_NDK_VERSION=25.2.9519653
+        EXPECTED_NDK_VERSION=26.1.10909125
         echo "Expected Android NDK: $EXPECTED_NDK_VERSION"
         [[ "$EXPECTED_NDK_VERSION" == "$HIGHEST_NDK_VERSION" ]];
         echo "ANDROID_NDK_VERSION=$EXPECTED_NDK_VERSION" >> $GITHUB_ENV

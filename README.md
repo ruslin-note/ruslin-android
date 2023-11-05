@@ -65,8 +65,7 @@ Example:
 
 ```shell
 export ANDROID_HOME=$HOME/Android/Sdk
-export ANDROID_NDK_VERSION=25.2.9519653
-export ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/$ANDROID_NDK_VERSION
+export NDK_VERSION=26.1.10909125
 ```
 
 #### 2. Build the Rust library.
