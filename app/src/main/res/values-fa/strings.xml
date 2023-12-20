@@ -1,0 +1,93 @@
+<resources>
+    <string name="app_name" translatable="false">Ruslin</string>
+    <string name="new_note">یادداشت جدید</string>
+    <string name="desc_menu">فهرست</string>
+    <string name="desc_sync">همگام سازی</string>
+    <string name="desc_more">بیشتر</string>
+    <string name="desc_search">جستجو</string>
+    <string name="all_notes">همه یادداشتها</string>
+    <string name="title">عنوان</string>
+    <string name="body">متن</string>
+    <string name="folders">پوشه ها</string>
+    <string name="new_folder">پوشه جدید</string>
+    <string name="confirm">تایید</string>
+    <string name="cancel">لغو</string>
+    <string name="delete">حذف</string>
+    <string name="open">گشودن</string>
+    <string name="content">محنوا</string>
+    <string name="sign_in">ورود</string>
+    <string name="url">نشانی</string>
+    <string name="email">رایانامه</string>
+    <string name="password">رمز</string>
+    <string name="conflict_notes">یادداشتهای در تضاد</string>
+    <string name="settings">تنظیمات</string>
+    <string name="back">بازگشت</string>
+    <string name="account">حساب</string>
+    <string name="account_setting_desc">درحال همگام سازی</string>
+    <string name="color_and_style">رنگ &amp; سبک</string>
+    <string name="color_and_style_setting_desc">پوسته، رنگ سبک</string>
+    <string name="about">درباره</string>
+    <string name="about_setting_desc">نسخه، موضوع، اعتبار</string>
+    <string name="languages">زبانها</string>
+    <string name="use_device_languages">استفاده از زبان دستگاه</string>
+    <string name="languages_setting_desc">انگلیسی، چینی و بقیه</string>
+    <string name="english" translatable="false">English</string>
+    <string name="chinese_simplified" translatable="false">简体中文</string>
+    <string name="joplin_server">سرور Joplin</string>
+    <string name="syncing">درحال همگامسازی</string>
+    <string name="every_15_minutes">هر ۱۵ دقیقه</string>
+    <string name="every_30_minutes">هر ۳۰ دقیقه</string>
+    <string name="every_1_hour">هر ساعت</string>
+    <string name="every_2_hours">هر ۲ ساعت</string>
+    <string name="every_3_hours">هر ۳ ساعت</string>
+    <string name="every_6_hours">هر ۶ ساعت</string>
+    <string name="every_12_hours">هر ۱۲ ساعت</string>
+    <string name="every_1_day">هر روز</string>
+    <string name="manually">دستی</string>
+    <string name="sync_interval">همگامسازی</string>
+    <string name="sync_once_on_start">همگامسازی در شروع</string>
+    <string name="only_on_wifi">فقط از طریق وایفای</string>
+    <string name="only_when_charging">فقط هنگام شارژ</string>
+    <string name="tools">ابزار</string>
+    <string name="tools_setting_des">گزارش، پایگاه داده و بیشتر</string>
+    <string name="log">گزارش</string>
+    <string name="view_logs">دیدن گزارشها</string>
+    <string name="coming_soon">بزودی</string>
+    <string name="login_tip">لطفا اطلاعات ورود سرور Joplin را وارد نمایید.</string>
+    <string name="database_status">وضعیت پایگاه داده</string>
+    <string name="database_status_desc">دیدن وضعیت پایگاه داده</string>
+    <string name="search">جستجو</string>
+    <string name="not_found">یادداشتی برای "%s" یافت نشد.</string>
+    <string name="searching">جستجو برای یادداشتهای "%s"</string>
+    <string name="notes_loading">بارگیری یادداشتها</string>
+    <string name="create_a_note">ساخت یک یادداشت؟</string>
+    <string name="ask_delete_folder_title">حذف "%s"؟</string>
+    <string name="ask_delete_folder_description">تمام یادداشت ها و زیر پوشه های داخل این پوشه نیز حذف خواهند شد.</string>
+    <string name="edit_folder">ویرایش پوشه</string>
+    <string name="resynchronize_from_scratch">از ابتدا دوباره همگام سازی کنید</string>
+    <string name="edit">ویرایش</string>
+    <string name="preview">پیش نمایش</string>
+    <string name="ask_delete_selected_notes">حذف یادداشتهای انتخابی؟</string>
+    <string name="readme" translatable="false">README</string>
+    <string name="readme_desc">مخزن گیتهاب و README را بررسی کنید.</string>
+    <string name="release_desc">جستجو برای تغییرات و نسخه جدید</string>
+    <string name="release">آخرین انتشار</string>
+    <string name="credits">اعتبارها</string>
+    <string name="credits_desc">اعتبارها و نرم افزارهای آزاد</string>
+    <string name="version">نسخه</string>
+    <string name="github_issue">موضوع Github</string>
+    <string name="github_issue_desc">ثبت موضوع برای گزارش باگ یا درخواست قابلیت</string>
+    <string name="info_copied">اطلاعات به حافظه رونوشت شد.</string>
+    <string name="sync_failed">همگامسازی ناموفق بود.</string>
+    <string name="dark_theme">پوسته تیره</string>
+    <string name="high_contrast">پوسته تیره با تضاد بالا</string>
+    <string name="use_device_theme">استفاده از پوسته دستگاه</string>
+    <string name="on">روشن</string>
+    <string name="off">خاموش</string>
+    <string name="other">سایر</string>
+    <string name="content_text_direction">جهت متن محتوا</string>
+    <string name="content_text_direction_desc">جهت متن یادداشتها، عنوانها و غیره.</string>
+    <string name="rtl" translatable="false">RTL</string>
+    <string name="ltr" translatable="false">LTR</string>
+    <string name="auto">خودکار</string>
+</resources>
