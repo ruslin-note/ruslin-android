@@ -1,5 +1,3 @@
-@file:Suppress("UnstableApiUsage")
-
 import java.io.FileInputStream
 import java.util.Properties
 import com.android.build.api.variant.FilterConfiguration.FilterType.*
@@ -119,11 +117,12 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
     composeOptions {
         // https://developer.android.com/jetpack/androidx/releases/compose-kotlin
-        kotlinCompilerExtensionVersion = "1.4.7"
+        kotlinCompilerExtensionVersion = "1.5.7"
     }
 
     packaging {
