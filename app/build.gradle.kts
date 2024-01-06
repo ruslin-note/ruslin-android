@@ -157,13 +157,13 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.runtime.compose)
-    implementation("androidx.activity:activity-compose:1.7.2")
-    implementation("androidx.work:work-runtime-ktx:2.8.1")
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.work.runtime.ktx)
 
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.tooling.preview)
 
-    implementation("androidx.navigation:navigation-compose:2.6.0")
+    implementation(libs.androidx.navigation.compose)
     implementation(libs.compose.material)
     implementation(libs.compose.material.icons.core)
     implementation(libs.compose.material.icons.extended)
@@ -172,20 +172,20 @@ dependencies {
     implementation(libs.accompanist.webview)
     implementation(libs.accompanist.systemuicontroller)
 
-    implementation("com.google.android.material:material:1.9.0")
+    implementation(libs.android.material)
 
-    implementation("androidx.webkit:webkit:1.7.0")
+    implementation(libs.androidx.webkit)
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
-    kapt("androidx.hilt:hilt-compiler:1.0.0")
+    kapt(libs.androidx.hilt.compiler)
     // https://github.com/google/dagger/issues/2601#issuecomment-1174506373
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
-    implementation("androidx.hilt:hilt-work:1.0.0")
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.hilt.work)
 
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation(libs.androidx.datastore.preferences)
 
-    implementation("androidx.core:core-splashscreen:1.0.1")
+    implementation(libs.androidx.core.splashscreen)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)

@@ -6,14 +6,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.tooling.preview.Preview
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import androidx.navigation.compose.rememberNavController
 import org.dianqk.ruslin.ui.theme.RuslinTheme
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
 fun RuslinApp() {
     RuslinTheme {
-        val navController = rememberAnimatedNavController()
+        val navController = rememberNavController()
         val navigationActions = remember(navController) {
             RuslinNavigationActions(navController)
         }

@@ -35,5 +35,6 @@ android {
 
 dependencies {
     implementation(libs.androidx.core.ktx)
-    implementation("net.java.dev.jna:jna:5.13.0@aar")
+    implementation("net.java.dev.jna:jna:5.14.0@aar")
+    implementation(libs.kotlinx.coroutines.core)
 }

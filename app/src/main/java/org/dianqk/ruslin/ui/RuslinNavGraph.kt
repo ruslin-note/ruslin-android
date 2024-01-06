@@ -8,9 +8,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
+import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import org.dianqk.ruslin.ui.RuslinDestinationsArgs.FOLDER_ID_ARG
 import org.dianqk.ruslin.ui.RuslinDestinationsArgs.IS_PREVIEW_ARG
 import org.dianqk.ruslin.ui.RuslinDestinationsArgs.NOTE_ID_ARG
@@ -28,7 +28,7 @@ import org.dianqk.ruslin.ui.page.settings.tools.log.LogPage
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun RuslinNavGraph(
-    navController: NavHostController = rememberAnimatedNavController(),
+    navController: NavHostController = rememberNavController(),
     navigationActions: RuslinNavigationActions = remember(navController) {
         RuslinNavigationActions(navController)
     },

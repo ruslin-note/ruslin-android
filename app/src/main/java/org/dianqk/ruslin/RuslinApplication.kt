@@ -23,14 +23,14 @@ class RuslinApplication : Application(), Configuration.Provider {
     @ApplicationScope
     lateinit var applicationScope: CoroutineScope
 
+    override val workManagerConfiguration: Configuration
+        get() = Configuration.Builder()
+            .setWorkerFactory(workerFactory)
+            .setMinimumLoggingLevel(Log.DEBUG)
+            .build()
+
     override fun onCreate() {
         super.onCreate()
         notesRepository.doSync(isOnStart = true, fromScratch = false)
     }
-
-    override fun getWorkManagerConfiguration() =
-        Configuration.Builder()
-            .setWorkerFactory(workerFactory)
-            .setMinimumLoggingLevel(Log.DEBUG)
-            .build()
 }
