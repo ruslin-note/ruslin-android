@@ -28,6 +28,7 @@ pub fn generate_kotlin_bindings(udl_file: impl AsRef<Utf8Path>) {
         vec![TargetLanguage::Kotlin],
         Some("../uniffi/src/main/java".as_ref()),
         None,
+        None,
         true,
     )
     .unwrap();
