@@ -1,7 +1,7 @@
 [versions]
 # plugin
 activityCompose = "1.8.2"
-androidGradlePlugin = "8.2.1"
+androidGradlePlugin = "8.2.2"
 coreSplashscreen = "1.0.1"
 datastorePreferences = "1.0.0"
 hiltDragger = "2.50"
