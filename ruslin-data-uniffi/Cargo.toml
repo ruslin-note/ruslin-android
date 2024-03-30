@@ -9,7 +9,7 @@ crate-type = ["cdylib"]
 name = "uniffi_ruslin"
 
 [dependencies]
-uniffi = { version = "0.25" }
+uniffi = { version = "0.27" }
 ruslin-data = { path = "./ruslin-data" }
 log = { version = "0.4", features = ["max_level_debug", "release_max_level_info"] }
 android_logger = "0.13"
@@ -18,7 +18,7 @@ log4rs = "1.2"
 pulldown-cmark = { version = "0.9.3", default-features = false }
 
 [build-dependencies]
-uniffi = { version = "0.25", features = ["build", "cli"] }
+uniffi = { version = "0.27", features = ["build", "cli"] }
 camino = "1.1.4"
 
 [profile.release]
