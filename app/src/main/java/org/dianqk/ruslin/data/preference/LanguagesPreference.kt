@@ -17,6 +17,8 @@ sealed class LanguagesPreference(val value: Int) {
     object UseDeviceLanguages : LanguagesPreference(0)
     object English : LanguagesPreference(1)
     object ChineseSimplified : LanguagesPreference(2)
+    object Farsi : LanguagesPreference(3)
+    object Russian : LanguagesPreference(4)
 
     fun put(context: Context, scope: CoroutineScope) {
         scope.launch {
@@ -32,6 +34,8 @@ sealed class LanguagesPreference(val value: Int) {
             UseDeviceLanguages -> context.getString(R.string.use_device_languages)
             English -> context.getString(R.string.english)
             ChineseSimplified -> context.getString(R.string.chinese_simplified)
+            Farsi -> context.getString(R.string.farsi)
+            Russian -> context.getString(R.string.russian)
         }
 
     fun getLocale(): Locale =
@@ -39,6 +43,8 @@ sealed class LanguagesPreference(val value: Int) {
             UseDeviceLanguages -> LocaleList.getDefault().get(0)
             English -> Locale("en", "US")
             ChineseSimplified -> Locale("zh", "CN")
+            Farsi -> Locale("fa", "IR")
+            Russian -> Locale("ru", "RU")
         }
 
     fun setLocale(context: Context) {
@@ -65,7 +71,9 @@ sealed class LanguagesPreference(val value: Int) {
         val values = listOf(
             UseDeviceLanguages,
             English,
-            ChineseSimplified
+            ChineseSimplified,
+            Farsi,
+            Russian
         )
 
         fun fromPreferences(preferences: Preferences): LanguagesPreference =
@@ -73,6 +81,8 @@ sealed class LanguagesPreference(val value: Int) {
                 0 -> UseDeviceLanguages
                 1 -> English
                 2 -> ChineseSimplified
+                3 -> Farsi
+                4 -> Russian
                 else -> default
             }
 
@@ -81,6 +91,8 @@ sealed class LanguagesPreference(val value: Int) {
                 0 -> UseDeviceLanguages
                 1 -> English
                 2 -> ChineseSimplified
+                3 -> Farsi
+                4 -> Russian
                 else -> default
             }
     }

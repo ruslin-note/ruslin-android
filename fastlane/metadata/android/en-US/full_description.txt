@@ -1,6 +1,4 @@
-It is currently in the beta stage, so take care to make backups.
-
-Supported features:
+<b>Supported features:</b>
 
 ✅ Create, modify and delete folders and notes
 ✅ Markdown editor with toolbar
@@ -8,3 +6,5 @@ Supported features:
 ✅ Sync notes using a self-hosted Joplin server
 ✅ Manual and automatic synchronization
 🚧 Possible compatibility with Joplin's sync format (End-to-end encryption is not supported)
+
+<b>It is currently in the beta stage, so take care to make backups.</b>

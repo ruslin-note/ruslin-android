@@ -28,7 +28,7 @@
     <string name="color_and_style_setting_desc">پوسته، رنگ سبک</string>
     <string name="about">درباره</string>
     <string name="about_setting_desc">نسخه، موضوع، اعتبار</string>
-    <string name="languages">زبانها</string>
+    <string name="languages">زبانها (Languages)</string>
     <string name="use_device_languages">استفاده از زبان دستگاه</string>
     <string name="languages_setting_desc">انگلیسی، چینی و بقیه</string>
     <string name="english" translatable="false">English</string>
