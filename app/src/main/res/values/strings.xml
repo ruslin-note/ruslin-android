@@ -30,9 +30,11 @@
     <string name="about_setting_desc">Version, issue, credits</string>
     <string name="languages">Languages</string>
     <string name="use_device_languages">Use Device Languages</string>
-    <string name="languages_setting_desc">English, Chinese, more</string>
+    <string name="languages_setting_desc">English, Chinese, Farsi, Russian, more</string>
     <string name="english" translatable="false">English</string>
     <string name="chinese_simplified" translatable="false">简体中文</string>
+    <string name="farsi" translatable="false">فارسی</string>
+    <string name="russian" translatable="false">Русский</string>
     <string name="joplin_server">Joplin Server</string>
     <string name="syncing">Syncing</string>
     <string name="every_15_minutes">Every 15 minutes</string>
