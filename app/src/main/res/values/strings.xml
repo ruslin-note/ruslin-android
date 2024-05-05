@@ -19,14 +19,14 @@
     <string name="url">URL</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
-    <string name="conflict_notes">Conflict Notes</string>
+    <string name="conflict_notes">Conflicting Notes</string>
     <string name="settings">Settings</string>
     <string name="back">Back</string>
     <string name="account">Account</string>
     <string name="account_setting_desc">Syncing</string>
     <string name="color_and_style">Color &amp; Style</string>
     <string name="color_and_style_setting_desc">Theme, color style</string>
-    <string name="about">About</string>
+    <string name="about">About the app</string>
     <string name="about_setting_desc">Version, issue, credits</string>
     <string name="languages">Languages</string>
     <string name="use_device_languages">Use Device Languages</string>
@@ -69,14 +69,14 @@
     <string name="preview">Preview</string>
     <string name="ask_delete_selected_notes">Delete selected notes?</string>
     <string name="readme" translatable="false">README</string>
-    <string name="readme_desc">Check the GitHub repository and the README</string>
-    <string name="release_desc">Look for changelogs and new versions</string>
+    <string name="readme_desc">See the GitHub repository and its the README</string>
+    <string name="release_desc">See the changelog and new versions</string>
     <string name="release">Latest release</string>
-    <string name="credits">Credits</string>
-    <string name="credits_desc">Credits and libre software</string>
+    <string name="credits">Authors</string>
+    <string name="credits_desc">Copyright and licenses</string>
     <string name="version">Version</string>
-    <string name="github_issue">GitHub issue</string>
-    <string name="github_issue_desc">Submit an issue for bug report or feature request</string>
+    <string name="github_issue">GitHub issues</string>
+    <string name="github_issue_desc">Submit a bug report or a feature request</string>
     <string name="info_copied">Info copied to clipboard</string>
     <string name="sync_failed">Sync failed</string>
     <string name="dark_theme">Dark Theme</string>
