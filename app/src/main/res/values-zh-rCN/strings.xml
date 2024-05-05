@@ -27,7 +27,7 @@
     <string name="color_and_style_setting_desc">主题、色调样式</string>
     <string name="about">关于</string>
     <string name="about_setting_desc">版本、反馈、致谢</string>
-    <string name="languages">语言</string>
+    <string name="languages">语言 (Languages)</string>
     <string name="languages_setting_desc">英语、简体中文、更多</string>
     <string name="joplin_server">Joplin 服务器</string>
     <string name="syncing">同步</string>
