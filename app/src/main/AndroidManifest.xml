@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Ruslin.Launcher"
         android:windowSoftInputMode="adjustResize"
-        tools:targetApi="33">
+        tools:targetApi="34">
         <activity
             android:name=".MainActivity"
             android:exported="true"
