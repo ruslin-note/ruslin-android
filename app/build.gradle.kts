@@ -42,8 +42,8 @@ android {
         applicationId = "org.dianqk.ruslin"
         minSdk = libs.versions.minSdkVersion.get().toInt()
         targetSdk = libs.versions.targetSdkVersion.get().toInt()
-        versionCode = 9
-        versionName = "0.1.1-beta.2"
+        versionCode = 10
+        versionName = "0.1.2-beta.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

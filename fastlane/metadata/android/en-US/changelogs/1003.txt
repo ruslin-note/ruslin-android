@@ -1,0 +1,2 @@
+- Supports Farsi and Russian languages
+**Full Changelog**: https://github.com/ruslin-note/ruslin-android/releases/tag/v0.1.2-beta.1
