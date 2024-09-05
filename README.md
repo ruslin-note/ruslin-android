@@ -53,9 +53,9 @@ The following instructions are based on a Linux development environment and an a
 
 ### Requirements
 
-- [Rust 1.69.0](https://www.rust-lang.org/tools/install)
+- [Rust 1.75.0](https://www.rust-lang.org/tools/install)
 - [Android Studio](https://developer.android.com/studio)
-- [NDK 25.2.9519653](https://developer.android.com/ndk/downloads)
+- [NDK 26.1.10909125](https://developer.android.com/ndk/downloads)
 
 ### Build Instructions
 
