@@ -38,10 +38,12 @@ jobs:
         echo "Highest Android NDK: $HIGHEST_NDK_VERSION"
         EXPECTED_NDK_VERSION=26.1.10909125
         echo "Expected Android NDK: $EXPECTED_NDK_VERSION"
+        echo "ANDROID_NDK_ROOT=$ANDROID_SDK_ROOT/ndk/$EXPECTED_NDK_VERSION" >> $GITHUB_ENV
         echo "ANDROID_NDK_VERSION=$EXPECTED_NDK_VERSION" >> $GITHUB_ENV
     - name: Build ruslin-data-uniffi
       working-directory: ./ruslin-data-uniffi
       run: |
+        env
         ./release.sh arm64-v8a
         ./release.sh armeabi-v7a
         ./release.sh x86_64
