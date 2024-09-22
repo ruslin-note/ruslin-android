@@ -55,7 +55,7 @@ The following instructions are based on a Linux development environment and an a
 
 - [Rust 1.75.0](https://www.rust-lang.org/tools/install)
 - [Android Studio](https://developer.android.com/studio)
-- [NDK 26.1.10909125](https://developer.android.com/ndk/downloads)
+- [NDK 27.1.12297006](https://developer.android.com/ndk/downloads)
 
 ### Build Instructions
 
@@ -65,7 +65,7 @@ Example:
 
 ```shell
 export ANDROID_HOME=$HOME/Android/Sdk
-export NDK_VERSION=26.1.10909125
+export NDK_VERSION=27.1.12297006
 ```
 
 #### 2. Build the Rust library.

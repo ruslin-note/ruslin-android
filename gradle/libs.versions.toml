@@ -17,7 +17,7 @@ minSdkVersion = "28"
 navigationCompose = "2.7.6"
 targetSdkVersion = "34"
 buildToolsVersion = "34.0.0"
-ndkVersion = "26.1.10909125"
+ndkVersion = "27.1.12297006"
 
 # library
 appcompat = "1.6.1"
