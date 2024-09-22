@@ -35,6 +35,7 @@ jobs:
         echo "Highest Android NDK: $HIGHEST_NDK_VERSION"
         EXPECTED_NDK_VERSION=27.1.12297006
         echo "Expected Android NDK: $EXPECTED_NDK_VERSION"
+        [[ "$EXPECTED_NDK_VERSION" == "$HIGHEST_NDK_VERSION" ]];
         echo "ANDROID_NDK_VERSION=$EXPECTED_NDK_VERSION" >> $GITHUB_ENV
     - name: Check ruslin-data-uniffi
       working-directory: ./ruslin-data-uniffi
