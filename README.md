@@ -47,6 +47,16 @@ Supported features:
 
 > Ruslin is a reproducible build of app, you don't need to worry about F-Droid and other store signature issues, see: [Towards a reproducible F-Droid](https://f-droid.org/en/2023/01/15/towards-a-reproducible-fdroid.html).
 
+
+## Translation
+
+Please help to translate with the [Weblate](https://toolate.othing.xyz/projects/ruslin-android/) 
+
+<a href="https://toolate.othing.xyz/projects/ruslin-android/">
+<img src="https://toolate.othing.xyz/widget/ruslin-android/app/multi-auto.svg" alt="Translation status" />
+</a>
+
+
 ## Build
 
 The following instructions are based on a Linux development environment and an arm64 physical device for debugging.
